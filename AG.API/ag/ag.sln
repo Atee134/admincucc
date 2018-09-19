@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "ag\Web.csproj", "{2DF8F72F-6255-4673-BDF0-0A12B69AF4FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{69527CD6-7517-46EA-BE86-A70E3696173F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{A9E196A0-3BAA-42CE-A739-DB0FE548A983}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DF8F72F-6255-4673-BDF0-0A12B69AF4FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF8F72F-6255-4673-BDF0-0A12B69AF4FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF8F72F-6255-4673-BDF0-0A12B69AF4FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF8F72F-6255-4673-BDF0-0A12B69AF4FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69527CD6-7517-46EA-BE86-A70E3696173F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69527CD6-7517-46EA-BE86-A70E3696173F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69527CD6-7517-46EA-BE86-A70E3696173F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69527CD6-7517-46EA-BE86-A70E3696173F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9E196A0-3BAA-42CE-A739-DB0FE548A983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E196A0-3BAA-42CE-A739-DB0FE548A983}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E196A0-3BAA-42CE-A739-DB0FE548A983}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E196A0-3BAA-42CE-A739-DB0FE548A983}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {088E6999-540C-4717-BBAB-FB2C1177BFAC}
+	EndGlobalSection
+EndGlobal
