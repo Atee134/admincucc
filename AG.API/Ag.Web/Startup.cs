@@ -31,6 +31,8 @@ namespace Ag.Web
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
+
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IIncomeService, IncomeService>();
         }
 

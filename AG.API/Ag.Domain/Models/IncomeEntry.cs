@@ -18,5 +18,9 @@ namespace Ag.Domain.Models
 
         [Required]
         public DateTime WorkDay { get; set; } // TODO this will be a reference to the workday entity
+
+        public User User { get; set; }
+
+        public int UserId { get; set; }
     }
 }

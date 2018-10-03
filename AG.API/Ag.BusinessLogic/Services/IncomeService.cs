@@ -1,5 +1,5 @@
-﻿using Ag.BusinessLogic.Dtos;
-using Ag.BusinessLogic.Interfaces;
+﻿using Ag.BusinessLogic.Interfaces;
+using Ag.Common.Dtos;
 using Ag.Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,14 +19,14 @@ namespace Ag.BusinessLogic.Services
             _context = context;
         }
 
-        public Task<List<IncomeEntryForReturnDto>> GetIncomeEntries()
+        public List<IncomeEntryForReturnDto> GetIncomeEntries()
         {
             return _context.IncomeEntries.Select(ie => new IncomeEntryForReturnDto
             {
                 IncomeInDollars = ie.IncomeInDollars,
                 SiteName = ie.SiteName,
                 WorkDay = ie.WorkDay
-            }).ToListAsync(); // TODO replace this with automapper
+            }).ToList(); // TODO replace this with automapper
         }
     }
 }

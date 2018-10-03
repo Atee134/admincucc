@@ -18,9 +18,9 @@ namespace Ag.Web.Controllers
             _incomeService = incomeService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetIncomes()
+        public IActionResult GetIncomes()
         {
-            var incomeEntries = await _incomeService.GetIncomeEntries();
+            var incomeEntries = _incomeService.GetIncomeEntries();
             return Ok(incomeEntries);
         }
     }

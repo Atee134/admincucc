@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ag.BusinessLogic.Dtos
+namespace Ag.Common.Dtos
 {
     public class IncomeEntryForReturnDto
     {

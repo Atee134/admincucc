@@ -8,6 +8,8 @@ namespace Ag.Domain
     {
         public AgDbContext(DbContextOptions<AgDbContext> options) : base(options) { }
 
+        public DbSet<User> Users { get; set; }
+
         public DbSet<IncomeEntry> IncomeEntries { get; set; }
     }
 }
