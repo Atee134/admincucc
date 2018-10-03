@@ -16,10 +16,9 @@ namespace Ag.Domain
 
             var optionsBuilder = new DbContextOptionsBuilder<AgDbContext>();
             var connectionString = configuration.GetConnectionString("Ag");
-            optionsBuilder.UseSqlite(connectionString);
+            optionsBuilder.UseNpgsql(connectionString);
 
             return new AgDbContext(optionsBuilder.Options);
         }
-
     }
 }
