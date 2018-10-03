@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Domain.Models
+namespace Ag.Domain.Models
 {
     public class IncomeEntry
     {

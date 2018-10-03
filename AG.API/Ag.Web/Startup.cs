@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BusinessLogic.Interfaces;
-using BusinessLogic.Services;
-using Domain;
+using Ag.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -15,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Web
+namespace Ag.Web
 {
     public class Startup
     {
@@ -31,8 +29,6 @@ namespace Web
         {
             services.AddDbContext<AgDbContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))); // TODO remove reference to domain
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.AddScoped<IIncomeService, IncomeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,10 +40,10 @@ namespace Web
             }
             else
             {
-                //app.UseHsts();
+                app.UseHsts();
             }
 
-           // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
