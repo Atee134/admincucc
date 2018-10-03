@@ -39,6 +39,8 @@ namespace Ag.Domain.Models
 
         public ICollection<IncomeEntry> IncomeEntries { get; set; }
 
+        public ICollection<WorkDay> WorkDays { get; set; }
+
         // TODO workdays collection
     }
 }

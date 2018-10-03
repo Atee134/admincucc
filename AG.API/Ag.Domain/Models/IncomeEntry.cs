@@ -17,7 +17,7 @@ namespace Ag.Domain.Models
         public double IncomeInDollars { get; set; }
 
         [Required]
-        public DateTime WorkDay { get; set; } // TODO this will be a reference to the workday entity
+        public WorkDay WorkDay { get; set; }
 
         public User User { get; set; }
 

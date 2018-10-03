@@ -10,6 +10,8 @@ namespace Ag.Domain
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<WorkDay> WorkDays { get; set; }
+
         public DbSet<IncomeEntry> IncomeEntries { get; set; }
     }
 }
