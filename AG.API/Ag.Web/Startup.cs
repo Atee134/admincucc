@@ -34,6 +34,7 @@ namespace Ag.Web
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IIncomeService, IncomeService>();
+            services.AddScoped<IWorkDayService, WorkDayService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
