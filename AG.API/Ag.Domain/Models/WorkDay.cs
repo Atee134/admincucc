@@ -18,10 +18,10 @@ namespace Ag.Domain.Models
         public Shift Shift { get; set; }
 
         [Required]
-        public User Operator { get; set; }
+        public virtual User Operator { get; set; }
 
         [Required]
-        public User Performer { get; set; }
+        public virtual User Performer { get; set; }
 
         public virtual ICollection<IncomeEntry> IncomeEntries { get; set; }
     }

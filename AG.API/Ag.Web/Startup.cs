@@ -33,6 +33,7 @@ namespace Ag.Web
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIncomeService, IncomeService>();
             services.AddScoped<IWorkDayService, WorkDayService>();
         }

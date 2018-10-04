@@ -33,14 +33,14 @@ namespace Ag.Domain.Models
         [Required]
         public Shift Shift { get; set; }
 
-        public User Colleague { get; set; }
+        public virtual User Colleague { get; set; }
 
         public string Sites { get; set; } // csv list for now
                                           // TODO many-many connection with sites
         [InverseProperty("Operator")]
-        public ICollection<WorkDay> OperatorWorkDays { get; set; }
+        public virtual ICollection<WorkDay> OperatorWorkDays { get; set; }
 
         [InverseProperty("Performer")]
-        public ICollection<WorkDay> PerformerWorkDays { get; set; }
+        public virtual ICollection<WorkDay> PerformerWorkDays { get; set; }
     }
 }

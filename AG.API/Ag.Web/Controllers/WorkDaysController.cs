@@ -24,7 +24,7 @@ namespace Ag.Web.Controllers
         [HttpGet("workdays/available")]
         public IActionResult GetAvailableWorkdaysInPeriod()
         {
-            return new JsonResult(_workDayService.GetDatesOfCurrentPeriod());
+            return Ok(_workDayService.GetDatesOfCurrentPeriod());
         }
 
         [HttpPost("users/{userId}/workdays")]
@@ -37,7 +37,7 @@ namespace Ag.Web.Controllers
 
             _workDayService.AddWorkDay(workDayDto, userId);
 
-            return Ok();
+            return StatusCode(201);
         }
     }
 }

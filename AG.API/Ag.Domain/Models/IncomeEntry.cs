@@ -17,6 +17,6 @@ namespace Ag.Domain.Models
         public double IncomeInDollars { get; set; }
 
         [Required]
-        public WorkDay WorkDay { get; set; }
+        public virtual WorkDay WorkDay { get; set; }
     }
 }

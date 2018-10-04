@@ -17,6 +17,7 @@ namespace Ag.Web.Controllers
         {
             _incomeService = incomeService;
         }
+
         [HttpGet]
         public IActionResult GetIncomes()
         {

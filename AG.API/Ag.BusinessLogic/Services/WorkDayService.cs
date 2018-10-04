@@ -2,6 +2,7 @@
 using Ag.Common.Dtos;
 using Ag.Domain;
 using Ag.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace Ag.BusinessLogic.Services
 
         public void AddWorkDay(WorkDayForAddDto workdayDto, int userId)
         {
-            var user = _context.Users.SingleOrDefault(u => u.Id == userId);
+            var user = _context.Users.Include(u => u.Colleague).SingleOrDefault(u => u.Id == userId);
 
             if (user == null)
             {
@@ -69,12 +70,13 @@ namespace Ag.BusinessLogic.Services
             var workDay = new WorkDay
             {
                 Date = workdayDto.Date,
-                Shift = workdayDto.Shift,
+                Shift = op.Shift,
                 Performer = performer,
                 Operator = op
             };
 
             _context.Add(workDay);
+            _context.SaveChanges();
         }
     }
 }
