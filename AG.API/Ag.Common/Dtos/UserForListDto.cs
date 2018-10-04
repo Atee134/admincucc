@@ -11,5 +11,7 @@ namespace Ag.Common.Dtos
         public string UserName { get; set; }
 
         public string Shift { get; set; }
+
+        public string Role { get; set; }
     }
 }
