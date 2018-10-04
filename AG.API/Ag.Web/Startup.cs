@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
 using Ag.BusinessLogic.Services;
+using Ag.Common.Enums;
 using Ag.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -43,14 +44,21 @@ namespace Ag.Web
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>
               {
+                  options.RequireHttpsMetadata = false; // TODO in production
+                  options.SaveToken = true;
                   options.TokenValidationParameters = new TokenValidationParameters
                   {
                       ValidateIssuerSigningKey = true,
                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                       ValidateIssuer = false,
-                      ValidateAudience = false,
+                      ValidateAudience = false, // TODO in production issuer and audience must be validated too
                   };
               });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Operator", policy => policy.RequireRole(Role.Operator.ToString()));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

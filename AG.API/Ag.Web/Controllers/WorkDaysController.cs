@@ -5,11 +5,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ag.Web.Controllers
 {
+    [Authorize]
     [Route("api")]
     [ApiController]
     public class WorkDaysController : ControllerBase
@@ -27,6 +29,7 @@ namespace Ag.Web.Controllers
             return Ok(_workDayService.GetDatesOfCurrentPeriod());
         }
 
+        [Authorize("Operator")]
         [HttpPost("users/{userId}/workdays")]
         public IActionResult AddWorkDay(int userId, [FromBody] WorkDayForAddDto workDayDto)
         {
