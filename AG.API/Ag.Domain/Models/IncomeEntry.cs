@@ -18,9 +18,5 @@ namespace Ag.Domain.Models
 
         [Required]
         public WorkDay WorkDay { get; set; }
-
-        public User User { get; set; }
-
-        public int UserId { get; set; }
     }
 }

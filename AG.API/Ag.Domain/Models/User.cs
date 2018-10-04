@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Ag.Domain.Models
@@ -35,12 +36,11 @@ namespace Ag.Domain.Models
         public User Colleague { get; set; }
 
         public string Sites { get; set; } // csv list for now
-        // TODO many-many connection with sites
+                                          // TODO many-many connection with sites
+        [InverseProperty("Operator")]
+        public ICollection<WorkDay> OperatorWorkDays { get; set; }
 
-        public ICollection<IncomeEntry> IncomeEntries { get; set; }
-
-        public ICollection<WorkDay> WorkDays { get; set; }
-
-        // TODO workdays collection
+        [InverseProperty("Performer")]
+        public ICollection<WorkDay> PerformerWorkDays { get; set; }
     }
 }

@@ -17,13 +17,12 @@ namespace Ag.Domain.Models
         [Required]
         public Shift Shift { get; set; }
 
-        // TODO something is wrong with these connections
         [Required]
         public User Operator { get; set; }
 
         [Required]
         public User Performer { get; set; }
 
-        public IncomeEntry IncomeEntry { get; set; }
+        public virtual ICollection<IncomeEntry> IncomeEntries { get; set; }
     }
 }
