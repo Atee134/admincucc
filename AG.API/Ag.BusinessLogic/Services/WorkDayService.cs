@@ -48,7 +48,7 @@ namespace Ag.BusinessLogic.Services
             return availableDates;
         }
 
-        public void AddWorkDay(WorkDayForAddDto workdayDto, int userId)
+        public void AddWorkDay(DateTime date, int userId)
         {
             var user = _context.Users.Include(u => u.Colleague).SingleOrDefault(u => u.Id == userId);
 
@@ -69,7 +69,7 @@ namespace Ag.BusinessLogic.Services
 
             var workDay = new WorkDay
             {
-                Date = workdayDto.Date,
+                Date = date,
                 Shift = op.Shift,
                 Performer = performer,
                 Operator = op

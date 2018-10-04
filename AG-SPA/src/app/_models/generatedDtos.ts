@@ -8,59 +8,6 @@
 
 
 
-export class WorkDayForAddDto implements IWorkDayForAddDto {
-    date!: Date;
-    shift!: Shift;
-
-    constructor(data?: IWorkDayForAddDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>null;
-            this.shift = data["Shift"] !== undefined ? data["Shift"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): WorkDayForAddDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new WorkDayForAddDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["Date"] = this.date ? this.date.toISOString() : <any>null;
-        data["Shift"] = this.shift !== undefined ? this.shift : <any>null;
-        return data; 
-    }
-
-    clone(): WorkDayForAddDto {
-        const json = this.toJSON();
-        let result = new WorkDayForAddDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IWorkDayForAddDto {
-    date: Date;
-    shift: Shift;
-}
-
-export enum Shift {
-    Morning = "Morning", 
-    Afternoon = "Afternoon", 
-    Night = "Night", 
-}
-
 export class UserForRegisterDto implements IUserForRegisterDto {
     userName?: string | null;
     password?: string | null;
@@ -268,4 +215,65 @@ export interface IIncomeEntryForReturnDto {
     siteName?: string | null;
     incomeInDollars: number;
     workDay: Date;
+}
+
+export enum Shift {
+    Morning = "Morning", 
+    Afternoon = "Afternoon", 
+    Night = "Night", 
+}
+
+export class WorkDayForListDto implements IWorkDayForListDto {
+    date!: Date;
+    workers?: UserForListDto[] | null;
+
+    constructor(data?: IWorkDayForListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>null;
+            if (data["Workers"] && data["Workers"].constructor === Array) {
+                this.workers = [];
+                for (let item of data["Workers"])
+                    this.workers.push(UserForListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): WorkDayForListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new WorkDayForListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Date"] = this.date ? this.date.toISOString() : <any>null;
+        if (this.workers && this.workers.constructor === Array) {
+            data["Workers"] = [];
+            for (let item of this.workers)
+                data["Workers"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): WorkDayForListDto {
+        const json = this.toJSON();
+        let result = new WorkDayForListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IWorkDayForListDto {
+    date: Date;
+    workers?: UserForListDto[] | null;
 }

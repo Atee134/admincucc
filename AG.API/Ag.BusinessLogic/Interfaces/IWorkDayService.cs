@@ -8,6 +8,6 @@ namespace Ag.BusinessLogic.Interfaces
     public interface IWorkDayService
     {
         List<DateTime> GetDatesOfCurrentPeriod();
-        void AddWorkDay(WorkDayForAddDto workdayDto, int userId);
+        void AddWorkDay(DateTime date, int userId);
     }
 }

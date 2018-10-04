@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ag.Web.Controllers
 {
-    [Authorize]
+  //  [Authorize]
     [Route("api")]
     [ApiController]
     public class WorkDaysController : ControllerBase
@@ -30,15 +30,15 @@ namespace Ag.Web.Controllers
         }
 
         [Authorize("Operator")]
-        [HttpPost("users/{userId}/workdays")]
-        public IActionResult AddWorkDay(int userId, [FromBody] WorkDayForAddDto workDayDto)
+        [HttpPost("users/{userId}/workdays/{date}")]
+        public IActionResult AddWorkDay(int userId, DateTime date)
         {
             //if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             //    return Unauthorized();
 
             //TODO add validation if its a valid workday for this period
 
-            _workDayService.AddWorkDay(workDayDto, userId);
+            _workDayService.AddWorkDay(date, userId);
 
             return StatusCode(201);
         }

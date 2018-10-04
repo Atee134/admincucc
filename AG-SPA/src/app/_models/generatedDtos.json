@@ -5,37 +5,6 @@
     "version": "1.0.0"
   },
   "definitions": {
-    "WorkDayForAddDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Date",
-        "Shift"
-      ],
-      "properties": {
-        "Date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "Shift": {
-          "$ref": "#/definitions/Shift"
-        }
-      }
-    },
-    "Shift": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ],
-      "enum": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ]
-    },
     "UserForRegisterDto": {
       "type": "object",
       "additionalProperties": false,
@@ -118,6 +87,39 @@
         "WorkDay": {
           "type": "string",
           "format": "date-time"
+        }
+      }
+    },
+    "Shift": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ],
+      "enum": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ]
+    },
+    "WorkDayForListDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date"
+      ],
+      "properties": {
+        "Date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Workers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserForListDto"
+          }
         }
       }
     }

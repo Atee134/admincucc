@@ -1,14 +1,13 @@
-﻿using Ag.Common.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Ag.Common.Dtos
 {
-    public class WorkDayForAddDto
+    public class WorkDayForListDto
     {
         public DateTime Date { get; set; }
 
-        public Shift Shift { get; set; }
+        public List<UserForListDto> Workers { get; set; }
     }
 }
