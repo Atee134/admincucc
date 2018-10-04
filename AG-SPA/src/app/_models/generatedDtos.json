@@ -1,0 +1,125 @@
+﻿{
+  "swagger": "2.0",
+  "info": {
+    "title": "Swagger specification",
+    "version": "1.0.0"
+  },
+  "definitions": {
+    "WorkDayForAddDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date",
+        "Shift"
+      ],
+      "properties": {
+        "Date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Shift": {
+          "$ref": "#/definitions/Shift"
+        }
+      }
+    },
+    "Shift": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ],
+      "enum": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ]
+    },
+    "UserForRegisterDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Role"
+      ],
+      "properties": {
+        "UserName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "Role": {
+          "$ref": "#/definitions/Role"
+        }
+      }
+    },
+    "Role": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Operator",
+        "Performer"
+      ],
+      "enum": [
+        "Operator",
+        "Performer"
+      ]
+    },
+    "UserForLoginDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "UserName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      }
+    },
+    "UserForListDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "UserName": {
+          "type": "string"
+        },
+        "Shift": {
+          "type": "string"
+        },
+        "Role": {
+          "type": "string"
+        }
+      }
+    },
+    "IncomeEntryForReturnDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "IncomeInDollars",
+        "WorkDay"
+      ],
+      "properties": {
+        "SiteName": {
+          "type": "string"
+        },
+        "IncomeInDollars": {
+          "type": "number",
+          "format": "double"
+        },
+        "WorkDay": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
