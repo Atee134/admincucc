@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20181004125051_Initial")]
+    [Migration("20181009143150_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,16 +26,22 @@ namespace Ag.Domain.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("Date");
+
                     b.Property<double>("IncomeInDollars");
+
+                    b.Property<int>("OperatorId");
+
+                    b.Property<int>("PerformerId");
 
                     b.Property<string>("SiteName")
                         .IsRequired();
 
-                    b.Property<int>("WorkDayId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkDayId");
+                    b.HasIndex("OperatorId");
+
+                    b.HasIndex("PerformerId");
 
                     b.ToTable("IncomeEntries");
                 });
@@ -97,9 +103,14 @@ namespace Ag.Domain.Migrations
 
             modelBuilder.Entity("Ag.Domain.Models.IncomeEntry", b =>
                 {
-                    b.HasOne("Ag.Domain.Models.WorkDay", "WorkDay")
-                        .WithMany("IncomeEntries")
-                        .HasForeignKey("WorkDayId")
+                    b.HasOne("Ag.Domain.Models.User", "Operator")
+                        .WithMany("OperatorIncomeEntries")
+                        .HasForeignKey("OperatorId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ag.Domain.Models.User", "Performer")
+                        .WithMany("PerformerIncomeEntries")
+                        .HasForeignKey("PerformerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

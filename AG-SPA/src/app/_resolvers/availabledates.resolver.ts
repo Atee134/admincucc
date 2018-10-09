@@ -5,14 +5,14 @@ import { catchError } from "rxjs/operators";
 import { WorkdayService } from "../_services/workday.service";
 
 @Injectable()
-export class WorkdayResolver implements Resolve<Date[]> {
+export class AvailableDatesResolver implements Resolve<Date[]> {
   constructor(
      private workDayService: WorkdayService,
     private router: Router
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Date[]> {
-    return this.workDayService.getWorkdaysOfCurrentUser().pipe(
+    return this.workDayService.getAvailableDates().pipe(
       catchError(error => {
         //this.alertify.error("Problem retrieving data"); //TODO add alertify
         console.log(error);

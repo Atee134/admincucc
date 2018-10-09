@@ -11,12 +11,18 @@ namespace Ag.Domain.Models
         public long Id { get; set; }
 
         [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
         public string SiteName { get; set; } // TODO should this be another entity?
 
         [Required]
         public double IncomeInDollars { get; set; }
 
         [Required]
-        public virtual WorkDay WorkDay { get; set; }
+        public virtual User Operator { get; set; }
+
+        [Required]
+        public virtual User Performer { get; set; }
     }
 }

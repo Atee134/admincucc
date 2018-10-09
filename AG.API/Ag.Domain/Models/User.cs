@@ -42,5 +42,11 @@ namespace Ag.Domain.Models
 
         [InverseProperty("Performer")]
         public virtual ICollection<WorkDay> PerformerWorkDays { get; set; }
+
+        [InverseProperty("Operator")]
+        public virtual ICollection<IncomeEntry> OperatorIncomeEntries { get; set; }
+
+        [InverseProperty("Performer")]
+        public virtual ICollection<IncomeEntry> PerformerIncomeEntries { get; set; }
     }
 }

@@ -7,7 +7,9 @@ namespace Ag.BusinessLogic.Interfaces
 {
     public interface IWorkDayService
     {
-        List<DateTime> GetDatesOfCurrentPeriod();
+        List<DateTime> GetCurrentWorkDaysOfUser(int userId);
+        List<DateTime> GetModifiableWorkDays();
         void AddWorkDay(DateTime date, int userId);
+        void RemoveWorkDay(DateTime date, int userId);
     }
 }

@@ -25,7 +25,7 @@ namespace Ag.BusinessLogic.Services
             {
                 IncomeInDollars = ie.IncomeInDollars,
                 SiteName = ie.SiteName,
-                WorkDay = ie.WorkDay.Date
+                WorkDay = ie.Date
             }).ToList(); // TODO replace this with automapper
         }
     }

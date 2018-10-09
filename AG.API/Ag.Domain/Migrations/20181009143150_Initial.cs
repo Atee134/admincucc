@@ -36,6 +36,35 @@ namespace Ag.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IncomeEntries",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Date = table.Column<DateTime>(nullable: false),
+                    SiteName = table.Column<string>(nullable: false),
+                    IncomeInDollars = table.Column<double>(nullable: false),
+                    OperatorId = table.Column<int>(nullable: false),
+                    PerformerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncomeEntries", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IncomeEntries_Users_OperatorId",
+                        column: x => x.OperatorId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IncomeEntries_Users_PerformerId",
+                        column: x => x.PerformerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkDays",
                 columns: table => new
                 {
@@ -63,31 +92,15 @@ namespace Ag.Domain.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "IncomeEntries",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    SiteName = table.Column<string>(nullable: false),
-                    IncomeInDollars = table.Column<double>(nullable: false),
-                    WorkDayId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IncomeEntries", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IncomeEntries_WorkDays_WorkDayId",
-                        column: x => x.WorkDayId,
-                        principalTable: "WorkDays",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_IncomeEntries_OperatorId",
+                table: "IncomeEntries",
+                column: "OperatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IncomeEntries_WorkDayId",
+                name: "IX_IncomeEntries_PerformerId",
                 table: "IncomeEntries",
-                column: "WorkDayId");
+                column: "PerformerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ColleagueId",

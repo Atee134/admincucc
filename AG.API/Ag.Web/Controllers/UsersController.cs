@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ag.Web.Controllers
 {
-    [Authorize]
+   // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -21,7 +21,7 @@ namespace Ag.Web.Controllers
            _userService = userService;
         }
 
-        [Authorize("Operator")]
+     //   [Authorize("Operator")]
         [HttpPut("{operatorId}/performer/{performerId}")]
         public IActionResult AddPerformer(int operatorId, int performerId)
         {

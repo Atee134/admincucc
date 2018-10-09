@@ -22,7 +22,5 @@ namespace Ag.Domain.Models
 
         [Required]
         public virtual User Performer { get; set; }
-
-        public virtual ICollection<IncomeEntry> IncomeEntries { get; set; }
     }
 }

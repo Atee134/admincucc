@@ -8,6 +8,6 @@ namespace Ag.Common.Dtos
     {
         public string SiteName { get; set; } // TODO should this be another entity?
         public double IncomeInDollars { get; set; }
-        public DateTime WorkDay { get; set; } // TODO this will be a reference to the workday entity
+        public DateTime WorkDay { get; set; }
     }
 }
