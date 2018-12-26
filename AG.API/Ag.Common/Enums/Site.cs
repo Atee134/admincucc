@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Ag.Common.Enums
 {
-    public enum Role
+    public enum Site
     {
-        Operator,
-        Performer,
-        Admin
+        LJ,
+        CB,
+        MFC
     }
 }

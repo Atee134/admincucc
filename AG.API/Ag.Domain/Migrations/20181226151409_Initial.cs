@@ -42,8 +42,10 @@ namespace Ag.Domain.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Date = table.Column<DateTime>(nullable: false),
-                    SiteName = table.Column<string>(nullable: false),
-                    IncomeInDollars = table.Column<double>(nullable: false),
+                    Site = table.Column<int>(nullable: false),
+                    IncomeForOwner = table.Column<double>(nullable: false),
+                    IncomeForOperator = table.Column<double>(nullable: false),
+                    IncomeForPerformer = table.Column<double>(nullable: false),
                     OperatorId = table.Column<int>(nullable: false),
                     PerformerId = table.Column<int>(nullable: false)
                 },

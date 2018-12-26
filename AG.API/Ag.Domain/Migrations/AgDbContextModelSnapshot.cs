@@ -26,14 +26,17 @@ namespace Ag.Domain.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<double>("IncomeInDollars");
+                    b.Property<double>("IncomeForOperator");
+
+                    b.Property<double>("IncomeForOwner");
+
+                    b.Property<double>("IncomeForPerformer");
 
                     b.Property<int>("OperatorId");
 
                     b.Property<int>("PerformerId");
 
-                    b.Property<string>("SiteName")
-                        .IsRequired();
+                    b.Property<int>("Site");
 
                     b.HasKey("Id");
 

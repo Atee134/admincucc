@@ -77,8 +77,8 @@ namespace Ag.BusinessLogic.Services
             {
                 UserName = userDto.UserName,
                 Role = userDto.Role,
-                MinPercent = 20,
-                MaxPercent = 30, //TODO change this, use automapper
+                MinPercent = 27.5,
+                MaxPercent = 27.5,
                 Shift = Common.Enums.Shift.Morning
             };
         }

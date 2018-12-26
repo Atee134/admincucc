@@ -21,12 +21,14 @@ namespace Ag.BusinessLogic.Services
 
         public List<IncomeEntryForReturnDto> GetIncomeEntries()
         {
-            return _context.IncomeEntries.Select(ie => new IncomeEntryForReturnDto
-            {
-                IncomeInDollars = ie.IncomeInDollars,
-                SiteName = ie.SiteName,
-                WorkDay = ie.Date
-            }).ToList(); // TODO replace this with automapper
+            //return _context.IncomeEntries.Select(ie => new IncomeEntryForReturnDto
+            //{
+            //    IncomeInDollars = ie.IncomeForOwner,
+            //    SiteName = ie.SiteName,
+            //    WorkDay = ie.Date
+            //}).ToList(); // TODO replace this with automapper
+
+            return null;
         }
     }
 }

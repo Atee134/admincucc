@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ag.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -14,10 +15,16 @@ namespace Ag.Domain.Models
         public DateTime Date { get; set; }
 
         [Required]
-        public string SiteName { get; set; } // TODO should this be another entity?
+        public Site Site { get; set; }
 
         [Required]
-        public double IncomeInDollars { get; set; }
+        public double IncomeForOwner { get; set; }
+
+        [Required]
+        public double IncomeForOperator { get; set; }
+
+        [Required]
+        public double IncomeForPerformer { get; set; }
 
         [Required]
         public virtual User Operator { get; set; }

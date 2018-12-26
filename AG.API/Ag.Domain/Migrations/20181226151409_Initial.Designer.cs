@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20181009143150_Initial")]
+    [Migration("20181226151409_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,14 +28,17 @@ namespace Ag.Domain.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<double>("IncomeInDollars");
+                    b.Property<double>("IncomeForOperator");
+
+                    b.Property<double>("IncomeForOwner");
+
+                    b.Property<double>("IncomeForPerformer");
 
                     b.Property<int>("OperatorId");
 
                     b.Property<int>("PerformerId");
 
-                    b.Property<string>("SiteName")
-                        .IsRequired();
+                    b.Property<int>("Site");
 
                     b.HasKey("Id");
 

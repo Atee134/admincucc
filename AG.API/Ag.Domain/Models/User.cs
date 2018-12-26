@@ -35,8 +35,8 @@ namespace Ag.Domain.Models
 
         public virtual User Colleague { get; set; }
 
-        public string Sites { get; set; } // csv list for now
-                                          // TODO many-many connection with sites
+        public string Sites { get; set; } //TODO like category
+
         [InverseProperty("Operator")]
         public virtual ICollection<WorkDay> OperatorWorkDays { get; set; }
 
