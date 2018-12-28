@@ -70,10 +70,10 @@ namespace Ag.Web.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new
+            return Ok(new UserAuthResponseDto
             {
-                token = tokenHandler.WriteToken(token),
-                user
+                Token = tokenHandler.WriteToken(token),
+                User = user
             });
         }
     }

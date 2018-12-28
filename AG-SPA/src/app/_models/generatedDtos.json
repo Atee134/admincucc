@@ -5,45 +5,24 @@
     "version": "1.0.0"
   },
   "definitions": {
-    "UserForRegisterDto": {
+    "IncomeEntryForReturnDto": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "Role"
+        "IncomeInDollars",
+        "WorkDay"
       ],
       "properties": {
-        "UserName": {
+        "SiteName": {
           "type": "string"
         },
-        "Password": {
-          "type": "string"
+        "IncomeInDollars": {
+          "type": "number",
+          "format": "double"
         },
-        "Role": {
-          "$ref": "#/definitions/Role"
-        }
-      }
-    },
-    "Role": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "Operator",
-        "Performer"
-      ],
-      "enum": [
-        "Operator",
-        "Performer"
-      ]
-    },
-    "UserForLoginDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "UserName": {
-          "type": "string"
-        },
-        "Password": {
-          "type": "string"
+        "WorkDay": {
+          "type": "string",
+          "format": "date-time"
         }
       }
     },
@@ -69,26 +48,49 @@
         }
       }
     },
-    "IncomeEntryForReturnDto": {
+    "UserForLoginDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "UserName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        }
+      }
+    },
+    "UserForRegisterDto": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "IncomeInDollars",
-        "WorkDay"
+        "Role"
       ],
       "properties": {
-        "SiteName": {
+        "UserName": {
           "type": "string"
         },
-        "IncomeInDollars": {
-          "type": "number",
-          "format": "double"
+        "Password": {
+          "type": "string"
         },
-        "WorkDay": {
-          "type": "string",
-          "format": "date-time"
+        "Role": {
+          "$ref": "#/definitions/Role"
         }
       }
+    },
+    "Role": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Operator",
+        "Performer",
+        "Admin"
+      ],
+      "enum": [
+        "Operator",
+        "Performer",
+        "Admin"
+      ]
     },
     "Shift": {
       "type": "string",
@@ -120,6 +122,32 @@
           "items": {
             "$ref": "#/definitions/UserForListDto"
           }
+        }
+      }
+    },
+    "Site": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "LJ",
+        "CB",
+        "MFC"
+      ],
+      "enum": [
+        "LJ",
+        "CB",
+        "MFC"
+      ]
+    },
+    "UserAuthResponseDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Token": {
+          "type": "string"
+        },
+        "User": {
+          "$ref": "#/definitions/UserForListDto"
         }
       }
     }

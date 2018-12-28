@@ -1,8 +1,5 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div>
-  <app-login *ngIf="!loggedIn" (loggedIn)="loggedIn = $event"></app-login>
-  <div *ngIf="loggedIn">
-      <app-nav></app-nav>
+      <app-nav *ngIf="loggedIn$ | async"></app-nav>
       <router-outlet></router-outlet>
-  </div>
 </div>

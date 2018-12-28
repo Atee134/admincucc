@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
 })
 export class WorkdayService {
   baseUrl = environment.apiUrl;
-  
+
   constructor(private http: HttpClient) { }
 
   addWorkDay(date: Date) {
