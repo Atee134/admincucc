@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ag.Common.Dtos.Request
 {
-    class IncomeEntryAddDto
+    public class IncomeEntryAddDto
     {
+        [Required]
         public DateTime Date { get; set; }
 
-        public string Site { get; set; } // TODO like priority
-
-        public double IncomeInDollars { get; set; }
+        [Required]
+        public List<IncomeChunkAddDto> IncomeChunks { get; set; }
     }
 }

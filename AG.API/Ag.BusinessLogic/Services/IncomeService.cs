@@ -1,6 +1,8 @@
 ﻿using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos;
+using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
+using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,59 @@ namespace Ag.BusinessLogic.Services
             _context = context;
         }
 
+        public IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto)
+        {
+            var op = _context.Users.Include(u => u.Colleague).FirstOrDefault(u => u.Id == userId);
+
+            if (op.Role != Role.Operator)
+            {
+                // TODO throw exception
+            }
+
+            if (op.Colleague == null)
+            {
+                // TODO throw exception
+            }
+
+            List<IncomeChunk> incomeChunks = new List<IncomeChunk>();
+
+            foreach (var incomeChunkDto in incomeEntryDto.IncomeChunks)
+            {
+                incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, op.MinPercent, op.Colleague.MinPercent)); // TODO add logic for currentPercent to not use always minimum
+            }
+
+            var incomeEntry = new IncomeEntry()
+            {
+                Date = DateTime.UtcNow,
+                Operator = op,
+                Performer = op.Colleague,
+                IncomeChunks = incomeChunks,
+                TotalIncomeForOwner = incomeChunks.Sum(i => i.IncomeForOwner),
+                TotalIncomeForOperator = incomeChunks.Sum(i => i.IncomeForOperator),
+                TotalIncomeForPerformer = incomeChunks.Sum(i => i.IncomeForPerformer)
+            };
+
+            _context.IncomeEntries.Add(incomeEntry);
+            _context.SaveChanges();
+
+            return ConvertIncomeEntryForReturnDto(incomeEntry);
+        }
+
+        private IncomeChunk CreateIncomeChunkFromDto(IncomeChunkAddDto incomeChunkDto, double operatorPercent, double performerPercent)
+        {
+            double incomeForOperator = incomeChunkDto.Income * operatorPercent;
+            double incomeForPerformer = incomeChunkDto.Income * performerPercent;
+            double incomeForOwner = incomeChunkDto.Income - (incomeForOperator + incomeForPerformer);
+
+            return new IncomeChunk()
+            {
+                Site = incomeChunkDto.Site,
+                IncomeForOwner = incomeForOwner,
+                IncomeForOperator = incomeForOperator,
+                IncomeForPerformer = incomeForPerformer,
+            };
+        }
+
         public List<IncomeEntryForReturnDto> GetIncomeEntries(int userId)
         {
             List<IncomeEntryForReturnDto> incomeEntriesToReturn = new List<IncomeEntryForReturnDto>();
@@ -31,20 +86,23 @@ namespace Ag.BusinessLogic.Services
 
             foreach (var entry in userEntries)
             {
-                IncomeEntryForReturnDto incomeEntryDto = new IncomeEntryForReturnDto()
-                {
-                    Id = entry.Id,
-                    Date = entry.Date,
-                    TotalIncomeForOwner = entry.TotalIncomeForOwner,
-                    TotalIncomeForOperator = entry.TotalIncomeForOperator,
-                    TotalIncomeForPerformer = entry.TotalIncomeForPerformer,
-                    IncomeChunkDtos = GetIncomeChunks(entry)
-                };
-
-                incomeEntriesToReturn.Add(incomeEntryDto);
+                incomeEntriesToReturn.Add(ConvertIncomeEntryForReturnDto(entry));
             }
 
             return incomeEntriesToReturn;
+        }
+
+        private IncomeEntryForReturnDto ConvertIncomeEntryForReturnDto(IncomeEntry incomeEntry)
+        {
+            return new IncomeEntryForReturnDto()
+            {
+                Id = incomeEntry.Id,
+                Date = incomeEntry.Date,
+                TotalIncomeForOwner = incomeEntry.TotalIncomeForOwner,
+                TotalIncomeForOperator = incomeEntry.TotalIncomeForOperator,
+                TotalIncomeForPerformer = incomeEntry.TotalIncomeForPerformer,
+                IncomeChunkDtos = GetIncomeChunks(incomeEntry)
+            };
         }
 
         private List<IncomeChunkForReturnDto> GetIncomeChunks(IncomeEntry entry)

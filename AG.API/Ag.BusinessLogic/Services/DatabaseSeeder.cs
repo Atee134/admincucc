@@ -1,26 +1,30 @@
 ﻿using Ag.BusinessLogic.Interfaces;
+using Ag.Common.Dtos.Request;
+using Ag.Common.Enums;
 using Ag.Domain;
-using Ag.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Ag.BusinessLogic.Services
 {
     public class DatabaseSeeder : IApplicationInitializer
     {
+        private static readonly Random _random = new Random();
+        private const int TEST_INCOMES_COUNT = 30;
         private readonly AgDbContext _context;
         private readonly IAuthService _authService;
         private readonly IIncomeService _incomeService;
+        private readonly IUserService _userService;
 
-        public DatabaseSeeder(AgDbContext context, IAuthService authService, IIncomeService incomeService)
+        public DatabaseSeeder(AgDbContext context, IAuthService authService, IIncomeService incomeService, IUserService userService)
         {
             _context = context;
             _authService = authService;
             _incomeService = incomeService;
+            _userService = userService;
         }
 
         public void Start()
@@ -37,28 +41,51 @@ namespace Ag.BusinessLogic.Services
 
         private void SeedTestData()
         {
-            _authService.Register(new Common.Dtos.Request.UserForRegisterDto()
+            _authService.Register(new UserForRegisterDto()
             {
                 UserName = "TestOperator",
                 Password = "1234",
-                Role = Common.Enums.Role.Operator
+                Role = Role.Operator
             });
 
-            _authService.Register(new Common.Dtos.Request.UserForRegisterDto()
+            _authService.Register(new UserForRegisterDto()
             {
                 UserName = "TestPerformer",
                 Password = "1234",
-                Role = Common.Enums.Role.Performer
+                Role = Role.Performer
             });
 
-            _authService.Register(new Common.Dtos.Request.UserForRegisterDto()
+            _authService.Register(new UserForRegisterDto()
             {
                 UserName = "TestAdmin",
                 Password = "1234",
-                Role = Common.Enums.Role.Admin
+                Role = Role.Admin
             });
 
             _context.SaveChanges();
+
+            _userService.AddPerformer(1, 2);
+
+            for (int i = 0; i < TEST_INCOMES_COUNT; i++)
+            {
+                _incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
+            }
+
+            _context.SaveChanges();
+        }
+
+        private IncomeEntryAddDto CreateRandomIncomeEntry(int dayOffset)
+        {
+            return new IncomeEntryAddDto()
+            {
+                Date = DateTime.Now.AddDays(-dayOffset),
+                IncomeChunks = new List<IncomeChunkAddDto>()
+                {
+                    new IncomeChunkAddDto { Site = Site.CB, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.LJ, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.MFC, Income = _random.NextDouble() * 100},
+                }
+            };
         }
     }
 }

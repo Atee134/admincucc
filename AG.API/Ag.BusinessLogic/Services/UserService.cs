@@ -23,7 +23,7 @@ namespace Ag.BusinessLogic.Services
 
             if (op == null || op.Colleague != null)
             {
-                // TODO throw exception
+                // TODO throw exception, op already has a colleague
                 return;
             }
 
@@ -31,7 +31,7 @@ namespace Ag.BusinessLogic.Services
 
             if (performer == null || performer.Colleague != null)
             {
-                // TODO throw exception
+                // TODO throw exception, performer already has a colleague
                 return;
             }
 

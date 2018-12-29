@@ -23,7 +23,7 @@ namespace Ag.Web.Controllers
         [HttpGet]
         public IActionResult GetIncomes(int userId)
         {
-            var incomeEntries = _incomeService.GetIncomeEntries(5);
+            var incomeEntries = _incomeService.GetIncomeEntries(userId);
             return Ok(incomeEntries);
         }
     }
