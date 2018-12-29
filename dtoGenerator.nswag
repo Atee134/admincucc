@@ -4,13 +4,15 @@
   "swaggerGenerator": {
     "typesToSwagger": {
       "classNames": [
-        "Ag.Common.Dtos.WorkDayForAddDto",
-        "Ag.Common.Dtos.UserForRegisterDto",
-        "Ag.Common.Dtos.UserForLoginDto",
-        "Ag.Common.Dtos.UserForListDto",
         "Ag.Common.Dtos.IncomeEntryForReturnDto",
+        "Ag.Common.Dtos.UserAuthResponseDto",
+        "Ag.Common.Dtos.UserForListDto",
+        "Ag.Common.Dtos.UserForLoginDto",
+        "Ag.Common.Dtos.UserForRegisterDto",
+        "Ag.Common.Dtos.WorkDayForListDto",
+        "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
-        "Ag.Common.Enums.Role"
+        "Ag.Common.Enums.Site"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",
@@ -23,7 +25,8 @@
       "output": "AG-SPA/src/app/_models/generatedDtos.json",
       "outputType": "Swagger2",
       "assemblyPaths": [
-        "AG.API/Ag.Web/bin/Debug/netcoreapp2.1/Ag.Common.dll"
+        "AG.API/Ag.Web/bin/Debug/netcoreapp2.1/Ag.Common.dll",
+        "AG.API/Ag.Web/bin/Debug/netcoreapp2.1/Ag.Web.dll"
       ],
       "assemblyConfig": null,
       "referencePaths": [],
@@ -75,6 +78,7 @@
       "useGetBaseUrlMethod": false,
       "baseUrlTokenName": "API_BASE_URL",
       "queryNullValue": "",
+      "inlineNamedDictionaries": false,
       "templateDirectory": null,
       "typeNameGeneratorType": null,
       "propertyNameGeneratorType": null,

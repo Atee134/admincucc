@@ -26,6 +26,18 @@
         }
       }
     },
+    "UserAuthResponseDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Token": {
+          "type": "string"
+        },
+        "User": {
+          "$ref": "#/definitions/UserForListDto"
+        }
+      }
+    },
     "UserForListDto": {
       "type": "object",
       "additionalProperties": false,
@@ -92,20 +104,6 @@
         "Admin"
       ]
     },
-    "Shift": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ],
-      "enum": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ]
-    },
     "WorkDayForListDto": {
       "type": "object",
       "additionalProperties": false,
@@ -125,6 +123,20 @@
         }
       }
     },
+    "Shift": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ],
+      "enum": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ]
+    },
     "Site": {
       "type": "string",
       "description": "",
@@ -139,15 +151,15 @@
         "MFC"
       ]
     },
-    "UserAuthResponseDto": {
+    "ErrorDetails": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Token": {
-          "type": "string"
-        },
-        "User": {
-          "$ref": "#/definitions/UserForListDto"
+        "Messages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

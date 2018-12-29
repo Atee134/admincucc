@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Ag.Common.Dtos
+﻿namespace Ag.Common.Dtos
 {
     public class UserForLoginDto
     {

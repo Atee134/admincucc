@@ -59,6 +59,53 @@ export interface IIncomeEntryForReturnDto {
     workDay: Date;
 }
 
+export class UserAuthResponseDto implements IUserAuthResponseDto {
+    token?: string | null;
+    user?: UserForListDto | null;
+
+    constructor(data?: IUserAuthResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.token = data["Token"] !== undefined ? data["Token"] : <any>null;
+            this.user = data["User"] ? UserForListDto.fromJS(data["User"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserAuthResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserAuthResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Token"] = this.token !== undefined ? this.token : <any>null;
+        data["User"] = this.user ? this.user.toJSON() : <any>null;
+        return data; 
+    }
+
+    clone(): UserAuthResponseDto {
+        const json = this.toJSON();
+        let result = new UserAuthResponseDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserAuthResponseDto {
+    token?: string | null;
+    user?: UserForListDto | null;
+}
+
 export class UserForListDto implements IUserForListDto {
     id!: number;
     userName?: string | null;
@@ -218,12 +265,6 @@ export enum Role {
     Admin = "Admin", 
 }
 
-export enum Shift {
-    Morning = "Morning", 
-    Afternoon = "Afternoon", 
-    Night = "Night", 
-}
-
 export class WorkDayForListDto implements IWorkDayForListDto {
     date!: Date;
     workers?: UserForListDto[] | null;
@@ -279,17 +320,22 @@ export interface IWorkDayForListDto {
     workers?: UserForListDto[] | null;
 }
 
+export enum Shift {
+    Morning = "Morning", 
+    Afternoon = "Afternoon", 
+    Night = "Night", 
+}
+
 export enum Site {
     LJ = "LJ", 
     CB = "CB", 
     MFC = "MFC", 
 }
 
-export class UserAuthResponseDto implements IUserAuthResponseDto {
-    token?: string | null;
-    user?: UserForListDto | null;
+export class ErrorDetails implements IErrorDetails {
+    messages?: string[] | null;
 
-    constructor(data?: IUserAuthResponseDto) {
+    constructor(data?: IErrorDetails) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -300,34 +346,39 @@ export class UserAuthResponseDto implements IUserAuthResponseDto {
 
     init(data?: any) {
         if (data) {
-            this.token = data["Token"] !== undefined ? data["Token"] : <any>null;
-            this.user = data["User"] ? UserForListDto.fromJS(data["User"]) : <any>null;
+            if (data["Messages"] && data["Messages"].constructor === Array) {
+                this.messages = [];
+                for (let item of data["Messages"])
+                    this.messages.push(item);
+            }
         }
     }
 
-    static fromJS(data: any): UserAuthResponseDto {
+    static fromJS(data: any): ErrorDetails {
         data = typeof data === 'object' ? data : {};
-        let result = new UserAuthResponseDto();
+        let result = new ErrorDetails();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Token"] = this.token !== undefined ? this.token : <any>null;
-        data["User"] = this.user ? this.user.toJSON() : <any>null;
+        if (this.messages && this.messages.constructor === Array) {
+            data["Messages"] = [];
+            for (let item of this.messages)
+                data["Messages"].push(item);
+        }
         return data; 
     }
 
-    clone(): UserAuthResponseDto {
+    clone(): ErrorDetails {
         const json = this.toJSON();
-        let result = new UserAuthResponseDto();
+        let result = new ErrorDetails();
         result.init(json);
         return result;
     }
 }
 
-export interface IUserAuthResponseDto {
-    token?: string | null;
-    user?: UserForListDto | null;
+export interface IErrorDetails {
+    messages?: string[] | null;
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ag.Common.Dtos
+﻿namespace Ag.Common.Dtos
 {
     public class UserForListDto
     {
