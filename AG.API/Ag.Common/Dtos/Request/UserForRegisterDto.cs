@@ -1,6 +1,6 @@
 ﻿using Ag.Common.Enums;
 
-namespace Ag.Common.Dtos
+namespace Ag.Common.Dtos.Request
 {
     public class UserForRegisterDto
     {

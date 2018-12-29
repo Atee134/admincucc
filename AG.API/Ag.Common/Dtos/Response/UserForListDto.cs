@@ -1,4 +1,4 @@
-﻿namespace Ag.Common.Dtos
+﻿namespace Ag.Common.Dtos.Response
 {
     public class UserForListDto
     {

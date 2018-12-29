@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ag.Common.Dtos
+namespace Ag.Common.Dtos.Response
 {
     public class WorkDayForListDto
     {

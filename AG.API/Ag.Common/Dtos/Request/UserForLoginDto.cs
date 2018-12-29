@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ag.Common.Dtos
+namespace Ag.Common.Dtos.Request
 {
     public class UserForLoginDto
     {

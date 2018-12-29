@@ -8,316 +8,10 @@
 
 
 
-export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
-    siteName?: string | null;
-    incomeInDollars!: number;
-    workDay!: Date;
-
-    constructor(data?: IIncomeEntryForReturnDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.siteName = data["SiteName"] !== undefined ? data["SiteName"] : <any>null;
-            this.incomeInDollars = data["IncomeInDollars"] !== undefined ? data["IncomeInDollars"] : <any>null;
-            this.workDay = data["WorkDay"] ? new Date(data["WorkDay"].toString()) : <any>null;
-        }
-    }
-
-    static fromJS(data: any): IncomeEntryForReturnDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new IncomeEntryForReturnDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["SiteName"] = this.siteName !== undefined ? this.siteName : <any>null;
-        data["IncomeInDollars"] = this.incomeInDollars !== undefined ? this.incomeInDollars : <any>null;
-        data["WorkDay"] = this.workDay ? this.workDay.toISOString() : <any>null;
-        return data; 
-    }
-
-    clone(): IncomeEntryForReturnDto {
-        const json = this.toJSON();
-        let result = new IncomeEntryForReturnDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IIncomeEntryForReturnDto {
-    siteName?: string | null;
-    incomeInDollars: number;
-    workDay: Date;
-}
-
-export class UserAuthResponseDto implements IUserAuthResponseDto {
-    token?: string | null;
-    user?: UserForListDto | null;
-
-    constructor(data?: IUserAuthResponseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.token = data["Token"] !== undefined ? data["Token"] : <any>null;
-            this.user = data["User"] ? UserForListDto.fromJS(data["User"]) : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UserAuthResponseDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserAuthResponseDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["Token"] = this.token !== undefined ? this.token : <any>null;
-        data["User"] = this.user ? this.user.toJSON() : <any>null;
-        return data; 
-    }
-
-    clone(): UserAuthResponseDto {
-        const json = this.toJSON();
-        let result = new UserAuthResponseDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUserAuthResponseDto {
-    token?: string | null;
-    user?: UserForListDto | null;
-}
-
-export class UserForListDto implements IUserForListDto {
-    id!: number;
-    userName?: string | null;
-    shift?: string | null;
-    role?: string | null;
-
-    constructor(data?: IUserForListDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
-            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
-            this.shift = data["Shift"] !== undefined ? data["Shift"] : <any>null;
-            this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UserForListDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserForListDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["Id"] = this.id !== undefined ? this.id : <any>null;
-        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
-        data["Shift"] = this.shift !== undefined ? this.shift : <any>null;
-        data["Role"] = this.role !== undefined ? this.role : <any>null;
-        return data; 
-    }
-
-    clone(): UserForListDto {
-        const json = this.toJSON();
-        let result = new UserForListDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUserForListDto {
-    id: number;
-    userName?: string | null;
-    shift?: string | null;
-    role?: string | null;
-}
-
-export class UserForLoginDto implements IUserForLoginDto {
-    userName?: string | null;
-    password?: string | null;
-
-    constructor(data?: IUserForLoginDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
-            this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UserForLoginDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserForLoginDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
-        data["Password"] = this.password !== undefined ? this.password : <any>null;
-        return data; 
-    }
-
-    clone(): UserForLoginDto {
-        const json = this.toJSON();
-        let result = new UserForLoginDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUserForLoginDto {
-    userName?: string | null;
-    password?: string | null;
-}
-
-export class UserForRegisterDto implements IUserForRegisterDto {
-    userName?: string | null;
-    password?: string | null;
-    role!: Role;
-
-    constructor(data?: IUserForRegisterDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
-            this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
-            this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): UserForRegisterDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserForRegisterDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
-        data["Password"] = this.password !== undefined ? this.password : <any>null;
-        data["Role"] = this.role !== undefined ? this.role : <any>null;
-        return data; 
-    }
-
-    clone(): UserForRegisterDto {
-        const json = this.toJSON();
-        let result = new UserForRegisterDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IUserForRegisterDto {
-    userName?: string | null;
-    password?: string | null;
-    role: Role;
-}
-
 export enum Role {
     Operator = "Operator", 
     Performer = "Performer", 
     Admin = "Admin", 
-}
-
-export class WorkDayForListDto implements IWorkDayForListDto {
-    date!: Date;
-    workers?: UserForListDto[] | null;
-
-    constructor(data?: IWorkDayForListDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>null;
-            if (data["Workers"] && data["Workers"].constructor === Array) {
-                this.workers = [];
-                for (let item of data["Workers"])
-                    this.workers.push(UserForListDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): WorkDayForListDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new WorkDayForListDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["Date"] = this.date ? this.date.toISOString() : <any>null;
-        if (this.workers && this.workers.constructor === Array) {
-            data["Workers"] = [];
-            for (let item of this.workers)
-                data["Workers"].push(item.toJSON());
-        }
-        return data; 
-    }
-
-    clone(): WorkDayForListDto {
-        const json = this.toJSON();
-        let result = new WorkDayForListDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IWorkDayForListDto {
-    date: Date;
-    workers?: UserForListDto[] | null;
 }
 
 export enum Shift {
@@ -381,4 +75,389 @@ export class ErrorDetails implements IErrorDetails {
 
 export interface IErrorDetails {
     messages?: string[] | null;
+}
+
+export class WorkDayForListDto implements IWorkDayForListDto {
+    date!: Date;
+    workers?: UserForListDto[] | null;
+
+    constructor(data?: IWorkDayForListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>null;
+            if (data["Workers"] && data["Workers"].constructor === Array) {
+                this.workers = [];
+                for (let item of data["Workers"])
+                    this.workers.push(UserForListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): WorkDayForListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new WorkDayForListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Date"] = this.date ? this.date.toISOString() : <any>null;
+        if (this.workers && this.workers.constructor === Array) {
+            data["Workers"] = [];
+            for (let item of this.workers)
+                data["Workers"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): WorkDayForListDto {
+        const json = this.toJSON();
+        let result = new WorkDayForListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IWorkDayForListDto {
+    date: Date;
+    workers?: UserForListDto[] | null;
+}
+
+export class UserForListDto implements IUserForListDto {
+    id!: number;
+    userName?: string | null;
+    shift?: string | null;
+    role?: string | null;
+
+    constructor(data?: IUserForListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
+            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.shift = data["Shift"] !== undefined ? data["Shift"] : <any>null;
+            this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserForListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserForListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id !== undefined ? this.id : <any>null;
+        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["Shift"] = this.shift !== undefined ? this.shift : <any>null;
+        data["Role"] = this.role !== undefined ? this.role : <any>null;
+        return data; 
+    }
+
+    clone(): UserForListDto {
+        const json = this.toJSON();
+        let result = new UserForListDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserForListDto {
+    id: number;
+    userName?: string | null;
+    shift?: string | null;
+    role?: string | null;
+}
+
+export class UserAuthResponseDto implements IUserAuthResponseDto {
+    token?: string | null;
+    user?: UserForListDto | null;
+
+    constructor(data?: IUserAuthResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.token = data["Token"] !== undefined ? data["Token"] : <any>null;
+            this.user = data["User"] ? UserForListDto.fromJS(data["User"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserAuthResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserAuthResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Token"] = this.token !== undefined ? this.token : <any>null;
+        data["User"] = this.user ? this.user.toJSON() : <any>null;
+        return data; 
+    }
+
+    clone(): UserAuthResponseDto {
+        const json = this.toJSON();
+        let result = new UserAuthResponseDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserAuthResponseDto {
+    token?: string | null;
+    user?: UserForListDto | null;
+}
+
+export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
+    id!: number;
+    date!: Date;
+    totalIncomeForOwner!: number;
+    totalIncomeForOperator!: number;
+    totalIncomeForPerformer!: number;
+    incomeChunkDtos?: IncomeChunkForReturnDto[] | null;
+
+    constructor(data?: IIncomeEntryForReturnDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
+            this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>null;
+            this.totalIncomeForOwner = data["TotalIncomeForOwner"] !== undefined ? data["TotalIncomeForOwner"] : <any>null;
+            this.totalIncomeForOperator = data["TotalIncomeForOperator"] !== undefined ? data["TotalIncomeForOperator"] : <any>null;
+            this.totalIncomeForPerformer = data["TotalIncomeForPerformer"] !== undefined ? data["TotalIncomeForPerformer"] : <any>null;
+            if (data["IncomeChunkDtos"] && data["IncomeChunkDtos"].constructor === Array) {
+                this.incomeChunkDtos = [];
+                for (let item of data["IncomeChunkDtos"])
+                    this.incomeChunkDtos.push(IncomeChunkForReturnDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): IncomeEntryForReturnDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncomeEntryForReturnDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id !== undefined ? this.id : <any>null;
+        data["Date"] = this.date ? this.date.toISOString() : <any>null;
+        data["TotalIncomeForOwner"] = this.totalIncomeForOwner !== undefined ? this.totalIncomeForOwner : <any>null;
+        data["TotalIncomeForOperator"] = this.totalIncomeForOperator !== undefined ? this.totalIncomeForOperator : <any>null;
+        data["TotalIncomeForPerformer"] = this.totalIncomeForPerformer !== undefined ? this.totalIncomeForPerformer : <any>null;
+        if (this.incomeChunkDtos && this.incomeChunkDtos.constructor === Array) {
+            data["IncomeChunkDtos"] = [];
+            for (let item of this.incomeChunkDtos)
+                data["IncomeChunkDtos"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): IncomeEntryForReturnDto {
+        const json = this.toJSON();
+        let result = new IncomeEntryForReturnDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIncomeEntryForReturnDto {
+    id: number;
+    date: Date;
+    totalIncomeForOwner: number;
+    totalIncomeForOperator: number;
+    totalIncomeForPerformer: number;
+    incomeChunkDtos?: IncomeChunkForReturnDto[] | null;
+}
+
+export class IncomeChunkForReturnDto implements IIncomeChunkForReturnDto {
+    id!: number;
+    site!: Site;
+    incomeForOwner!: number;
+    incomeForOperator!: number;
+    incomeForPerformer!: number;
+
+    constructor(data?: IIncomeChunkForReturnDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
+            this.site = data["Site"] !== undefined ? data["Site"] : <any>null;
+            this.incomeForOwner = data["IncomeForOwner"] !== undefined ? data["IncomeForOwner"] : <any>null;
+            this.incomeForOperator = data["IncomeForOperator"] !== undefined ? data["IncomeForOperator"] : <any>null;
+            this.incomeForPerformer = data["IncomeForPerformer"] !== undefined ? data["IncomeForPerformer"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): IncomeChunkForReturnDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncomeChunkForReturnDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id !== undefined ? this.id : <any>null;
+        data["Site"] = this.site !== undefined ? this.site : <any>null;
+        data["IncomeForOwner"] = this.incomeForOwner !== undefined ? this.incomeForOwner : <any>null;
+        data["IncomeForOperator"] = this.incomeForOperator !== undefined ? this.incomeForOperator : <any>null;
+        data["IncomeForPerformer"] = this.incomeForPerformer !== undefined ? this.incomeForPerformer : <any>null;
+        return data; 
+    }
+
+    clone(): IncomeChunkForReturnDto {
+        const json = this.toJSON();
+        let result = new IncomeChunkForReturnDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIncomeChunkForReturnDto {
+    id: number;
+    site: Site;
+    incomeForOwner: number;
+    incomeForOperator: number;
+    incomeForPerformer: number;
+}
+
+export class UserForRegisterDto implements IUserForRegisterDto {
+    userName?: string | null;
+    password?: string | null;
+    role!: Role;
+
+    constructor(data?: IUserForRegisterDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
+            this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserForRegisterDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserForRegisterDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["Password"] = this.password !== undefined ? this.password : <any>null;
+        data["Role"] = this.role !== undefined ? this.role : <any>null;
+        return data; 
+    }
+
+    clone(): UserForRegisterDto {
+        const json = this.toJSON();
+        let result = new UserForRegisterDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserForRegisterDto {
+    userName?: string | null;
+    password?: string | null;
+    role: Role;
+}
+
+export class UserForLoginDto implements IUserForLoginDto {
+    userName!: string;
+    password!: string;
+
+    constructor(data?: IUserForLoginDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserForLoginDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserForLoginDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["Password"] = this.password !== undefined ? this.password : <any>null;
+        return data; 
+    }
+
+    clone(): UserForLoginDto {
+        const json = this.toJSON();
+        let result = new UserForLoginDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserForLoginDto {
+    userName: string;
+    password: string;
 }

@@ -5,91 +5,6 @@
     "version": "1.0.0"
   },
   "definitions": {
-    "IncomeEntryForReturnDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "IncomeInDollars",
-        "WorkDay"
-      ],
-      "properties": {
-        "SiteName": {
-          "type": "string"
-        },
-        "IncomeInDollars": {
-          "type": "number",
-          "format": "double"
-        },
-        "WorkDay": {
-          "type": "string",
-          "format": "date-time"
-        }
-      }
-    },
-    "UserAuthResponseDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Token": {
-          "type": "string"
-        },
-        "User": {
-          "$ref": "#/definitions/UserForListDto"
-        }
-      }
-    },
-    "UserForListDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Id"
-      ],
-      "properties": {
-        "Id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "UserName": {
-          "type": "string"
-        },
-        "Shift": {
-          "type": "string"
-        },
-        "Role": {
-          "type": "string"
-        }
-      }
-    },
-    "UserForLoginDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "UserName": {
-          "type": "string"
-        },
-        "Password": {
-          "type": "string"
-        }
-      }
-    },
-    "UserForRegisterDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Role"
-      ],
-      "properties": {
-        "UserName": {
-          "type": "string"
-        },
-        "Password": {
-          "type": "string"
-        },
-        "Role": {
-          "$ref": "#/definitions/Role"
-        }
-      }
-    },
     "Role": {
       "type": "string",
       "description": "",
@@ -103,25 +18,6 @@
         "Performer",
         "Admin"
       ]
-    },
-    "WorkDayForListDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Date"
-      ],
-      "properties": {
-        "Date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "Workers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserForListDto"
-          }
-        }
-      }
     },
     "Shift": {
       "type": "string",
@@ -160,6 +56,166 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "WorkDayForListDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date"
+      ],
+      "properties": {
+        "Date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Workers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserForListDto"
+          }
+        }
+      }
+    },
+    "UserForListDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "UserName": {
+          "type": "string"
+        },
+        "Shift": {
+          "type": "string"
+        },
+        "Role": {
+          "type": "string"
+        }
+      }
+    },
+    "UserAuthResponseDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Token": {
+          "type": "string"
+        },
+        "User": {
+          "$ref": "#/definitions/UserForListDto"
+        }
+      }
+    },
+    "IncomeEntryForReturnDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id",
+        "Date",
+        "TotalIncomeForOwner",
+        "TotalIncomeForOperator",
+        "TotalIncomeForPerformer"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "TotalIncomeForOwner": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalIncomeForOperator": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalIncomeForPerformer": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeChunkDtos": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeChunkForReturnDto"
+          }
+        }
+      }
+    },
+    "IncomeChunkForReturnDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id",
+        "Site",
+        "IncomeForOwner",
+        "IncomeForOperator",
+        "IncomeForPerformer"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Site": {
+          "$ref": "#/definitions/Site"
+        },
+        "IncomeForOwner": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeForOperator": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeForPerformer": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "UserForRegisterDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Role"
+      ],
+      "properties": {
+        "UserName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "Role": {
+          "$ref": "#/definitions/Role"
+        }
+      }
+    },
+    "UserForLoginDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "UserName",
+        "Password"
+      ],
+      "properties": {
+        "UserName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Password": {
+          "type": "string",
+          "minLength": 4
         }
       }
     }

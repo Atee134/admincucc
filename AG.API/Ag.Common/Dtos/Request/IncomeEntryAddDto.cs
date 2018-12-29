@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ag.Common.Dtos
+namespace Ag.Common.Dtos.Request
 {
     class IncomeEntryAddDto
     {

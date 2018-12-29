@@ -4,16 +4,17 @@
   "swaggerGenerator": {
     "typesToSwagger": {
       "classNames": [
-        "Ag.Common.Dtos.IncomeEntryForReturnDto",
-        "Ag.Common.Dtos.UserAuthResponseDto",
-        "Ag.Common.Dtos.UserForListDto",
-        "Ag.Common.Dtos.UserForLoginDto",
-        "Ag.Common.Dtos.UserForRegisterDto",
-        "Ag.Common.Dtos.WorkDayForListDto",
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
         "Ag.Common.Enums.Site",
-        "Ag.Web.Models.ErrorDetails"
+        "Ag.Web.Models.ErrorDetails",
+        "Ag.Common.Dtos.Response.WorkDayForListDto",
+        "Ag.Common.Dtos.Response.UserAuthResponseDto",
+        "Ag.Common.Dtos.Response.UserForListDto",
+        "Ag.Common.Dtos.Response.IncomeEntryForReturnDto",
+        "Ag.Common.Dtos.Response.IncomeChunkForReturnDto",
+        "Ag.Common.Dtos.Request.UserForRegisterDto",
+        "Ag.Common.Dtos.Request.UserForLoginDto"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",
