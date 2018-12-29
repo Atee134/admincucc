@@ -1,5 +1,6 @@
 <div class="container">
-  <h1>Login</h1>
+  <h1 class="text-center mt-4">Login</h1>
+  <hr>
   <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
     <div class="form-group">
       <label for="userName">Username</label>
@@ -8,7 +9,7 @@
             [(ngModel)]="user.userName" name="userName"
             #userName="ngModel">
       <div [hidden]="userName.valid || userName.pristine"
-          class="alert alert-danger">
+          class="alert alert-danger mt-2">
           Username is required
       </div>
     </div>
@@ -20,11 +21,11 @@
             [(ngModel)]="user.password" name="password"
             #password="ngModel">
       <div [hidden]="password.valid || password.pristine"
-          class="alert alert-danger">
+          class="alert alert-danger mt-2">
           Password is required
        </div>
     </div>
 
-    <button type="submit" class="btn btn-success" [disabled]="!loginForm.form.valid">Login</button>
+    <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!loginForm.form.valid">Login</button>
   </form>
 </div>
