@@ -15,21 +15,20 @@ namespace Ag.Domain.Models
         public DateTime Date { get; set; }
 
         [Required]
-        public Site Site { get; set; }
+        public double TotalIncomeForOwner { get; set; }
 
         [Required]
-        public double IncomeForOwner { get; set; }
+        public double TotalIncomeForOperator { get; set; }
 
         [Required]
-        public double IncomeForOperator { get; set; }
-
-        [Required]
-        public double IncomeForPerformer { get; set; }
+        public double TotalIncomeForPerformer { get; set; }
 
         [Required]
         public virtual User Operator { get; set; }
 
         [Required]
         public virtual User Performer { get; set; }
+
+        public ICollection<IncomeChunk> IncomeChunks { get; set; }
     }
 }

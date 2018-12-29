@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20181226151409_Initial")]
+    [Migration("20181229183114_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,12 +21,12 @@ namespace Ag.Domain.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("Ag.Domain.Models.IncomeEntry", b =>
+            modelBuilder.Entity("Ag.Domain.Models.IncomeChunk", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Date");
+                    b.Property<long>("IncomeEntryId");
 
                     b.Property<double>("IncomeForOperator");
 
@@ -34,11 +34,31 @@ namespace Ag.Domain.Migrations
 
                     b.Property<double>("IncomeForPerformer");
 
+                    b.Property<int>("Site");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IncomeEntryId");
+
+                    b.ToTable("IncomeChunks");
+                });
+
+            modelBuilder.Entity("Ag.Domain.Models.IncomeEntry", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
                     b.Property<int>("OperatorId");
 
                     b.Property<int>("PerformerId");
 
-                    b.Property<int>("Site");
+                    b.Property<double>("TotalIncomeForOperator");
+
+                    b.Property<double>("TotalIncomeForOwner");
+
+                    b.Property<double>("TotalIncomeForPerformer");
 
                     b.HasKey("Id");
 
@@ -102,6 +122,14 @@ namespace Ag.Domain.Migrations
                     b.HasIndex("PerformerId");
 
                     b.ToTable("WorkDays");
+                });
+
+            modelBuilder.Entity("Ag.Domain.Models.IncomeChunk", b =>
+                {
+                    b.HasOne("Ag.Domain.Models.IncomeEntry", "IncomeEntry")
+                        .WithMany("IncomeChunks")
+                        .HasForeignKey("IncomeEntryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ag.Domain.Models.IncomeEntry", b =>

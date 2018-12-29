@@ -13,5 +13,7 @@ namespace Ag.Domain
         public DbSet<WorkDay> WorkDays { get; set; }
 
         public DbSet<IncomeEntry> IncomeEntries { get; set; }
+
+        public DbSet<IncomeChunk> IncomeChunks { get; set; }
     }
 }

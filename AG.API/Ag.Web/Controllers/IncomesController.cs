@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Ag.Web.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/users/{userId}/[controller]")]
     [ApiController]
     public class IncomesController : ControllerBase
     {
@@ -21,9 +21,9 @@ namespace Ag.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetIncomes()
+        public IActionResult GetIncomes(int userId)
         {
-            var incomeEntries = _incomeService.GetIncomeEntries();
+            var incomeEntries = _incomeService.GetIncomeEntries(5);
             return Ok(incomeEntries);
         }
     }

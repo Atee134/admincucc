@@ -42,10 +42,9 @@ namespace Ag.Domain.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Date = table.Column<DateTime>(nullable: false),
-                    Site = table.Column<int>(nullable: false),
-                    IncomeForOwner = table.Column<double>(nullable: false),
-                    IncomeForOperator = table.Column<double>(nullable: false),
-                    IncomeForPerformer = table.Column<double>(nullable: false),
+                    TotalIncomeForOwner = table.Column<double>(nullable: false),
+                    TotalIncomeForOperator = table.Column<double>(nullable: false),
+                    TotalIncomeForPerformer = table.Column<double>(nullable: false),
                     OperatorId = table.Column<int>(nullable: false),
                     PerformerId = table.Column<int>(nullable: false)
                 },
@@ -94,6 +93,34 @@ namespace Ag.Domain.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "IncomeChunks",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Site = table.Column<int>(nullable: false),
+                    IncomeForOwner = table.Column<double>(nullable: false),
+                    IncomeForOperator = table.Column<double>(nullable: false),
+                    IncomeForPerformer = table.Column<double>(nullable: false),
+                    IncomeEntryId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncomeChunks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IncomeChunks_IncomeEntries_IncomeEntryId",
+                        column: x => x.IncomeEntryId,
+                        principalTable: "IncomeEntries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IncomeChunks_IncomeEntryId",
+                table: "IncomeChunks",
+                column: "IncomeEntryId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_IncomeEntries_OperatorId",
                 table: "IncomeEntries",
@@ -123,10 +150,13 @@ namespace Ag.Domain.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "IncomeEntries");
+                name: "IncomeChunks");
 
             migrationBuilder.DropTable(
                 name: "WorkDays");
+
+            migrationBuilder.DropTable(
+                name: "IncomeEntries");
 
             migrationBuilder.DropTable(
                 name: "Users");
