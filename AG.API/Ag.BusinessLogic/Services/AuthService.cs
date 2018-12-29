@@ -1,12 +1,9 @@
 ﻿using Ag.BusinessLogic.Interfaces;
-using Ag.Common.Dtos;
+using Ag.Common.Dtos.Request;
+using Ag.Common.Dtos.Response;
 using Ag.Domain;
 using Ag.Domain.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ag.BusinessLogic.Services
 {

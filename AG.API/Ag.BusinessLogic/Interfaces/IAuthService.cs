@@ -1,7 +1,5 @@
-﻿using Ag.Common.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Ag.Common.Dtos.Request;
+using Ag.Common.Dtos.Response;
 
 namespace Ag.BusinessLogic.Interfaces
 {

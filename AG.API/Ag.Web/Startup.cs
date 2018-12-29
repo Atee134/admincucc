@@ -36,12 +36,14 @@ namespace Ag.Web
         {
             services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            // TODO remove dbcontext dependency, and reference to domain from here somehow (make dependency modules that add their own dependencies to DI)
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIncomeService, IncomeService>();
             services.AddScoped<IWorkDayService, WorkDayService>();
+            services.AddTransient<IApplicationInitializer, DatabaseSeeder>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
               .AddJwtBearer(options =>

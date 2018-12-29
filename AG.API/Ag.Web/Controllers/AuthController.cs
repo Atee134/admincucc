@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
-using Ag.Common.Dtos;
-using Microsoft.AspNetCore.Http;
+using Ag.Common.Dtos.Request;
+using Ag.Common.Dtos.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
