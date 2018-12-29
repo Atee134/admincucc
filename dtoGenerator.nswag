@@ -12,7 +12,8 @@
         "Ag.Common.Dtos.WorkDayForListDto",
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
-        "Ag.Common.Enums.Site"
+        "Ag.Common.Enums.Site",
+        "Ag.Web.Models.ErrorDetails"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",

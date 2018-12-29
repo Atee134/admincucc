@@ -45,12 +45,6 @@ namespace Ag.Web.Extensions
                         context.Response.Headers.Add("Application-Error", String.Join(';', errorMessages));
                         context.Response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
                         context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-                        await context.Response.WriteAsync(new ErrorDetails()
-                        {
-                            Status = context.Response.StatusCode,
-                            Messages = errorMessages.ToArray()
-                        }.ToString());
                     }
                 });
             });

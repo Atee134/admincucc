@@ -11,6 +11,7 @@ import { ButtonsModule } from 'ngx-bootstrap';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
+import { ErrorInterceptorProvider } from './_services/error.interceptor';
 
 @NgModule({
    declarations: [
@@ -26,7 +27,11 @@ import { FormsModule } from '@angular/forms';
       ButtonsModule.forRoot(),
       AppRoutingModule
    ],
-   providers: [WorkdayResolver, AvailableDatesResolver],
+   providers: [
+      WorkdayResolver,
+      AvailableDatesResolver,
+      ErrorInterceptorProvider
+   ],
    bootstrap: [
       AppComponent
    ]

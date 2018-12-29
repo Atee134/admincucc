@@ -25,12 +25,10 @@ export class LoginComponent implements OnInit {
     console.log('submitted');
 
     this.authService.login(this.user).subscribe(next => {
-      if (next) {
-        console.log(next);
+        console.log('Logged in as: ' + next);
         this.router.navigate(['/workdays']);
-      } else { // TODO catch error here, provided by error interceptor
-        console.log('Unauthorized haha');
-      }
+    }, error => {
+      console.log(error);
     });
   }
 }

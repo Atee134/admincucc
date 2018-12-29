@@ -26,18 +26,21 @@ export class AuthService {
     }
   }
 
-  login(user: UserForLoginDto): Observable<UserAuthResponseDto> {
+  login(user: UserForLoginDto): Observable<string> {
     return this.http.post<UserAuthResponseDto>(this.baseUrl + 'auth/login', user, { observe: 'response'}).pipe(
       map(res => {
         const token = res.body.token;
         localStorage.setItem('token', token);
         this.decodedToken = this.jwtHelper.decodeToken(token);
         this.loggedIn$.next(true);
-        return res.body;
-      }), // TODO add error interceptor
-      catchError(error => {
-          return of(null);
+        return res.body.user.userName;
       })
     );
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    this.decodedToken = null;
+    this.loggedIn$.next(false);
   }
 }
