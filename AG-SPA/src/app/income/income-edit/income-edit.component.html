@@ -1,0 +1,19 @@
+<div class="container" *ngIf="incomeEntry">
+    <h1 class="text-center mt-4">Add income</h1>
+    <hr>
+    <form (ngSubmit)="onSubmit()" #incomeForm="ngForm">
+      <div *ngFor="let site of uniqueSites" class="form-group">
+        <label [for]="site">{{site}}</label>
+        <input type="text" class="form-control" [id]="site"
+              required
+              [(ngModel)]="getIncomeChunk(site).income" [name]="site"
+              #income="ngModel">
+        <div [hidden]="income.valid || income.pristine"
+            class="alert alert-danger mt-2">
+            test is required
+        </div>
+      </div>
+  
+      <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeForm.form.valid">Add</button>
+    </form>
+  </div>

@@ -1,10 +1,10 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mx-auto">
   <div class='container'>
-    <a class="navbar-brand" [routerLink]="['/home']">Next Gen Studios</a>
+    <a class="navbar-brand" [routerLink]="['/incomes']">Next Gen Studios</a>
 
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/earnings']">Earnings</a>
+        <a class="nav-link" [routerLink]="['/incomes']">Incomes</a>
       </li>
     </ul>
 
@@ -15,9 +15,14 @@
     </ul> -->
 
     <ul class="navbar-nav">
+        <li class="nav-item" routerLinkActive="active">
+          <button class="nav-item btn btn-primary btn-sm mr-3" [routerLink]="['/incomes/add']">Add income</button>
+        </li>
+      </ul>
+
+    <ul class="navbar-nav">
       <li class="nav-item" routerLinkActive="active">
         <button class="nav-item btn btn-primary btn-sm" [routerLink]="['/login']" (click)="onLogout()">Log out</button>
-        <!-- <a class="nav-link" [routerLink]="['/login']" (click)="onLogout()">Log out</a> -->
       </li>
     </ul>
   </div>
