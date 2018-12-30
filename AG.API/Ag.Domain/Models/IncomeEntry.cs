@@ -15,6 +15,9 @@ namespace Ag.Domain.Models
         public DateTime Date { get; set; }
 
         [Required]
+        public double TotalSum { get; set; }
+
+        [Required]
         public double TotalIncomeForOwner { get; set; }
 
         [Required]

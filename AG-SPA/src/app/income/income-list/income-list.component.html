@@ -1,3 +1,22 @@
-<p>
-  income-list works!
-</p>
+<div class="container" *ngIf="incomeEntries">
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th *ngFor="let site of uniqueSites" scope="col">{{site}}</th>
+          <th scope="col">Total</th>
+          <th scope="col">Operator</th>
+          <th scope="col">Performer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of incomeEntries">
+          <td scope="row">{{entry.date | date}}</td>
+          <td *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum | number}}</td>
+          <td>{{entry.totalSum | number}}</td>
+          <td>{{entry.totalIncomeForOperator | number}}</td>
+          <td>{{entry.totalIncomeForPerformer | number}}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

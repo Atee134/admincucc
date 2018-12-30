@@ -34,6 +34,8 @@ namespace Ag.Domain.Migrations
 
                     b.Property<int>("Site");
 
+                    b.Property<double>("Sum");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IncomeEntryId");
@@ -57,6 +59,8 @@ namespace Ag.Domain.Migrations
                     b.Property<double>("TotalIncomeForOwner");
 
                     b.Property<double>("TotalIncomeForPerformer");
+
+                    b.Property<double>("TotalSum");
 
                     b.HasKey("Id");
 

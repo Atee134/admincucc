@@ -50,6 +50,7 @@ namespace Ag.BusinessLogic.Services
                 Operator = op,
                 Performer = op.Colleague,
                 IncomeChunks = incomeChunks,
+                TotalSum = incomeChunks.Sum(i => i.Sum),
                 TotalIncomeForOwner = incomeChunks.Sum(i => i.IncomeForOwner),
                 TotalIncomeForOperator = incomeChunks.Sum(i => i.IncomeForOperator),
                 TotalIncomeForPerformer = incomeChunks.Sum(i => i.IncomeForPerformer)
@@ -70,6 +71,7 @@ namespace Ag.BusinessLogic.Services
             return new IncomeChunk()
             {
                 Site = incomeChunkDto.Site,
+                Sum = incomeChunkDto.Income,
                 IncomeForOwner = incomeForOwner,
                 IncomeForOperator = incomeForOperator,
                 IncomeForPerformer = incomeForPerformer,
@@ -98,6 +100,7 @@ namespace Ag.BusinessLogic.Services
             {
                 Id = incomeEntry.Id,
                 Date = incomeEntry.Date,
+                TotalSum = incomeEntry.TotalSum,
                 TotalIncomeForOwner = incomeEntry.TotalIncomeForOwner,
                 TotalIncomeForOperator = incomeEntry.TotalIncomeForOperator,
                 TotalIncomeForPerformer = incomeEntry.TotalIncomeForPerformer,
@@ -115,6 +118,7 @@ namespace Ag.BusinessLogic.Services
                 {
                     Id = chunk.Id,
                     Site = chunk.Site,
+                    Sum = chunk.Sum,
                     IncomeForOwner = chunk.IncomeForOwner,
                     IncomeForOperator = chunk.IncomeForOperator,
                     IncomeForPerformer = chunk.IncomeForPerformer

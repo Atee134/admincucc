@@ -61,6 +61,7 @@
       "required": [
         "Id",
         "Site",
+        "Sum",
         "IncomeForOwner",
         "IncomeForOperator",
         "IncomeForPerformer"
@@ -72,6 +73,10 @@
         },
         "Site": {
           "$ref": "#/definitions/Site"
+        },
+        "Sum": {
+          "type": "number",
+          "format": "double"
         },
         "IncomeForOwner": {
           "type": "number",
@@ -107,6 +112,7 @@
       "required": [
         "Id",
         "Date",
+        "TotalSum",
         "TotalIncomeForOwner",
         "TotalIncomeForOperator",
         "TotalIncomeForPerformer"
@@ -119,6 +125,10 @@
         "Date": {
           "type": "string",
           "format": "date-time"
+        },
+        "TotalSum": {
+          "type": "number",
+          "format": "double"
         },
         "TotalIncomeForOwner": {
           "type": "number",
@@ -148,9 +158,63 @@
           "type": "string"
         },
         "User": {
-          "$ref": "#/definitions/UserForListDto"
+          "$ref": "#/definitions/UserDetailDto"
         }
       }
+    },
+    "UserDetailDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id",
+        "Shift",
+        "Role",
+        "MinPercent",
+        "MaxPercent"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "UserName": {
+          "type": "string"
+        },
+        "Shift": {
+          "$ref": "#/definitions/Shift"
+        },
+        "Role": {
+          "$ref": "#/definitions/Role"
+        },
+        "Sites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Site"
+          }
+        },
+        "MinPercent": {
+          "type": "number",
+          "format": "double"
+        },
+        "MaxPercent": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "Shift": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ],
+      "enum": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ]
     },
     "UserForListDto": {
       "type": "object",
@@ -193,20 +257,6 @@
         }
       }
     },
-    "Shift": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ],
-      "enum": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ]
-    },
     "ErrorDetails": {
       "type": "object",
       "additionalProperties": false,
@@ -215,6 +265,27 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "IncomeEntryAddDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date",
+        "IncomeChunks"
+      ],
+      "properties": {
+        "Date": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1
+        },
+        "IncomeChunks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeChunkAddDto"
           }
         }
       }
@@ -238,27 +309,6 @@
         "Income": {
           "type": "number",
           "format": "double"
-        }
-      }
-    },
-    "IncomeEntryAddDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Date",
-        "IncomeChunks"
-      ],
-      "properties": {
-        "Date": {
-          "type": "string",
-          "format": "date-time",
-          "minLength": 1
-        },
-        "IncomeChunks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IncomeChunkAddDto"
-          }
         }
       }
     }

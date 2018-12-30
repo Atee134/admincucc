@@ -11,6 +11,8 @@ namespace Ag.Common.Dtos.Response
 
         public Site Site { get; set; }
 
+        public double Sum { get; set; }
+
         public double IncomeForOwner { get; set; }
 
         public double IncomeForOperator { get; set; }

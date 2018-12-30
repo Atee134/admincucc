@@ -15,6 +15,9 @@ namespace Ag.Domain.Models
         public Site Site { get; set; }
 
         [Required]
+        public double Sum { get; set; }
+
+        [Required]
         public double IncomeForOwner { get; set; }
 
         [Required]

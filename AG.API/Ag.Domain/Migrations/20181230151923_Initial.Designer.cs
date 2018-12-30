@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20181229183114_Initial")]
+    [Migration("20181230151923_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,8 @@ namespace Ag.Domain.Migrations
 
                     b.Property<int>("Site");
 
+                    b.Property<double>("Sum");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IncomeEntryId");
@@ -59,6 +61,8 @@ namespace Ag.Domain.Migrations
                     b.Property<double>("TotalIncomeForOwner");
 
                     b.Property<double>("TotalIncomeForPerformer");
+
+                    b.Property<double>("TotalSum");
 
                     b.HasKey("Id");
 

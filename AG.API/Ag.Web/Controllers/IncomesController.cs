@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ag.Web.Controllers
 {
-    [Authorize]
+  //  [Authorize]
     [Route("api/users/{userId}/[controller]")]
     [ApiController]
     public class IncomesController : ControllerBase

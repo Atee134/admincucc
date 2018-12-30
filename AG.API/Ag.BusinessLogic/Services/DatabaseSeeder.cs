@@ -80,16 +80,32 @@ namespace Ag.BusinessLogic.Services
 
         private IncomeEntryAddDto CreateRandomIncomeEntry(int dayOffset)
         {
-            return new IncomeEntryAddDto()
+            if (dayOffset > 10)
             {
-                Date = DateTime.Now.AddDays(-dayOffset),
-                IncomeChunks = new List<IncomeChunkAddDto>()
+                return new IncomeEntryAddDto()
+                {
+                    Date = DateTime.Now.AddDays(dayOffset * (-1)),
+                    IncomeChunks = new List<IncomeChunkAddDto>()
                 {
                     new IncomeChunkAddDto { Site = Site.CB, Income = _random.NextDouble() * 100},
                     new IncomeChunkAddDto { Site = Site.LJ, Income = _random.NextDouble() * 100},
                     new IncomeChunkAddDto { Site = Site.MFC, Income = _random.NextDouble() * 100},
                 }
-            };
+                };
+            }
+            else
+            {
+                return new IncomeEntryAddDto()
+                {
+                    Date = DateTime.Now.AddDays(dayOffset * (-1)),
+                    IncomeChunks = new List<IncomeChunkAddDto>()
+                {
+                    new IncomeChunkAddDto { Site = Site.CB, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.MFC, Income = _random.NextDouble() * 100},
+                }
+                };
+            }
+          
         }
     }
 }

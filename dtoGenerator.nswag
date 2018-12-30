@@ -14,7 +14,10 @@
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
         "Ag.Common.Enums.Site",
-        "Ag.Web.Models.ErrorDetails"
+        "Ag.Web.Models.ErrorDetails",
+        "Ag.Common.Dtos.Response.UserDetailDto",
+        "Ag.Common.Dtos.Request.IncomeEntryAddDto",
+        "Ag.Common.Dtos.Request.IncomeChunkAddDto"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",
