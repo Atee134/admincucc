@@ -1,21 +1,21 @@
-<div class="container" *ngIf="incomeEntries">
-  <table class="table">
+<div class="container mt-4" *ngIf="incomeEntries">
+  <table class="table table-bordered">
       <thead>
-        <tr>
+        <tr class="table-primary">
           <th scope="col">Date</th>
-          <th *ngFor="let site of uniqueSites" scope="col">{{site}}</th>
-          <th scope="col">Total</th>
-          <th scope="col">Operator</th>
-          <th scope="col">Performer</th>
+          <th class="text-center" *ngFor="let site of uniqueSites" scope="col">{{site}}</th>
+          <th class="text-center" scope="col">Operator</th>
+          <th class="text-center" scope="col">Performer</th>
+          <th class="text-center" scope="col">Total</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let entry of incomeEntries">
-          <td scope="row">{{entry.date | date}}</td>
-          <td *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum | number}}</td>
-          <td>{{entry.totalSum | number}}</td>
-          <td>{{entry.totalIncomeForOperator | number}}</td>
-          <td>{{entry.totalIncomeForPerformer | number}}</td>
+          <td scope="row">{{entry.date | date:'yyyy-MM-dd'}}</td>
+          <td class="text-right" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum | currency}}</td>
+          <td class="text-right">{{entry.totalIncomeForOperator | currency}}</td>
+          <td class="text-right">{{entry.totalIncomeForPerformer | currency}}</td>
+          <td class="text-right table-info">{{entry.totalSum | currency}}</td>
         </tr>
       </tbody>
     </table>

@@ -46,7 +46,7 @@ namespace Ag.BusinessLogic.Services
 
             var incomeEntry = new IncomeEntry()
             {
-                Date = DateTime.UtcNow,
+                Date = incomeEntryDto.Date,
                 Operator = op,
                 Performer = op.Colleague,
                 IncomeChunks = incomeChunks,
@@ -84,7 +84,8 @@ namespace Ag.BusinessLogic.Services
 
             var userEntries = _context.IncomeEntries
                 .Include(i => i.IncomeChunks)
-                .Where(i => i.Operator.Id == userId || i.Performer.Id == userId);
+                .Where(i => i.Operator.Id == userId || i.Performer.Id == userId)
+                .OrderByDescending(i => i.Date);
 
             foreach (var entry in userEntries)
             {
