@@ -4,6 +4,6 @@
     {
         public string Token { get; set; }
 
-        public UserForListDto User { get; set; }
+        public UserDetailDto User { get; set; }
     }
 }

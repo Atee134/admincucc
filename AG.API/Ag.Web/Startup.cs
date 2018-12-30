@@ -35,7 +35,13 @@ namespace Ag.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options =>
+                {
+                    var settings = options.SerializerSettings;
+                    settings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                });
             // TODO remove dbcontext dependency, and reference to domain from here somehow (make dependency modules that add their own dependencies to DI)
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
 

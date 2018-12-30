@@ -64,6 +64,10 @@ namespace Ag.BusinessLogic.Services
 
             _context.SaveChanges();
 
+            var opi = _context.Users.Find(1);
+
+            opi.Sites = String.Join(';', new List<string> { Site.CB.ToString(), Site.LJ.ToString(), Site.MFC.ToString() });
+
             _userService.AddPerformer(1, 2);
 
             for (int i = 0; i < TEST_INCOMES_COUNT; i++)

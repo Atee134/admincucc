@@ -101,7 +101,7 @@ namespace Ag.BusinessLogic.Services
                 TotalIncomeForOwner = incomeEntry.TotalIncomeForOwner,
                 TotalIncomeForOperator = incomeEntry.TotalIncomeForOperator,
                 TotalIncomeForPerformer = incomeEntry.TotalIncomeForPerformer,
-                IncomeChunkDtos = GetIncomeChunks(incomeEntry)
+                IncomeChunks = GetIncomeChunks(incomeEntry)
             };
         }
 

@@ -1,8 +1,10 @@
 ﻿using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
+using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
+using System;
 using System.Linq;
 
 namespace Ag.BusinessLogic.Services
@@ -16,7 +18,7 @@ namespace Ag.BusinessLogic.Services
             _context = context;
         }
 
-        public UserForListDto Login(UserForLoginDto userDto)
+        public UserDetailDto Login(UserForLoginDto userDto)
         {
             userDto.UserName = userDto.UserName.ToLower();
 
@@ -26,12 +28,15 @@ namespace Ag.BusinessLogic.Services
 
             if (!VerifyPasswordHash(userDto.Password, user.PasswordHash, user.PasswordSalt)) return null;
 
-            return new UserForListDto
+            return new UserDetailDto
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Shift = user.Shift.ToString(),
-                Role = user.Role.ToString()
+                Shift = user.Shift,
+                Role = user.Role,
+                Sites = user.Sites.Split(';').Select(s => Enum.Parse<Site>(s)).ToList(),
+                MinPercent = user.MinPercent,
+                MaxPercent = user.MaxPercent,
             };
         }
 

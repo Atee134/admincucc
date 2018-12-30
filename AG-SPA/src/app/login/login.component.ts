@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.authService.loggedIn$.subscribe(next => {
       if (next) {
-        this.router.navigate(['/workdays']);
+        this.router.navigate(['/earnings']);
       }
     });
   }
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.user).subscribe(next => {
         console.log('Logged in as: ' + next);
-        this.router.navigate(['/workdays']);
+        this.router.navigate(['/earnings']);
     }, error => {
       console.log(error);
     });

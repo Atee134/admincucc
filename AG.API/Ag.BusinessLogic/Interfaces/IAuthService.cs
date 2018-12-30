@@ -5,7 +5,7 @@ namespace Ag.BusinessLogic.Interfaces
 {
     public interface IAuthService
     {
-        UserForListDto Login(UserForLoginDto userDto);
+        UserDetailDto Login(UserForLoginDto userDto);
         UserForListDto Register(UserForRegisterDto userDto);
         bool UserExists(string userName);
     }

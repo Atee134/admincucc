@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
+import { IncomeModule } from './income/income.module';
 
 @NgModule({
    declarations: [
@@ -25,7 +26,8 @@ import { ErrorInterceptorProvider } from './_services/error.interceptor';
       FormsModule,
       HttpClientModule,
       ButtonsModule.forRoot(),
-      AppRoutingModule
+      AppRoutingModule,
+      IncomeModule
    ],
    providers: [
       WorkdayResolver,

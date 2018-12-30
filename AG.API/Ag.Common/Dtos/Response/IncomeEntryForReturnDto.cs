@@ -17,6 +17,6 @@ namespace Ag.Common.Dtos.Response
 
         // TODO for admin earning listing it may need an OP id and perf ID
 
-        public List<IncomeChunkForReturnDto> IncomeChunkDtos { get; set; }
+        public List<IncomeChunkForReturnDto> IncomeChunks { get; set; }
     }
 }

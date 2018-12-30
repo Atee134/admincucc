@@ -5,6 +5,42 @@
     "version": "1.0.0"
   },
   "definitions": {
+    "UserForLoginDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "UserName",
+        "Password"
+      ],
+      "properties": {
+        "UserName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Password": {
+          "type": "string",
+          "minLength": 4
+        }
+      }
+    },
+    "UserForRegisterDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Role"
+      ],
+      "properties": {
+        "UserName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "Role": {
+          "$ref": "#/definitions/Role"
+        }
+      }
+    },
     "Role": {
       "type": "string",
       "description": "",
@@ -18,138 +54,6 @@
         "Performer",
         "Admin"
       ]
-    },
-    "Shift": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ],
-      "enum": [
-        "Morning",
-        "Afternoon",
-        "Night"
-      ]
-    },
-    "Site": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "LJ",
-        "CB",
-        "MFC"
-      ],
-      "enum": [
-        "LJ",
-        "CB",
-        "MFC"
-      ]
-    },
-    "ErrorDetails": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Messages": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "WorkDayForListDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Date"
-      ],
-      "properties": {
-        "Date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "Workers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserForListDto"
-          }
-        }
-      }
-    },
-    "UserForListDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Id"
-      ],
-      "properties": {
-        "Id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "UserName": {
-          "type": "string"
-        },
-        "Shift": {
-          "type": "string"
-        },
-        "Role": {
-          "type": "string"
-        }
-      }
-    },
-    "UserAuthResponseDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Token": {
-          "type": "string"
-        },
-        "User": {
-          "$ref": "#/definitions/UserForListDto"
-        }
-      }
-    },
-    "IncomeEntryForReturnDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Id",
-        "Date",
-        "TotalIncomeForOwner",
-        "TotalIncomeForOperator",
-        "TotalIncomeForPerformer"
-      ],
-      "properties": {
-        "Id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "TotalIncomeForOwner": {
-          "type": "number",
-          "format": "double"
-        },
-        "TotalIncomeForOperator": {
-          "type": "number",
-          "format": "double"
-        },
-        "TotalIncomeForPerformer": {
-          "type": "number",
-          "format": "double"
-        },
-        "IncomeChunkDtos": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IncomeChunkForReturnDto"
-          }
-        }
-      }
     },
     "IncomeChunkForReturnDto": {
       "type": "object",
@@ -183,39 +87,178 @@
         }
       }
     },
-    "UserForRegisterDto": {
+    "Site": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "LJ",
+        "CB",
+        "MFC"
+      ],
+      "enum": [
+        "LJ",
+        "CB",
+        "MFC"
+      ]
+    },
+    "IncomeEntryForReturnDto": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "Role"
+        "Id",
+        "Date",
+        "TotalIncomeForOwner",
+        "TotalIncomeForOperator",
+        "TotalIncomeForPerformer"
       ],
       "properties": {
-        "UserName": {
-          "type": "string"
+        "Id": {
+          "type": "integer",
+          "format": "int64"
         },
-        "Password": {
-          "type": "string"
+        "Date": {
+          "type": "string",
+          "format": "date-time"
         },
-        "Role": {
-          "$ref": "#/definitions/Role"
+        "TotalIncomeForOwner": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalIncomeForOperator": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalIncomeForPerformer": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeChunks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeChunkForReturnDto"
+          }
         }
       }
     },
-    "UserForLoginDto": {
+    "UserAuthResponseDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Token": {
+          "type": "string"
+        },
+        "User": {
+          "$ref": "#/definitions/UserForListDto"
+        }
+      }
+    },
+    "UserForListDto": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "UserName",
-        "Password"
+        "Id"
       ],
       "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int32"
+        },
         "UserName": {
+          "type": "string"
+        },
+        "Shift": {
+          "type": "string"
+        },
+        "Role": {
+          "type": "string"
+        }
+      }
+    },
+    "WorkDayForListDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date"
+      ],
+      "properties": {
+        "Date": {
           "type": "string",
+          "format": "date-time"
+        },
+        "Workers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserForListDto"
+          }
+        }
+      }
+    },
+    "Shift": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ],
+      "enum": [
+        "Morning",
+        "Afternoon",
+        "Night"
+      ]
+    },
+    "ErrorDetails": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Messages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "IncomeChunkAddDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Site",
+        "Income"
+      ],
+      "properties": {
+        "Site": {
+          "minLength": 1,
+          "allOf": [
+            {
+              "$ref": "#/definitions/Site"
+            }
+          ]
+        },
+        "Income": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "IncomeEntryAddDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date",
+        "IncomeChunks"
+      ],
+      "properties": {
+        "Date": {
+          "type": "string",
+          "format": "date-time",
           "minLength": 1
         },
-        "Password": {
-          "type": "string",
-          "minLength": 4
+        "IncomeChunks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeChunkAddDto"
+          }
         }
       }
     }
