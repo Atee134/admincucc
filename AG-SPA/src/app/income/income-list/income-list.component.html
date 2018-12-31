@@ -12,7 +12,7 @@
       <tbody>
         <tr *ngFor="let entry of incomeEntries">
           <td scope="row">{{entry.date | date:'yyyy-MM-dd'}}</td>
-          <td class="text-right" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum | currency}}</td>
+          <td class="text-right" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum || 0 | currency}}</td>
           <td class="text-right">{{entry.totalIncomeForOperator | currency}}</td>
           <td class="text-right">{{entry.totalIncomeForPerformer | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>

@@ -1,4 +1,5 @@
 ﻿using Ag.BusinessLogic.Interfaces;
+using Ag.Common.Dtos.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,6 +26,13 @@ namespace Ag.Web.Controllers
         {
             var incomeEntries = _incomeService.GetIncomeEntries(userId);
             return Ok(incomeEntries);
+        }
+
+        [HttpPost]
+        public IActionResult AddIncome(int userId, IncomeEntryAddDto incomeEntryDto)
+        {
+            var addedIncomeEntry = _incomeService.AddIncomEntry(userId, incomeEntryDto);
+            return Ok(addedIncomeEntry);
         }
     }
 }

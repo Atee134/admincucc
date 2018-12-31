@@ -1,4 +1,5 @@
-﻿using Ag.BusinessLogic.Interfaces;
+﻿using Ag.BusinessLogic.Exceptions;
+using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
@@ -29,12 +30,12 @@ namespace Ag.BusinessLogic.Services
 
             if (op.Role != Role.Operator)
             {
-                // TODO throw exception
+                throw new AgUnfulfillableActionException("User is not an operator.");
             }
 
             if (op.Colleague == null)
             {
-                // TODO throw exception
+                throw new AgUnfulfillableActionException("User does not have a performer assigned.");
             }
 
             List<IncomeChunk> incomeChunks = new List<IncomeChunk>();

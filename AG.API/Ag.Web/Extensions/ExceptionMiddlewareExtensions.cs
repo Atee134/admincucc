@@ -1,4 +1,5 @@
-﻿using Ag.Common.Dtos;
+﻿using Ag.BusinessLogic.Exceptions;
+using Ag.Common.Dtos;
 using Ag.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -36,6 +37,11 @@ namespace Ag.Web.Extensions
                             {
                                 errorMessages.Add(e.Message);
                             }
+                        }
+                        else if (contextFeature.Error is AgUnfulfillableActionException)
+                        {
+                            errorMessages.Add($"Unable to perform action, {contextFeature.Error.Message}");
+                            context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         }
                         else
                         {
