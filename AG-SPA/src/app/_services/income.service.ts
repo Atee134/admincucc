@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Site, IncomeEntryForReturnDto } from '../_models/generatedDtos';
+import { Site, IncomeEntryForReturnDto, IncomeEntryAddDto } from '../_models/generatedDtos';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -19,5 +19,9 @@ export class IncomeService {
 
   getIncomeEntries(userId: number): Observable<IncomeEntryForReturnDto[]> {
     return this.http.get<IncomeEntryForReturnDto[]>(this.baseUrl + 'users/' + userId + '/incomes');
+  }
+
+  addIncomeEntry(userId: number, incomeEntry: IncomeEntryAddDto): Observable<IncomeEntryForReturnDto> {
+    return this.http.post<IncomeEntryForReturnDto>(this.baseUrl + 'users/' + userId + '/incomes', incomeEntry);
   }
 }
