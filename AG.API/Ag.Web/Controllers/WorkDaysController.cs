@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos;
+using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace Ag.Web.Controllers
 {
   //  [Authorize]
     [Route("api")]
+    [ServiceFilter(typeof(ExceptionHandlerFilterAttribute))]
     [ApiController]
     public class WorkDaysController : ControllerBase
     {

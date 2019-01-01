@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace Ag.Web
 {
@@ -47,6 +48,7 @@ namespace Ag.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseNLog()
                 .UseStartup<Startup>();
     }
 }

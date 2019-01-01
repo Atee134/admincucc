@@ -1,5 +1,6 @@
 ﻿using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos.Request;
+using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ namespace Ag.Web.Controllers
 {
   //  [Authorize]
     [Route("api/users/{userId}/[controller]")]
+    [ServiceFilter(typeof(ExceptionHandlerFilterAttribute))]
     [ApiController]
     public class IncomesController : ControllerBase
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
+using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace Ag.Web.Controllers
 {
    // [Authorize]
     [Route("api/[controller]")]
+    [ServiceFilter(typeof(ExceptionHandlerFilterAttribute))]
     [ApiController]
     public class UsersController : ControllerBase
     {

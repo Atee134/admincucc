@@ -8,6 +8,7 @@ using Ag.BusinessLogic.Services;
 using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Web.Extensions;
+using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Web;
 
 namespace Ag.Web
 {
@@ -47,6 +49,8 @@ namespace Ag.Web
             // TODO remove dbcontext dependency, and reference to domain from here somehow (make dependency modules that add their own dependencies to DI)
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
 
+            services.AddScoped<ExceptionHandlerFilterAttribute>();
+
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IIncomeService, IncomeService>();
@@ -74,14 +78,15 @@ namespace Ag.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<Startup> logger)
         {
+            env.ConfigureNLog("nlog.config");
+
             if (!env.IsDevelopment())
             {
                 //app.UseHsts();
             }
             //   app.UseHttpsRedirection();
-
 
             app.ConfigureExceptionHandler();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

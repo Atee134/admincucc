@@ -7,6 +7,7 @@ using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +19,17 @@ namespace Ag.BusinessLogic.Services
     public class IncomeService : IIncomeService
     {
         private readonly AgDbContext _context;
+        private readonly ILogger<IncomeService> _logger;
 
-        public IncomeService(AgDbContext context)
+        public IncomeService(AgDbContext context, ILogger<IncomeService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto)
         {
+
             var op = _context.Users.Include(u => u.Colleague).FirstOrDefault(u => u.Id == userId);
 
             if (op.Role != Role.Operator)
@@ -63,6 +67,25 @@ namespace Ag.BusinessLogic.Services
             return ConvertIncomeEntryForReturnDto(incomeEntry);
         }
 
+        public List<IncomeEntryForReturnDto> GetIncomeEntries(int userId)
+        {
+            throw new Exception();
+
+            List<IncomeEntryForReturnDto> incomeEntriesToReturn = new List<IncomeEntryForReturnDto>();
+
+            var userEntries = _context.IncomeEntries
+                .Include(i => i.IncomeChunks)
+                .Where(i => i.Operator.Id == userId || i.Performer.Id == userId)
+                .OrderByDescending(i => i.Date);
+
+            foreach (var entry in userEntries)
+            {
+                incomeEntriesToReturn.Add(ConvertIncomeEntryForReturnDto(entry));
+            }
+
+            return incomeEntriesToReturn;
+        }
+
         private IncomeChunk CreateIncomeChunkFromDto(IncomeChunkAddDto incomeChunkDto, double operatorPercent, double performerPercent)
         {
             double incomeForOperator = incomeChunkDto.Income * operatorPercent;
@@ -77,23 +100,6 @@ namespace Ag.BusinessLogic.Services
                 IncomeForOperator = incomeForOperator,
                 IncomeForPerformer = incomeForPerformer,
             };
-        }
-
-        public List<IncomeEntryForReturnDto> GetIncomeEntries(int userId)
-        {
-            List<IncomeEntryForReturnDto> incomeEntriesToReturn = new List<IncomeEntryForReturnDto>();
-
-            var userEntries = _context.IncomeEntries
-                .Include(i => i.IncomeChunks)
-                .Where(i => i.Operator.Id == userId || i.Performer.Id == userId)
-                .OrderByDescending(i => i.Date);
-
-            foreach (var entry in userEntries)
-            {
-                incomeEntriesToReturn.Add(ConvertIncomeEntryForReturnDto(entry));
-            }
-
-            return incomeEntriesToReturn;
         }
 
         private IncomeEntryForReturnDto ConvertIncomeEntryForReturnDto(IncomeEntry incomeEntry)

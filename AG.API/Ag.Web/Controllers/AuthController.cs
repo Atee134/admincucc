@@ -5,6 +5,7 @@ using System.Text;
 using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
+using Ag.Web.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Ag.Web.Controllers
 {
     [Route("api/[controller]")]
+    [ServiceFilter(typeof(ExceptionHandlerFilterAttribute))]
     [ApiController]
     public class AuthController : ControllerBase
     {

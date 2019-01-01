@@ -4,6 +4,7 @@ using Ag.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,8 +27,6 @@ namespace Ag.Web.Extensions
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
-                        //  logger.LogError($"Something went wrong: {contextFeature.Error}");
-
                         List<string> errorMessages = new List<string>();
                         var aggregateException = contextFeature.Error as AggregateException;
 
