@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { JwtModule } from '@auth0/angular-jwt';
 import { WorkdayComponent } from './workday/workday.component';
 import { WorkdayResolver } from './_resolvers/workday.resolver';
 import { AvailableDatesResolver } from './_resolvers/availabledates.resolver';
@@ -10,9 +12,13 @@ import { NavComponent } from './nav/nav.component';
 import { ButtonsModule } from 'ngx-bootstrap';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { IncomeModule } from './income/income.module';
+import { environment } from 'src/environments/environment';
+
+export function tokenGetter() {
+   return localStorage.getItem('token');
+ }
 
 @NgModule({
    declarations: [
@@ -27,7 +33,14 @@ import { IncomeModule } from './income/income.module';
       HttpClientModule,
       ButtonsModule.forRoot(),
       AppRoutingModule,
-      IncomeModule
+      IncomeModule,
+      JwtModule.forRoot({
+         config: {
+            tokenGetter: tokenGetter,
+            whitelistedDomains: [environment.domainUrl],
+            blacklistedRoutes: [environment.domainUrl + 'api/auth/login']
+         }
+      })
    ],
    providers: [
       WorkdayResolver,

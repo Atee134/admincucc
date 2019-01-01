@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Ag.Web.Controllers
 {
-   // [Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ServiceFilter(typeof(ActionLogFilterAttribute))]
     [ApiController]
@@ -23,7 +23,7 @@ namespace Ag.Web.Controllers
            _userService = userService;
         }
 
-     //   [Authorize("Operator")]
+        [Authorize("Admin")]
         [HttpPut("{operatorId}/performer/{performerId}")]
         public IActionResult AddPerformer(int operatorId, int performerId)
         {

@@ -11,13 +11,15 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
-  public loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);;
+  public loggedIn$: BehaviorSubject<boolean>;
   public decodedToken;
   public currentUser: UserDetailDto;
   private baseUrl = environment.apiUrl;
   private jwtHelper = new JwtHelperService();
 
   constructor(private http: HttpClient, private router: Router) {
+    this.loggedIn$ = new BehaviorSubject<boolean>(false);
+
     const token = localStorage.getItem('token');
     if (token) {
       if (!this.jwtHelper.isTokenExpired(token)) {

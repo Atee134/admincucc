@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Ag.Web.Controllers
 {
-  //  [Authorize]
+    [Authorize]
     [Route("api/users/{userId}/[controller]")]
     [ServiceFilter(typeof(ActionLogFilterAttribute))]
     [ApiController]
@@ -31,6 +31,7 @@ namespace Ag.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize("Operator")]
         public IActionResult AddIncome(int userId, IncomeEntryAddDto incomeEntryDto)
         {
             var addedIncomeEntry = _incomeService.AddIncomEntry(userId, incomeEntryDto);

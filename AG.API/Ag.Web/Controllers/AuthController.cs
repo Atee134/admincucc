@@ -6,6 +6,7 @@ using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
 using Ag.Web.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -26,6 +27,7 @@ namespace Ag.Web.Controllers
             _authService = authService;
         }
 
+        [Authorize("Admin")]
         [HttpPost("register")]
         public IActionResult Register(UserForRegisterDto userForRegisterDto)
         {

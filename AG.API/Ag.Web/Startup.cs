@@ -74,6 +74,7 @@ namespace Ag.Web
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Operator", policy => policy.RequireRole(Role.Operator.ToString()));
+                options.AddPolicy("Admin", policy => policy.RequireRole(Role.Admin.ToString()));
             });
         }
 
