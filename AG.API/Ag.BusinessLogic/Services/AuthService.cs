@@ -4,6 +4,7 @@ using Ag.Common.Dtos.Response;
 using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 
@@ -12,21 +13,27 @@ namespace Ag.BusinessLogic.Services
     public class AuthService : IAuthService
     {
         private readonly AgDbContext _context;
+        private readonly ILogger<AuthService> _logger;
 
-        public AuthService(AgDbContext context)
+        public AuthService(AgDbContext context, ILogger<AuthService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public UserDetailDto Login(UserForLoginDto userDto)
         {
             userDto.UserName = userDto.UserName.ToLower();
 
+            _logger.LogInformation($"A login attemp is made with username: {userDto.UserName}");
+
             var user = _context.Users.SingleOrDefault(u => u.UserName == userDto.UserName);
 
             if (user == null) return null;
 
             if (!VerifyPasswordHash(userDto.Password, user.PasswordHash, user.PasswordSalt)) return null;
+
+            _logger.LogInformation($"User: {userDto.UserName} logged in successfully.");
 
             return new UserDetailDto
             {
@@ -55,6 +62,8 @@ namespace Ag.BusinessLogic.Services
 
             _context.Users.Add(user);
             _context.SaveChanges();
+
+            _logger.LogInformation($"User: {userDto.UserName} successfully registrated");
 
             return new UserForListDto
             {

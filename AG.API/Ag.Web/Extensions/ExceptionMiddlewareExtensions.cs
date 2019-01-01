@@ -15,7 +15,7 @@ namespace Ag.Web.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
+        public static void ConfigureExceptionHandler(this IApplicationBuilder app, ILogger logger)
         {
             app.UseExceptionHandler(appError =>
             {
@@ -40,6 +40,7 @@ namespace Ag.Web.Extensions
                         else if (contextFeature.Error is AgUnfulfillableActionException)
                         {
                             errorMessages.Add($"Unable to perform action, {contextFeature.Error.Message}");
+                            logger.LogWarning($"Unable to perform action. Sending bad request to client, with message: {contextFeature.Error.Message}");
                             context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         }
                         else

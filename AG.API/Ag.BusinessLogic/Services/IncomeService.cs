@@ -29,6 +29,7 @@ namespace Ag.BusinessLogic.Services
 
         public IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto)
         {
+            _logger.LogInformation($"Adding income for user with ID: {userId}");
 
             var op = _context.Users.Include(u => u.Colleague).FirstOrDefault(u => u.Id == userId);
 
@@ -64,12 +65,14 @@ namespace Ag.BusinessLogic.Services
             _context.IncomeEntries.Add(incomeEntry);
             _context.SaveChanges();
 
+            _logger.LogInformation($"Income successfully added to user with ID: {userId}, income ID: {incomeEntry.Id}");
+
             return ConvertIncomeEntryForReturnDto(incomeEntry);
         }
 
         public List<IncomeEntryForReturnDto> GetIncomeEntries(int userId)
         {
-            throw new Exception();
+            _logger.LogInformation($"Getting income entries of user with ID: {userId}");
 
             List<IncomeEntryForReturnDto> incomeEntriesToReturn = new List<IncomeEntryForReturnDto>();
 

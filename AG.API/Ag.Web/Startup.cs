@@ -49,6 +49,7 @@ namespace Ag.Web
             // TODO remove dbcontext dependency, and reference to domain from here somehow (make dependency modules that add their own dependencies to DI)
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
 
+            services.AddScoped<ActionLogFilterAttribute>();
             services.AddScoped<ExceptionHandlerFilterAttribute>();
 
             services.AddScoped<IAuthService, AuthService>();
@@ -88,7 +89,7 @@ namespace Ag.Web
             }
             //   app.UseHttpsRedirection();
 
-            app.ConfigureExceptionHandler();
+            app.ConfigureExceptionHandler(logger);
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseMvc();

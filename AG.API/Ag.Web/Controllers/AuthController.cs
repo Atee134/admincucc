@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Ag.BusinessLogic.Exceptions;
 using Ag.BusinessLogic.Interfaces;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
@@ -13,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Ag.Web.Controllers
 {
     [Route("api/[controller]")]
+    [ServiceFilter(typeof(ActionLogFilterAttribute))]
     [ServiceFilter(typeof(ExceptionHandlerFilterAttribute))]
     [ApiController]
     public class AuthController : ControllerBase
@@ -42,6 +44,8 @@ namespace Ag.Web.Controllers
         [HttpPost("login")]
         public IActionResult Login(UserForLoginDto userForLoginDto)
         {
+            throw new AgUnfulfillableActionException("fasz");
+
             var user = _authService.Login(userForLoginDto);
 
             if (user == null)
