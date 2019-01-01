@@ -15,7 +15,6 @@ namespace Ag.Web.Controllers
   //  [Authorize]
     [Route("api")]
     [ServiceFilter(typeof(ActionLogFilterAttribute))]
-    [ServiceFilter(typeof(ExceptionHandlerFilterAttribute))]
     [ApiController]
     public class WorkDaysController : ControllerBase
     {

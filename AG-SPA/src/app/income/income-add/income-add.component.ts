@@ -3,6 +3,7 @@ import { IncomeEntryAddDto, Site, IncomeChunkAddDto, IncomeEntryForReturnDto } f
 import { AuthService } from 'src/app/_services/auth.service';
 import { IncomeService } from 'src/app/_services/income.service';
 import { Router } from '@angular/router';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-income-add',
@@ -13,7 +14,11 @@ export class IncomeAddComponent implements OnInit {
   public incomeEntry: IncomeEntryAddDto;
   public responseEntry: IncomeEntryForReturnDto;
 
-  constructor(private authService: AuthService, private incomeService: IncomeService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private incomeService: IncomeService,
+    private alertify: AlertifyService
+    ) { }
 
   ngOnInit() {
     // TODO if we come from an ADD route, we make a new incomeEntry, otherwise we fetch it from the server
@@ -68,6 +73,7 @@ export class IncomeAddComponent implements OnInit {
   public onSubmit(): void {
     this.incomeService.addIncomeEntry(this.authService.currentUser.id, this.incomeEntry).subscribe(resp => {
       this.responseEntry = resp;
+      this.alertify.success('Successfully added icome.');
     });
   }
 }

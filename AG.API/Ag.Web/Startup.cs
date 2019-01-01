@@ -50,7 +50,6 @@ namespace Ag.Web
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
 
             services.AddScoped<ActionLogFilterAttribute>();
-            services.AddScoped<ExceptionHandlerFilterAttribute>();
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
@@ -93,6 +92,8 @@ namespace Ag.Web
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseMvc();
+
+            logger.LogInformation("Startup configure finished.");
         }
     }
 }

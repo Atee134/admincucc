@@ -13,7 +13,6 @@ namespace Ag.Web.Controllers
    // [Authorize]
     [Route("api/[controller]")]
     [ServiceFilter(typeof(ActionLogFilterAttribute))]
-    [ServiceFilter(typeof(ExceptionHandlerFilterAttribute))]
     [ApiController]
     public class UsersController : ControllerBase
     {
