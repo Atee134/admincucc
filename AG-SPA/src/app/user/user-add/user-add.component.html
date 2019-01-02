@@ -1,3 +1,41 @@
-<p>
-  user-add works!
-</p>
+<div class="container">
+  <h1 class="text-center mt-4">Add user</h1>
+  <hr>
+  <form (ngSubmit)="onSubmit()" #registerFrom="ngForm">
+    <div class="form-group">
+      <label for="userName">Username</label>
+      <input type="text" class="form-control" id="userName"
+            required
+            [(ngModel)]="user.userName" name="userName">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password"  class="form-control" id="password"
+             required
+            [(ngModel)]="user.password" name="password">
+    </div>
+
+    <div class="form-group">
+      <label for="repassword">Re-enter password</label>
+      <input type="password"  class="form-control" id="repassword"
+             required
+            [(ngModel)]="rePassword" name="repassword">
+    </div>
+
+    <div class="form-group">
+      <label for="roleSelect">User role:</label>
+      <select class="custom-select form-control" [(ngModel)]="user.role" id="roleSelect" name="roleSelect" required>
+        <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+      </select>
+    </div>
+
+    <!-- <select [(ngModel)]="userParams.gender" class="form-control ml-1" style="width: 130px" id="gender" name="gender">
+      <option *ngFor="let gender of genderList" value="{{gender.value}}">
+        {{gender.display}}
+      </option>
+    </select> -->
+
+    <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!registerFrom.form.valid">Add</button>
+  </form>
+</div>

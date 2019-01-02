@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { UserForLoginDto, UserAuthResponseDto, UserDetailDto } from '../_models/generatedDtos';
+import { UserForLoginDto, UserAuthResponseDto, UserDetailDto, UserForRegisterDto, UserForListDto } from '../_models/generatedDtos';
 import { tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -42,6 +42,10 @@ export class AuthService {
         return res.body.user.userName;
       })
     );
+  }
+
+  register(user: UserForRegisterDto): Observable<UserForListDto> {
+    return this.http.post<UserForListDto>(this.baseUrl + 'auth/register', user);
   }
 
   logout(): void {

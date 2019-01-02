@@ -38,7 +38,7 @@ namespace Ag.Web.Controllers
 
             var createdUser = _authService.Register(userForRegisterDto);
 
-            return StatusCode(201);
+            return Ok(createdUser); //TODO return created at route
         }
 
         [HttpPost("login")]
