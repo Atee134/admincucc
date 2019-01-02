@@ -21,6 +21,10 @@ export class IncomeService {
     return this.http.get<IncomeEntryForReturnDto[]>(this.baseUrl + 'users/' + userId + '/incomes');
   }
 
+  getAllIncomeEntries(): Observable<IncomeEntryForReturnDto[]> {
+    return this.http.get<IncomeEntryForReturnDto[]>(this.baseUrl + 'incomes');
+  }
+
   addIncomeEntry(userId: number, incomeEntry: IncomeEntryAddDto): Observable<IncomeEntryForReturnDto> {
     return this.http.post<IncomeEntryForReturnDto>(this.baseUrl + 'users/' + userId + '/incomes', incomeEntry);
   }

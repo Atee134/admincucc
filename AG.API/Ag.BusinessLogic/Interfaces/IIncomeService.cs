@@ -6,7 +6,7 @@ namespace Ag.BusinessLogic.Interfaces
 {
     public interface IIncomeService
     {
-        List<IncomeEntryForReturnDto> GetIncomeEntries(int userId);
+        List<IncomeEntryForReturnDto> GetIncomeEntries(int? userId = null);
         IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto);
     }
 }

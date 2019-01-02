@@ -30,6 +30,14 @@ namespace Ag.Web.Controllers
             return Ok(incomeEntries);
         }
 
+        [HttpGet("~/api/incomes")]
+        [Authorize("Admin")]
+        public IActionResult GetAllIncomes()
+        {
+            var incomeEntries = _incomeService.GetIncomeEntries();
+            return Ok(incomeEntries);
+        }
+
         [HttpPost]
         [Authorize("Operator")]
         public IActionResult AddIncome(int userId, IncomeEntryAddDto incomeEntryDto)

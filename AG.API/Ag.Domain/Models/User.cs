@@ -35,6 +35,7 @@ namespace Ag.Domain.Models
 
         public virtual User Colleague { get; set; }
 
+        [Required]
         public string Sites { get; set; } //TODO like category
 
         [InverseProperty("Operator")]

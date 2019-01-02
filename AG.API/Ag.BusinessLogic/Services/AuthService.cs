@@ -6,6 +6,7 @@ using Ag.Domain;
 using Ag.Domain.Models;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ag.BusinessLogic.Services
@@ -35,13 +36,15 @@ namespace Ag.BusinessLogic.Services
 
             _logger.LogInformation($"User: {userDto.UserName} logged in successfully.");
 
+            var sites = user.Sites.Length == 0 ? new List<Site>() : user.Sites.Split(';').Select(s => Enum.Parse<Site>(s)).ToList();
+
             return new UserDetailDto
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 Shift = user.Shift,
                 Role = user.Role,
-                Sites = user.Sites.Split(';').Select(s => Enum.Parse<Site>(s)).ToList(),
+                Sites = sites,
                 MinPercent = user.MinPercent,
                 MaxPercent = user.MaxPercent,
             };
@@ -90,7 +93,8 @@ namespace Ag.BusinessLogic.Services
                 Role = userDto.Role,
                 MinPercent = 0.275, // TODO add proper init values from somewhere
                 MaxPercent = 0.275,
-                Shift = Common.Enums.Shift.Morning
+                Shift = Common.Enums.Shift.Morning,
+                Sites = String.Empty,
             };
         }
 

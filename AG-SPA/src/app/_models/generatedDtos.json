@@ -5,6 +5,63 @@
     "version": "1.0.0"
   },
   "definitions": {
+    "IncomeChunkAddDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Site",
+        "Income"
+      ],
+      "properties": {
+        "Site": {
+          "minLength": 1,
+          "allOf": [
+            {
+              "$ref": "#/definitions/Site"
+            }
+          ]
+        },
+        "Income": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "Site": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "LJ",
+        "CB",
+        "MFC"
+      ],
+      "enum": [
+        "LJ",
+        "CB",
+        "MFC"
+      ]
+    },
+    "IncomeEntryAddDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date",
+        "IncomeChunks"
+      ],
+      "properties": {
+        "Date": {
+          "type": "string",
+          "format": "date-time",
+          "minLength": 1
+        },
+        "IncomeChunks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeChunkAddDto"
+          }
+        }
+      }
+    },
     "UserForLoginDto": {
       "type": "object",
       "additionalProperties": false,
@@ -92,20 +149,6 @@
         }
       }
     },
-    "Site": {
-      "type": "string",
-      "description": "",
-      "x-enumNames": [
-        "LJ",
-        "CB",
-        "MFC"
-      ],
-      "enum": [
-        "LJ",
-        "CB",
-        "MFC"
-      ]
-    },
     "IncomeEntryForReturnDto": {
       "type": "object",
       "additionalProperties": false,
@@ -125,6 +168,12 @@
         "Date": {
           "type": "string",
           "format": "date-time"
+        },
+        "OperatorName": {
+          "type": "string"
+        },
+        "PerformerName": {
+          "type": "string"
         },
         "TotalSum": {
           "type": "number",
@@ -266,49 +315,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "IncomeEntryAddDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Date",
-        "IncomeChunks"
-      ],
-      "properties": {
-        "Date": {
-          "type": "string",
-          "format": "date-time",
-          "minLength": 1
-        },
-        "IncomeChunks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IncomeChunkAddDto"
-          }
-        }
-      }
-    },
-    "IncomeChunkAddDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Site",
-        "Income"
-      ],
-      "properties": {
-        "Site": {
-          "minLength": 1,
-          "allOf": [
-            {
-              "$ref": "#/definitions/Site"
-            }
-          ]
-        },
-        "Income": {
-          "type": "number",
-          "format": "double"
         }
       }
     }

@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { IncomeModule } from './income/income.module';
 import { environment } from 'src/environments/environment';
+import { UserModule } from './user/user.module';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -31,9 +32,10 @@ export function tokenGetter() {
       BrowserModule,
       FormsModule,
       HttpClientModule,
+      IncomeModule,
+      UserModule,
       ButtonsModule.forRoot(),
       AppRoutingModule,
-      IncomeModule,
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,

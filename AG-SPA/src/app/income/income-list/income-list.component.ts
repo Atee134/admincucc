@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IncomeService } from 'src/app/_services/income.service';
-import { IncomeEntryForReturnDto, Site, IncomeChunkForReturnDto } from 'src/app/_models/generatedDtos';
+import { IncomeEntryForReturnDto, Site, IncomeChunkForReturnDto, Role } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
@@ -18,9 +18,17 @@ export class IncomeListComponent implements OnInit {
   }
 
   getIncomeEntries(): void {
-    this.incomeService.getIncomeEntries(this.authService.currentUser.id).subscribe(resp => {
-      this.incomeEntries = resp;
-    });
+    // TODO add a filter component maybe which handles admin/operator lisings, as well as filters
+
+    if (this.authService.currentUser.role === Role.Admin) {
+      this.incomeService.getAllIncomeEntries().subscribe(resp => {
+        this.incomeEntries = resp;
+      });
+    } else {
+      this.incomeService.getIncomeEntries(this.authService.currentUser.id).subscribe(resp => {
+        this.incomeEntries = resp;
+      });
+    }
   }
 
   get uniqueSites(): Site[] {

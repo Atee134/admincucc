@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
 import { AlertifyService } from '../_services/alertify.service';
+import { Role } from '../_models/generatedDtos';
 
 @Component({
   selector: 'app-nav',
@@ -18,5 +19,9 @@ export class NavComponent implements OnInit {
   onLogout() {
     this.alertify.message('Logged out');
     this.authService.logout();
+  }
+
+  isCurrentUser(role: string): boolean {
+    return this.authService.currentUser.role.toLowerCase() === role.toLowerCase();
   }
 }

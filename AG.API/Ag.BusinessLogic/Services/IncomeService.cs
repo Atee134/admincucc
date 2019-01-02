@@ -70,18 +70,33 @@ namespace Ag.BusinessLogic.Services
             return ConvertIncomeEntryForReturnDto(incomeEntry);
         }
 
-        public List<IncomeEntryForReturnDto> GetIncomeEntries(int userId)
+        public List<IncomeEntryForReturnDto> GetIncomeEntries(int? userId = null) // TODO later there will be a filter with ID as param passed in
         {
             _logger.LogInformation($"Getting income entries of user with ID: {userId}");
 
             List<IncomeEntryForReturnDto> incomeEntriesToReturn = new List<IncomeEntryForReturnDto>();
 
-            var userEntries = _context.IncomeEntries
+            IOrderedQueryable<IncomeEntry> incomeEntries; 
+
+            if (userId != null)
+            {
+                incomeEntries = _context.IncomeEntries
                 .Include(i => i.IncomeChunks)
+                .Include(i => i.Operator)
+                .Include(i => i.Performer)
                 .Where(i => i.Operator.Id == userId || i.Performer.Id == userId)
                 .OrderByDescending(i => i.Date);
+            }
+            else
+            {
+                incomeEntries = _context.IncomeEntries
+                 .Include(i => i.IncomeChunks)
+                 .Include(i => i.Operator)
+                 .Include(i => i.Performer)
+                 .OrderByDescending(i => i.Date);
+            }
 
-            foreach (var entry in userEntries)
+            foreach (var entry in incomeEntries)
             {
                 incomeEntriesToReturn.Add(ConvertIncomeEntryForReturnDto(entry));
             }
@@ -111,6 +126,8 @@ namespace Ag.BusinessLogic.Services
             {
                 Id = incomeEntry.Id,
                 Date = incomeEntry.Date,
+                OperatorName = incomeEntry.Operator.UserName,
+                PerformerName = incomeEntry.Performer.UserName,
                 TotalSum = incomeEntry.TotalSum,
                 TotalIncomeForOwner = incomeEntry.TotalIncomeForOwner,
                 TotalIncomeForOperator = incomeEntry.TotalIncomeForOperator,

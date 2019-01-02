@@ -9,6 +9,10 @@ namespace Ag.Common.Dtos.Response
 
         public DateTime Date { get; set; }
 
+        public string OperatorName { get; set; }
+
+        public string PerformerName { get; set; }
+
         public double TotalSum { get; set; }
 
         public double TotalIncomeForOwner { get; set; }
