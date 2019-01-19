@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20190119161116_Initial")]
+    [Migration("20190119165817_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,7 +117,7 @@ namespace Ag.Domain.Migrations
 
                     b.HasIndex("ToId");
 
-                    b.ToTable("UserRelation");
+                    b.ToTable("UserRelations");
                 });
 
             modelBuilder.Entity("Ag.Domain.Models.WorkDay", b =>

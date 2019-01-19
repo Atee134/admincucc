@@ -1,12 +1,10 @@
 ﻿using Ag.BusinessLogic.Exceptions;
 using Ag.BusinessLogic.Interfaces;
+using Ag.Common.Enums;
 using Ag.Domain;
-using Microsoft.EntityFrameworkCore;
+using Ag.Domain.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Ag.BusinessLogic.Services
 {
@@ -23,27 +21,37 @@ namespace Ag.BusinessLogic.Services
 
         public void AddPerformer(int operatorId, int performerId)
         {
-            _logger.LogInformation($"Assigning a model to operator. Operatr ID: {operatorId}, Model ID: {performerId}");
+            if (operatorId == performerId) throw new AgUnfulfillableActionException("Can not add relation to self.");
 
-            var op = _context.Users.Include(u => u.Colleague).SingleOrDefault(u => u.Id == operatorId);
+            if (_context.UserRelations.SingleOrDefault(r => (r.FromId == operatorId && r.ToId == performerId) || (r.FromId == performerId && r.ToId == operatorId)) != null) throw new AgUnfulfillableActionException("Model is already assigned to Operator");
+
+            _logger.LogInformation($"Assigning a model to operator. Operator ID: {operatorId}, Model ID: {performerId}");
+
+            var op = _context.Users.SingleOrDefault(u => u.Id == operatorId && u.Role == Role.Operator);
 
             if (op == null) throw new AgUnfulfillableActionException($"Operator with ID: {operatorId} does not exist.");
-            if (op.Colleague != null) throw new AgUnfulfillableActionException($"Operator with ID: {operatorId} is already assigned to a model.");
 
-            var performer = _context.Users.Include(u => u.Colleague).SingleOrDefault(u => u.Id == performerId);
+            var performer = _context.Users.SingleOrDefault(u => u.Id == performerId && u.Role == Role.Performer);
 
-            if (performer == null) throw new AgUnfulfillableActionException($"Model with ID: {operatorId} does not exist.");
-            if (performer.Colleague != null) throw new AgUnfulfillableActionException($"Model with ID: {operatorId} is already assigned to an operator.");
+            if (performer == null) throw new AgUnfulfillableActionException($"Model with ID: {performerId} does not exist.");
 
-            op.Colleague = performer;
-            performer.Colleague = op;
+            UserRelation relation = new UserRelation
+            {
+                FromId = operatorId,
+                ToId = performerId,
+                UserFrom = op,
+                UserTo = performer
+            };
 
-            performer.Shift = op.Shift;
-            performer.Sites = op.Sites;
+            _context.UserRelations.Add(relation);
+
+            // HUGE TODO HERE, consider what the hell will happen with these? performers shouldnt even be assigned sites, they are fine on their own, but shift... op must have more shifts, each assigned to a performer, so the relation should contain shift?!
+            performer.Shift = op.Shift; //placeholders for now
+            performer.Sites = op.Sites; //placeholders for now
 
             _context.SaveChanges();
 
-            _logger.LogInformation($"Successfully assigned model with ID: {performerId}, to operator with ID: {operatorId}");
+            _logger.LogInformation($"Successfully assigned Model with ID: {performerId} to Operator with ID: {operatorId}.");
         }
     }
 }

@@ -70,8 +70,10 @@ namespace Ag.BusinessLogic.Services
 
             return new UserForListDto
             {
+                Id = user.Id,
                 UserName = user.UserName,
-                Shift = user.Shift.ToString()
+                Shift = user.Shift.ToString(),
+                Role = user.Role.ToString()
             };
         }
 

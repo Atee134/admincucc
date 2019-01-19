@@ -11,5 +11,7 @@ namespace Ag.Common.Dtos.Request
 
         [Required]
         public List<IncomeChunkAddDto> IncomeChunks { get; set; }
+
+        public int? PerformerId { get; set; }
     }
 }

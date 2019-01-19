@@ -87,6 +87,7 @@ namespace Ag.BusinessLogic.Services
                 return new IncomeEntryAddDto()
                 {
                     Date = date,
+                    PerformerId = 2,
                     IncomeChunks = new List<IncomeChunkAddDto>()
                 {
                     new IncomeChunkAddDto { Site = Site.CB, Income = _random.NextDouble() * 100},
@@ -100,6 +101,7 @@ namespace Ag.BusinessLogic.Services
                 return new IncomeEntryAddDto()
                 {
                     Date = date,
+                    PerformerId = 2,
                     IncomeChunks = new List<IncomeChunkAddDto>()
                 {
                     new IncomeChunkAddDto { Site = Site.CB, Income = _random.NextDouble() * 100},

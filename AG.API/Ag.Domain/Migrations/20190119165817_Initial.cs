@@ -67,7 +67,7 @@ namespace Ag.Domain.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRelation",
+                name: "UserRelations",
                 columns: table => new
                 {
                     FromId = table.Column<int>(nullable: false),
@@ -75,15 +75,15 @@ namespace Ag.Domain.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserRelation", x => new { x.FromId, x.ToId });
+                    table.PrimaryKey("PK_UserRelations", x => new { x.FromId, x.ToId });
                     table.ForeignKey(
-                        name: "FK_UserRelation_Users_FromId",
+                        name: "FK_UserRelations_Users_FromId",
                         column: x => x.FromId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserRelation_Users_ToId",
+                        name: "FK_UserRelations_Users_ToId",
                         column: x => x.ToId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -158,8 +158,8 @@ namespace Ag.Domain.Migrations
                 column: "PerformerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRelation_ToId",
-                table: "UserRelation",
+                name: "IX_UserRelations_ToId",
+                table: "UserRelations",
                 column: "ToId");
 
             migrationBuilder.CreateIndex(
@@ -184,7 +184,7 @@ namespace Ag.Domain.Migrations
                 name: "IncomeChunks");
 
             migrationBuilder.DropTable(
-                name: "UserRelation");
+                name: "UserRelations");
 
             migrationBuilder.DropTable(
                 name: "WorkDays");

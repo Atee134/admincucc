@@ -53,24 +53,25 @@ namespace Ag.Web
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJoinTableHelperService, JoinTableHelperService>();
             services.AddScoped<IIncomeService, IncomeService>();
             services.AddScoped<IWorkDayService, WorkDayService>();
             services.AddTransient<IApplicationInitializer, DatabaseSeeder>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-              .AddJwtBearer(options =>
-              {
-                  options.RequireHttpsMetadata = false; // TODO in production
-                  options.SaveToken = true;
-                  options.TokenValidationParameters = new TokenValidationParameters
-                  {
-                      ValidateIssuerSigningKey = true,
-                      IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-                      ValidateIssuer = false,
-                      ValidateAudience = false, // TODO in production issuer and audience must be validated too
-                  };
-              });
-
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false; // TODO in production
+                        options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false, // TODO in production issuer and audience must be validated too
+                        };
+                });
+        
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Operator", policy => policy.RequireRole(Role.Operator.ToString()));

@@ -115,7 +115,7 @@ namespace Ag.Domain.Migrations
 
                     b.HasIndex("ToId");
 
-                    b.ToTable("UserRelation");
+                    b.ToTable("UserRelations");
                 });
 
             modelBuilder.Entity("Ag.Domain.Models.WorkDay", b =>
