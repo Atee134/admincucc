@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20181230151923_Initial")]
+    [Migration("20190119161116_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,7 +94,8 @@ namespace Ag.Domain.Migrations
 
                     b.Property<int>("Shift");
 
-                    b.Property<string>("Sites");
+                    b.Property<string>("Sites")
+                        .IsRequired();
 
                     b.Property<string>("UserName")
                         .IsRequired();
@@ -104,6 +105,19 @@ namespace Ag.Domain.Migrations
                     b.HasIndex("ColleagueId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Ag.Domain.Models.UserRelation", b =>
+                {
+                    b.Property<int>("FromId");
+
+                    b.Property<int>("ToId");
+
+                    b.HasKey("FromId", "ToId");
+
+                    b.HasIndex("ToId");
+
+                    b.ToTable("UserRelation");
                 });
 
             modelBuilder.Entity("Ag.Domain.Models.WorkDay", b =>
@@ -139,12 +153,12 @@ namespace Ag.Domain.Migrations
             modelBuilder.Entity("Ag.Domain.Models.IncomeEntry", b =>
                 {
                     b.HasOne("Ag.Domain.Models.User", "Operator")
-                        .WithMany("OperatorIncomeEntries")
+                        .WithMany()
                         .HasForeignKey("OperatorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Ag.Domain.Models.User", "Performer")
-                        .WithMany("PerformerIncomeEntries")
+                        .WithMany()
                         .HasForeignKey("PerformerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -154,6 +168,19 @@ namespace Ag.Domain.Migrations
                     b.HasOne("Ag.Domain.Models.User", "Colleague")
                         .WithMany()
                         .HasForeignKey("ColleagueId");
+                });
+
+            modelBuilder.Entity("Ag.Domain.Models.UserRelation", b =>
+                {
+                    b.HasOne("Ag.Domain.Models.User", "UserFrom")
+                        .WithMany("RelatedTo")
+                        .HasForeignKey("FromId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ag.Domain.Models.User", "UserTo")
+                        .WithMany("RelatedFrom")
+                        .HasForeignKey("ToId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ag.Domain.Models.WorkDay", b =>

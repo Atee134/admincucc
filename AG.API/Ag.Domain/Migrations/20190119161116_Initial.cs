@@ -22,7 +22,7 @@ namespace Ag.Domain.Migrations
                     Role = table.Column<int>(nullable: false),
                     Shift = table.Column<int>(nullable: false),
                     ColleagueId = table.Column<int>(nullable: true),
-                    Sites = table.Column<string>(nullable: true)
+                    Sites = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,6 +61,30 @@ namespace Ag.Domain.Migrations
                     table.ForeignKey(
                         name: "FK_IncomeEntries_Users_PerformerId",
                         column: x => x.PerformerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRelation",
+                columns: table => new
+                {
+                    FromId = table.Column<int>(nullable: false),
+                    ToId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRelation", x => new { x.FromId, x.ToId });
+                    table.ForeignKey(
+                        name: "FK_UserRelation_Users_FromId",
+                        column: x => x.FromId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRelation_Users_ToId",
+                        column: x => x.ToId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -134,6 +158,11 @@ namespace Ag.Domain.Migrations
                 column: "PerformerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserRelation_ToId",
+                table: "UserRelation",
+                column: "ToId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_ColleagueId",
                 table: "Users",
                 column: "ColleagueId");
@@ -153,6 +182,9 @@ namespace Ag.Domain.Migrations
         {
             migrationBuilder.DropTable(
                 name: "IncomeChunks");
+
+            migrationBuilder.DropTable(
+                name: "UserRelation");
 
             migrationBuilder.DropTable(
                 name: "WorkDays");

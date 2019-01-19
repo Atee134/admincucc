@@ -35,6 +35,10 @@ namespace Ag.Domain.Models
 
         public virtual User Colleague { get; set; }
 
+        public virtual ICollection<UserRelation> RelatedTo { get; set; } = new List<UserRelation>();
+
+        public virtual ICollection<UserRelation> RelatedFrom { get; set; } = new List<UserRelation>();
+
         [Required]
         public string Sites { get; set; } //TODO like category
 
@@ -43,11 +47,5 @@ namespace Ag.Domain.Models
 
         [InverseProperty("Performer")]
         public virtual ICollection<WorkDay> PerformerWorkDays { get; set; }
-
-        [InverseProperty("Operator")]
-        public virtual ICollection<IncomeEntry> OperatorIncomeEntries { get; set; }
-
-        [InverseProperty("Performer")]
-        public virtual ICollection<IncomeEntry> PerformerIncomeEntries { get; set; }
     }
 }
