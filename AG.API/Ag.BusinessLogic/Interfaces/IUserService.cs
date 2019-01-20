@@ -8,6 +8,7 @@ namespace Ag.BusinessLogic.Interfaces
     public interface IUserService
     {
         IEnumerable<UserForListDto> GetUsers();
+        UserDetailDto GetUser(int userId);
         void AddPerformer(int operatorId, int performerId);
     }
 }

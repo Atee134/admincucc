@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ag.BusinessLogic.Converters;
 using Ag.BusinessLogic.Interfaces;
+using Ag.BusinessLogic.Interfaces.Converters;
 using Ag.BusinessLogic.Services;
 using Ag.Common.Enums;
 using Ag.Domain;
@@ -50,6 +52,9 @@ namespace Ag.Web
             services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
 
             services.AddScoped<ActionLogFilterAttribute>();
+
+            // Adding converters
+            services.AddScoped<IUserConverter, UserConverter>();
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();

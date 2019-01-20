@@ -32,6 +32,15 @@ namespace Ag.Web.Controllers
             return Ok(users);
         }
 
+        [HttpGet("{id}")]
+        [Authorize("Admin")]
+        public IActionResult GetUser(int id)
+        {
+            var user = _userService.GetUser(id);
+
+            return Ok(user);
+        }
+
         [Authorize("Admin")]
         [HttpPut("{operatorId}/performer/{performerId}")]
         public IActionResult AddPerformer(int operatorId, int performerId)

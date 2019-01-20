@@ -17,6 +17,8 @@ namespace Ag.Common.Dtos.Response
 
         public List<Site> Sites { get; set; }
 
+        public List<UserForListDto> Colleagues { get; set; }
+
         public double MinPercent { get; set; }
 
         public double MaxPercent { get; set; }

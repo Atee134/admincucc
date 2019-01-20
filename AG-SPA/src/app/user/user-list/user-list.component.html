@@ -1,0 +1,20 @@
+<div class="container mt-3" *ngIf="users">
+  <table class="table table-bordered">
+      <thead>
+        <tr class="table-primary">
+          <th scope="col">User name</th>
+          <th class="text-center" scope="col">Role</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td scope="row">{{user.userName}}</td>
+          <td class="text-right">{{user.role}}</td>
+          <td class="text-right">
+              <a routerLink="/users/{{user.id}}" class="btn btn-primary btn-sm text-center">Edit</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>

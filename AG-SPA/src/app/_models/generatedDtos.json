@@ -59,6 +59,10 @@
           "items": {
             "$ref": "#/definitions/IncomeChunkAddDto"
           }
+        },
+        "PerformerId": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
@@ -84,14 +88,18 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "UserName",
+        "Password",
         "Role"
       ],
       "properties": {
         "UserName": {
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "Password": {
-          "type": "string"
+          "type": "string",
+          "minLength": 6
         },
         "Role": {
           "$ref": "#/definitions/Role"
@@ -241,6 +249,12 @@
             "$ref": "#/definitions/Site"
           }
         },
+        "Colleagues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserForListDto"
+          }
+        },
         "MinPercent": {
           "type": "number",
           "format": "double"
@@ -269,7 +283,9 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "Id"
+        "Id",
+        "Shift",
+        "Role"
       ],
       "properties": {
         "Id": {
@@ -280,10 +296,10 @@
           "type": "string"
         },
         "Shift": {
-          "type": "string"
+          "$ref": "#/definitions/Shift"
         },
         "Role": {
-          "type": "string"
+          "$ref": "#/definitions/Role"
         }
       }
     },

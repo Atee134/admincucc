@@ -1,12 +1,11 @@
 ﻿using Ag.BusinessLogic.Interfaces;
+using Ag.BusinessLogic.Interfaces.Converters;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
-using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Ag.BusinessLogic.Services
@@ -15,11 +14,15 @@ namespace Ag.BusinessLogic.Services
     {
         private readonly AgDbContext _context;
         private readonly ILogger<AuthService> _logger;
+        private readonly IJoinTableHelperService _joinTableHelperService;
+        private readonly IUserConverter _userConverter;
 
-        public AuthService(AgDbContext context, ILogger<AuthService> logger)
+        public AuthService(AgDbContext context, ILogger<AuthService> logger, IJoinTableHelperService joinTableHelperService, IUserConverter userConverter)
         {
             _context = context;
             _logger = logger;
+            _joinTableHelperService = joinTableHelperService;
+            _userConverter = userConverter;
         }
 
         public UserDetailDto Login(UserForLoginDto userDto)
@@ -36,18 +39,7 @@ namespace Ag.BusinessLogic.Services
 
             _logger.LogInformation($"User: {userDto.UserName} logged in successfully.");
 
-            var sites = user.Sites.Length == 0 ? new List<Site>() : user.Sites.Split(';').Select(s => Enum.Parse<Site>(s)).ToList();
-
-            return new UserDetailDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Shift = user.Shift,
-                Role = user.Role,
-                Sites = sites,
-                MinPercent = user.MinPercent,
-                MaxPercent = user.MaxPercent,
-            };
+            return _userConverter.ConvertToUserDetailDto(user);
         }
 
         public UserForListDto Register(UserForRegisterDto userDto)
@@ -68,13 +60,7 @@ namespace Ag.BusinessLogic.Services
 
             _logger.LogInformation($"User: {userDto.UserName} successfully registrated");
 
-            return new UserForListDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Shift = user.Shift,
-                Role = user.Role
-            };
+            return _userConverter.ConvertToUserToListDto(user);
         }
 
         public bool UserExists(string userName)

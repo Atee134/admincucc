@@ -1,10 +1,12 @@
 ﻿using Ag.BusinessLogic.Exceptions;
 using Ag.BusinessLogic.Interfaces;
+using Ag.BusinessLogic.Interfaces.Converters;
 using Ag.Common.Dtos.Response;
 using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,29 +16,29 @@ namespace Ag.BusinessLogic.Services
     {
         private readonly AgDbContext _context;
         private readonly ILogger<UserService> _logger;
+        private readonly IUserConverter _userConverter;
 
-        public UserService(AgDbContext context, ILogger<UserService> logger)
+        public UserService(AgDbContext context, ILogger<UserService> logger, IUserConverter userConverter)
         {
             _context = context;
             _logger = logger;
+            _userConverter = userConverter;
         }
 
-        private UserForListDto ConvertUserToListDto(User user)
+        public UserDetailDto GetUser(int userId)
         {
-            return new UserForListDto
-            {
-                Id = user.Id,
-                Role = user.Role,
-                Shift = user.Shift,
-                UserName = user.UserName,
-            };
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user == null) throw new AgUnfulfillableActionException($"User with ID: {userId} does not exist.");
+
+            return _userConverter.ConvertToUserDetailDto(user);
         }
 
         public IEnumerable<UserForListDto> GetUsers() // TODO add filters later
         {
             _logger.LogInformation("Getting user list...");
 
-            return _context.Users.Where(u => u.Role == Role.Operator || u.Role == Role.Performer).Select(u => ConvertUserToListDto(u));
+            return _context.Users.Where(u => u.Role == Role.Operator || u.Role == Role.Performer).Select(u => _userConverter.ConvertToUserToListDto(u));
         }
 
         public void AddPerformer(int operatorId, int performerId)

@@ -1,7 +1,13 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mx-auto">
   <div class='container'>
     <a class="navbar-brand" [routerLink]="['/incomes']">Next Gen Studios</a>
-
+    
+    <ul class="navbar-nav" *ngIf="isCurrentUser('Admin')">
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/users']">Users</a>
+      </li>
+    </ul>
+    
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/incomes']">Incomes</a>
