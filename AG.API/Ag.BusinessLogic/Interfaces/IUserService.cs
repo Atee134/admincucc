@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ag.Common.Dtos.Response;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,7 @@ namespace Ag.BusinessLogic.Interfaces
 {
     public interface IUserService
     {
+        IEnumerable<UserForListDto> GetUsers();
         void AddPerformer(int operatorId, int performerId);
     }
 }

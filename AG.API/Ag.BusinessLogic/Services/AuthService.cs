@@ -72,8 +72,8 @@ namespace Ag.BusinessLogic.Services
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Shift = user.Shift.ToString(),
-                Role = user.Role.ToString()
+                Shift = user.Shift,
+                Role = user.Role
             };
         }
 

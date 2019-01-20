@@ -1,9 +1,11 @@
 ﻿using Ag.BusinessLogic.Exceptions;
 using Ag.BusinessLogic.Interfaces;
+using Ag.Common.Dtos.Response;
 using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ag.BusinessLogic.Services
@@ -17,6 +19,24 @@ namespace Ag.BusinessLogic.Services
         {
             _context = context;
             _logger = logger;
+        }
+
+        private UserForListDto ConvertUserToListDto(User user)
+        {
+            return new UserForListDto
+            {
+                Id = user.Id,
+                Role = user.Role,
+                Shift = user.Shift,
+                UserName = user.UserName,
+            };
+        }
+
+        public IEnumerable<UserForListDto> GetUsers() // TODO add filters later
+        {
+            _logger.LogInformation("Getting user list...");
+
+            return _context.Users.Where(u => u.Role == Role.Operator || u.Role == Role.Performer).Select(u => ConvertUserToListDto(u));
         }
 
         public void AddPerformer(int operatorId, int performerId)
