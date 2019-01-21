@@ -51,5 +51,15 @@ namespace Ag.Web.Controllers
 
             return NoContent();
         }
+
+        [Authorize("Admin")]
+        [HttpDelete("{operatorId}/performer/{performerId}")]
+        public IActionResult RemovePerformer(int operatorId, int performerId)
+        {
+            _userService.RemovePerformer(operatorId, performerId);
+            //TODO handle exception? or let the middleware handle it and return the relevant info
+
+            return NoContent();
+        }
     }
 }

@@ -82,5 +82,22 @@ namespace Ag.BusinessLogic.Services
 
             _logger.LogInformation($"Successfully assigned Model with ID: {performerId} to Operator with ID: {operatorId}.");
         }
+
+        public void RemovePerformer(int operatorId, int performerId)
+        {
+            if (operatorId == performerId) throw new AgUnfulfillableActionException("Can not remove performer, both IDs are the same.");
+
+            var userRelation = _context.UserRelations.SingleOrDefault(r => (r.FromId == operatorId && r.ToId == performerId) || (r.FromId == performerId && r.ToId == operatorId));
+
+            if (userRelation == null) throw new AgUnfulfillableActionException("Performer is not assigned to Operator");
+
+            _logger.LogInformation($"Removing relation between users, Operator ID: {operatorId}, Model ID: {performerId}");
+
+            _context.UserRelations.Remove(userRelation);
+
+            _context.SaveChanges();
+
+            _logger.LogInformation($"Successfully removed relation between users, Operator ID: {operatorId}, Model ID: {performerId}");
+        }
     }
 }

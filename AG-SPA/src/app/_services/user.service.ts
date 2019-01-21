@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { UserForListDto, UserDetailDto } from '../_models/generatedDtos';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { UserForListDto, UserDetailDto, Role } from '../_models/generatedDtos';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -12,8 +12,15 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<UserForListDto[]> {
-    return this.http.get<UserForListDto[]>(this.baseUrl + 'users');
+  getUsers(role?: Role): Observable<UserForListDto[]> {
+    if (role) {
+      const params = new HttpParams()
+      .set('role', role);
+
+      return this.http.get<UserForListDto[]>(this.baseUrl + 'users', {params: params});
+    } else {
+      return this.http.get<UserForListDto[]>(this.baseUrl + 'users');
+    }
   }
 
   getUser(userId: number): Observable<UserDetailDto> {

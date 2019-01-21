@@ -1,6 +1,29 @@
-<p *ngIf="user">
-  {{user.userName}}
-</p>
+<div class="container mt-3" *ngIf="users">
+  <div *ngIf="user">
+    <p>
+      USER EDIT: {{user.userName}}
+    </p>
+  </div>
 
-
-
+  <div class="col-lg-4 col-sm-12">
+    <table class="table table-bordered">
+        <thead>
+          <tr class="table-primary">
+            <th scope="col">User name</th>
+            <th class="text-center" scope="col">Role</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td scope="row">{{user.userName}}</td>
+            <td class="text-right">{{user.role}}</td>
+            <td class="text-right">
+                
+                <a *ngIf="isUserColleague(user)" routerLink="/users/{{user.id}}" class="btn btn-danger btn-sm text-center">Remove</a>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+  </div>
+</div>

@@ -11,5 +11,6 @@ namespace Ag.BusinessLogic.Interfaces
         IEnumerable<UserForListDto> GetUsers(Role? role = null);
         UserDetailDto GetUser(int userId);
         void AddPerformer(int operatorId, int performerId);
+        void RemovePerformer(int operatorId, int performerId);
     }
 }
