@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
+using Ag.Common.Enums;
 using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,9 +26,9 @@ namespace Ag.Web.Controllers
 
         [HttpGet]
         [Authorize("Admin")]
-        public IActionResult GetUsers()
+        public IActionResult GetUsers([FromQuery] Role? role = null)
         {
-            var users = _userService.GetUsers();
+            var users = _userService.GetUsers(role);
 
             return Ok(users);
         }

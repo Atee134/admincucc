@@ -34,11 +34,18 @@ namespace Ag.BusinessLogic.Services
             return _userConverter.ConvertToUserDetailDto(user);
         }
 
-        public IEnumerable<UserForListDto> GetUsers() // TODO add filters later
+        public IEnumerable<UserForListDto> GetUsers(Role? role = null) // TODO add filters later
         {
             _logger.LogInformation("Getting user list...");
 
-            return _context.Users.Where(u => u.Role == Role.Operator || u.Role == Role.Performer).Select(u => _userConverter.ConvertToUserToListDto(u));
+            if (role != null)
+            {
+                return _context.Users.Where(u => u.Role == role).Select(u => _userConverter.ConvertToUserToListDto(u));
+            }
+            else
+            {
+               return _context.Users.Select(u => _userConverter.ConvertToUserToListDto(u));    
+            }
         }
 
         public void AddPerformer(int operatorId, int performerId)
