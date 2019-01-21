@@ -26,4 +26,12 @@ export class UserService {
   getUser(userId: number): Observable<UserDetailDto> {
     return this.http.get<UserDetailDto>(this.baseUrl + 'users/' + userId);
   }
+
+  addPerformer(operatorId: number, performerId: number) {
+    return this.http.put(`${this.baseUrl}users/${operatorId}/performer/${performerId}`, {});
+  }
+
+  removePerformer(operatorId: number, performerId: number) {
+    return this.http.delete(`${this.baseUrl}users/${operatorId}/performer/${performerId}`, {});
+  }
 }

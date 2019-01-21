@@ -19,8 +19,8 @@
             <td scope="row">{{user.userName}}</td>
             <td class="text-right">{{user.role}}</td>
             <td class="text-right">
-                
-                <a *ngIf="isUserColleague(user)" routerLink="/users/{{user.id}}" class="btn btn-danger btn-sm text-center">Remove</a>
+                <button *ngIf="isUserColleague(user)" (click)="removeLink(user.id)" class="btn btn-danger btn-sm text-center">Remove link</button>
+                <button *ngIf="!isUserColleague(user)" (click)="addLink(user.id)" class="btn btn-success btn-sm text-center">Add link</button>
             </td>
           </tr>
         </tbody>
