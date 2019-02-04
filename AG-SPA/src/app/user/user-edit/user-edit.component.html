@@ -5,7 +5,7 @@
     </p>
   </div>
 
-  <div class="col-lg-4 col-sm-12">
+  <div class="col-lg-4 col-sm-12" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
     <table class="table table-bordered">
         <thead>
           <tr class="table-primary">

@@ -33,6 +33,12 @@ namespace Ag.Domain.Models
         [Required]
         public Shift Shift { get; set; }
 
+        [Required]
+        public string Color { get; set; }
+
+        /// <summary>
+        /// DEPRECATED
+        /// </summary>
         public virtual User Colleague { get; set; }
 
         public virtual ICollection<UserRelation> RelatedTo { get; set; } = new List<UserRelation>();

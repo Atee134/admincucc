@@ -11,5 +11,7 @@ namespace Ag.Common.Dtos.Response
         public Shift Shift { get; set; }
 
         public Role Role { get; set; }
+
+        public string Color { get; set; }
     }
 }

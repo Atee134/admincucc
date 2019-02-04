@@ -1,6 +1,7 @@
 ﻿using Ag.BusinessLogic.Exceptions;
 using Ag.BusinessLogic.Interfaces;
 using Ag.BusinessLogic.Interfaces.Converters;
+using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
 using Ag.Common.Enums;
 using Ag.Domain;
@@ -17,12 +18,14 @@ namespace Ag.BusinessLogic.Services
         private readonly AgDbContext _context;
         private readonly ILogger<UserService> _logger;
         private readonly IUserConverter _userConverter;
+        private readonly IAuthService _authService;
 
-        public UserService(AgDbContext context, ILogger<UserService> logger, IUserConverter userConverter)
+        public UserService(AgDbContext context, ILogger<UserService> logger, IUserConverter userConverter, IAuthService authService)
         {
             _context = context;
             _logger = logger;
             _userConverter = userConverter;
+            _authService = authService;
         }
 
         public UserDetailDto GetUser(int userId)
@@ -45,6 +48,30 @@ namespace Ag.BusinessLogic.Services
             else
             {
                return _context.Users.Select(u => _userConverter.ConvertToUserToListDto(u));    
+            }
+        }
+
+        public void UpdateUser(UserForEditDto userDto)
+        {
+            _logger.LogInformation($"Updating user with ID: {userDto.Id}");
+
+            var user = _context.Users.SingleOrDefault(u => u.Id == userDto.Id);
+
+            if (user == null) throw new AgUnfulfillableActionException($"User with ID: {userDto.Id} does not exist.");
+
+            user.UserName = userDto.UserName;
+            user.Color = userDto.Color;
+            user.Sites = String.Join(';', userDto.Sites);
+            user.MinPercent = userDto.MinPercent.Value;
+            user.MaxPercent = userDto.MaxPercent.Value;
+
+            _context.SaveChanges();
+
+            _logger.LogInformation($"Updating user with ID: {userDto.Id} was successful.");
+
+            if (!String.IsNullOrEmpty(userDto.Password))
+            {
+                _authService.ChangeUserPassword(user, userDto.Password);
             }
         }
 

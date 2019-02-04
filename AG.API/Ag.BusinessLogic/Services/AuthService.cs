@@ -4,6 +4,7 @@ using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
 using Ag.Domain;
 using Ag.Domain.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -16,13 +17,15 @@ namespace Ag.BusinessLogic.Services
         private readonly ILogger<AuthService> _logger;
         private readonly IJoinTableHelperService _joinTableHelperService;
         private readonly IUserConverter _userConverter;
+        private readonly IConfiguration _configuration;
 
-        public AuthService(AgDbContext context, ILogger<AuthService> logger, IJoinTableHelperService joinTableHelperService, IUserConverter userConverter)
+        public AuthService(AgDbContext context, ILogger<AuthService> logger, IJoinTableHelperService joinTableHelperService, IUserConverter userConverter, IConfiguration configuration)
         {
             _context = context;
             _logger = logger;
             _joinTableHelperService = joinTableHelperService;
             _userConverter = userConverter;
+            _configuration = configuration;
         }
 
         public UserDetailDto Login(UserForLoginDto userDto)
@@ -63,6 +66,20 @@ namespace Ag.BusinessLogic.Services
             return _userConverter.ConvertToUserToListDto(user);
         }
 
+        public void ChangeUserPassword(User user, string newPassword)
+        {
+            byte[] passwordHash;
+            byte[] passwordSalt;
+            CreatePasswordHash(newPassword, out passwordHash, out passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            _context.SaveChanges();
+
+            _logger.LogInformation($"Changing password of user with ID: {user.Id} was successful.");
+        }
+
         public bool UserExists(string userName)
         {
             userName = userName.ToLower();
@@ -75,6 +92,8 @@ namespace Ag.BusinessLogic.Services
 
         private User CreateUserFromDto(UserForRegisterDto userDto)
         {
+            var defaultColor = _configuration.GetSection("UserColors:0").Value;
+
             return new User
             {
                 UserName = userDto.UserName,
@@ -83,6 +102,7 @@ namespace Ag.BusinessLogic.Services
                 MaxPercent = 0.275,
                 Shift = Common.Enums.Shift.Morning,
                 Sites = String.Empty,
+                Color = defaultColor
             };
         }
 

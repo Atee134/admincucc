@@ -78,6 +78,9 @@ namespace Ag.Domain.Migrations
 
                     b.Property<int?>("ColleagueId");
 
+                    b.Property<string>("Color")
+                        .IsRequired();
+
                     b.Property<double>("MaxPercent");
 
                     b.Property<double>("MinPercent");

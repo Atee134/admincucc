@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20190119165817_Initial")]
+    [Migration("20190204162508_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,9 @@ namespace Ag.Domain.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int?>("ColleagueId");
+
+                    b.Property<string>("Color")
+                        .IsRequired();
 
                     b.Property<double>("MaxPercent");
 

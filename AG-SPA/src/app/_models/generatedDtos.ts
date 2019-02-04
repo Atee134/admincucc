@@ -425,6 +425,7 @@ export class UserDetailDto implements IUserDetailDto {
     userName?: string | null;
     shift!: Shift;
     role!: Role;
+    color?: string | null;
     sites?: Site[] | null;
     colleagues?: UserForListDto[] | null;
     minPercent!: number;
@@ -445,6 +446,7 @@ export class UserDetailDto implements IUserDetailDto {
             this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
             this.shift = data["Shift"] !== undefined ? data["Shift"] : <any>null;
             this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
+            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
             if (data["Sites"] && data["Sites"].constructor === Array) {
                 this.sites = [] as any;
                 for (let item of data["Sites"])
@@ -473,6 +475,7 @@ export class UserDetailDto implements IUserDetailDto {
         data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
         data["Shift"] = this.shift !== undefined ? this.shift : <any>null;
         data["Role"] = this.role !== undefined ? this.role : <any>null;
+        data["Color"] = this.color !== undefined ? this.color : <any>null;
         if (this.sites && this.sites.constructor === Array) {
             data["Sites"] = [];
             for (let item of this.sites)
@@ -501,6 +504,7 @@ export interface IUserDetailDto {
     userName?: string | null;
     shift: Shift;
     role: Role;
+    color?: string | null;
     sites?: Site[] | null;
     colleagues?: UserForListDto[] | null;
     minPercent: number;
@@ -518,6 +522,7 @@ export class UserForListDto implements IUserForListDto {
     userName?: string | null;
     shift!: Shift;
     role!: Role;
+    color?: string | null;
 
     constructor(data?: IUserForListDto) {
         if (data) {
@@ -534,6 +539,7 @@ export class UserForListDto implements IUserForListDto {
             this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
             this.shift = data["Shift"] !== undefined ? data["Shift"] : <any>null;
             this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
+            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
         }
     }
 
@@ -550,6 +556,7 @@ export class UserForListDto implements IUserForListDto {
         data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
         data["Shift"] = this.shift !== undefined ? this.shift : <any>null;
         data["Role"] = this.role !== undefined ? this.role : <any>null;
+        data["Color"] = this.color !== undefined ? this.color : <any>null;
         return data; 
     }
 
@@ -566,6 +573,7 @@ export interface IUserForListDto {
     userName?: string | null;
     shift: Shift;
     role: Role;
+    color?: string | null;
 }
 
 export class WorkDayForListDto implements IWorkDayForListDto {
@@ -672,4 +680,82 @@ export class ErrorDetails implements IErrorDetails {
 
 export interface IErrorDetails {
     messages?: string[] | null;
+}
+
+export class UserForEditDto implements IUserForEditDto {
+    id!: number;
+    userName!: string;
+    password?: string | null;
+    color!: string;
+    sites!: Site[];
+    minPercent!: number;
+    maxPercent!: number;
+
+    constructor(data?: IUserForEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.sites = [];
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
+            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
+            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
+            if (data["Sites"] && data["Sites"].constructor === Array) {
+                this.sites = [] as any;
+                for (let item of data["Sites"])
+                    this.sites!.push(item);
+            }
+            this.minPercent = data["MinPercent"] !== undefined ? data["MinPercent"] : <any>null;
+            this.maxPercent = data["MaxPercent"] !== undefined ? data["MaxPercent"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserForEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserForEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id !== undefined ? this.id : <any>null;
+        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["Password"] = this.password !== undefined ? this.password : <any>null;
+        data["Color"] = this.color !== undefined ? this.color : <any>null;
+        if (this.sites && this.sites.constructor === Array) {
+            data["Sites"] = [];
+            for (let item of this.sites)
+                data["Sites"].push(item);
+        }
+        data["MinPercent"] = this.minPercent !== undefined ? this.minPercent : <any>null;
+        data["MaxPercent"] = this.maxPercent !== undefined ? this.maxPercent : <any>null;
+        return data; 
+    }
+
+    clone(): UserForEditDto {
+        const json = this.toJSON();
+        let result = new UserForEditDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserForEditDto {
+    id: number;
+    userName: string;
+    password?: string | null;
+    color: string;
+    sites: Site[];
+    minPercent: number;
+    maxPercent: number;
 }

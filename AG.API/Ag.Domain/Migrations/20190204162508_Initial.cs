@@ -21,6 +21,7 @@ namespace Ag.Domain.Migrations
                     MaxPercent = table.Column<double>(nullable: false),
                     Role = table.Column<int>(nullable: false),
                     Shift = table.Column<int>(nullable: false),
+                    Color = table.Column<string>(nullable: false),
                     ColleagueId = table.Column<int>(nullable: true),
                     Sites = table.Column<string>(nullable: false)
                 },

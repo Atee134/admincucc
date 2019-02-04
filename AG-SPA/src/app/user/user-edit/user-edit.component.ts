@@ -95,4 +95,8 @@ export class UserEditComponent implements OnInit {
       });
     });
   }
+
+  public hasRole(user: UserForListDto, role: string): boolean {
+    return user.role === role;
+  }
 }

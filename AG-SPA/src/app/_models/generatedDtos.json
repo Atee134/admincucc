@@ -243,6 +243,9 @@
         "Role": {
           "$ref": "#/definitions/Role"
         },
+        "Color": {
+          "type": "string"
+        },
         "Sites": {
           "type": "array",
           "items": {
@@ -300,6 +303,9 @@
         },
         "Role": {
           "$ref": "#/definitions/Role"
+        },
+        "Color": {
+          "type": "string"
         }
       }
     },
@@ -331,6 +337,54 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "UserForEditDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id",
+        "UserName",
+        "Color",
+        "Sites",
+        "MinPercent",
+        "MaxPercent"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "UserName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Password": {
+          "type": "string",
+          "minLength": 6
+        },
+        "Color": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Sites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Site"
+          }
+        },
+        "MinPercent": {
+          "type": "number",
+          "format": "double",
+          "maximum": 100.0,
+          "minimum": 0.0
+        },
+        "MaxPercent": {
+          "type": "number",
+          "format": "double",
+          "maximum": 100.0,
+          "minimum": 0.0
         }
       }
     }

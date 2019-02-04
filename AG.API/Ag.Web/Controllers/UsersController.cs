@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
+using Ag.Common.Dtos.Request;
 using Ag.Common.Enums;
 using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -40,6 +41,15 @@ namespace Ag.Web.Controllers
             var user = _userService.GetUser(id);
 
             return Ok(user);
+        }
+
+        [HttpPut]
+        [Authorize("Admin")]
+        public IActionResult UpdateUser(UserForEditDto userDto)
+        {
+            _userService.UpdateUser(userDto);
+
+            return NoContent();
         }
 
         [Authorize("Admin")]
