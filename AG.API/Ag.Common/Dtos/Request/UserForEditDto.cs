@@ -22,11 +22,11 @@ namespace Ag.Common.Dtos.Request
         public List<Site> Sites { get; set; }
 
         [Required]
-        [Range(0,100, ErrorMessage = "Minimum percent must be between 0 and 100.")]
+        [Range(0,1, ErrorMessage = "Minimum percent must be between 0 and 1.")]
         public double? MinPercent { get; set; }
 
         [Required]
-        [Range(0, 100, ErrorMessage = "Maximum percent must be between 0 and 100.")]
+        [Range(0, 1, ErrorMessage = "Maximum percent must be between 0 and 1.")]
         public double? MaxPercent { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
-import { UserDetailDto, Role, UserForListDto, Shift } from 'src/app/_models/generatedDtos';
+import { UserDetailDto, Role, UserForListDto, Shift, UserForEditDto } from 'src/app/_models/generatedDtos';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { AuthService } from 'src/app/_services/auth.service';
 
@@ -12,6 +12,8 @@ import { AuthService } from 'src/app/_services/auth.service';
 })
 export class UserEditComponent implements OnInit {
   public user: UserDetailDto;
+  public userForEdit: UserForEditDto;
+  public rePassword: string;
   public users: UserForListDto[];
 
   constructor(
@@ -30,12 +32,45 @@ export class UserEditComponent implements OnInit {
     this.userService.getUser(id)
       .subscribe(user => {
         this.user = user;
+        this.initUserForEditDto(user);
         this.initAssigneableUsers();
       }, error => {
         this.alertify.error(error);
       });
   }
 
+  private initUserForEditDto(userDetail: UserDetailDto): void {
+    this.userForEdit = new UserForEditDto({
+      id: userDetail.id,
+      userName: userDetail.userName,
+      password: undefined,
+      color: userDetail.color,
+      sites: userDetail.sites,
+      minPercent: userDetail.minPercent,
+      maxPercent: userDetail.maxPercent
+    });
+  }
+
+  public onSubmit() {
+    if (this.userForEdit.password === '') {
+      this.userForEdit.password = undefined;
+    }
+    if (this.rePassword === '') {
+      this.rePassword = undefined;
+    }
+
+    if (this.userForEdit.password !== this.rePassword) {
+      this.alertify.error('A két jelszó nem egyezik');
+    } else {
+      this.userService.updateUser(this.userForEdit).subscribe(resp => {
+        this.alertify.success('Változtatások mentve.');
+      }, error => {
+        this.alertify.error(error);
+      });
+    }
+  }
+
+  // TODO refactor methods below this, probably into a seperate component (add\remove performer component)
   private initAssigneableUsers(): void {
     const role = this.user.role === Role.Operator ? Role.Performer : Role.Operator;
 

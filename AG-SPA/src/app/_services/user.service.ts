@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { UserForListDto, UserDetailDto, Role } from '../_models/generatedDtos';
+import { UserForListDto, UserDetailDto, Role, UserForEditDto } from '../_models/generatedDtos';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -25,6 +25,10 @@ export class UserService {
 
   getUser(userId: number): Observable<UserDetailDto> {
     return this.http.get<UserDetailDto>(this.baseUrl + 'users/' + userId);
+  }
+
+  updateUser(userForEdit: UserForEditDto) {
+    return this.http.put(`${this.baseUrl}users`, userForEdit);
   }
 
   addPerformer(operatorId: number, performerId: number) {

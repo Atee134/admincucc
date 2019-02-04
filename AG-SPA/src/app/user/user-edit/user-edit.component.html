@@ -1,9 +1,47 @@
 <div class="container mt-3" *ngIf="users">
-  <div *ngIf="user">
-    <p>
-      USER EDIT: {{user.userName}}
-    </p>
-  </div>
+  <form (ngSubmit)="onSubmit()" #editForm="ngForm">
+      <div class="form-group">
+        <label for="userName">Username</label>
+        <input type="text" class="form-control" id="userName"
+              required
+              [(ngModel)]="userForEdit.userName" name="userName">
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password"  class="form-control" id="password"
+              [(ngModel)]="userForEdit.password" name="password">
+      </div>
+  
+      <div class="form-group">
+        <label for="repassword">Re-enter password</label>
+        <input type="password"  class="form-control" id="repassword"
+              [(ngModel)]="rePassword" name="repassword">
+      </div>
+
+      <div class="form-group">
+          <label for="minPercent">Minimum income percent:</label>
+          <input type="number"  class="form-control" id="minPercent"
+                 required
+                [(ngModel)]="userForEdit.minPercent" name="minPercent">
+      </div>
+
+      <div class="form-group">
+          <label for="maxPercent">Minimum income percent:</label>
+          <input type="number"  class="form-control" id="maxPercent"
+                 required
+                [(ngModel)]="userForEdit.maxPercent" name="maxPercent">
+      </div>
+
+      <div class="form-group">
+          <label for="color">Color:</label>
+          <input type="text"  class="form-control" id="color"
+                 required
+                [(ngModel)]="userForEdit.color" name="color">
+      </div>
+  
+      <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!editForm.form.valid">Save</button>
+    </form>
 
   <div class="col-lg-4 col-sm-12" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
     <table class="table table-bordered">
