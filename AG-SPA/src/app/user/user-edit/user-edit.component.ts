@@ -4,6 +4,7 @@ import { UserService } from 'src/app/_services/user.service';
 import { UserDetailDto, Role, UserForListDto, Shift, UserForEditDto } from 'src/app/_models/generatedDtos';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { StaticdataService } from 'src/app/_services/staticdata.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -15,16 +16,19 @@ export class UserEditComponent implements OnInit {
   public userForEdit: UserForEditDto;
   public rePassword: string;
   public users: UserForListDto[];
+  public colors: string[];
 
   constructor(
     private route: ActivatedRoute,
     private userService: UserService,
     private alertify: AlertifyService,
-    private authService: AuthService
+    private authService: AuthService,
+    private staticDataService: StaticdataService
     ) { }
 
   ngOnInit() {
     this.initUser();
+    this.getColors();
   }
 
   private initUser(): void {
@@ -37,6 +41,12 @@ export class UserEditComponent implements OnInit {
       }, error => {
         this.alertify.error(error);
       });
+  }
+
+  private getColors(): void {
+    this.staticDataService.getColors().subscribe(colors => {
+      this.colors = colors;
+    });
   }
 
   private initUserForEditDto(userDetail: UserDetailDto): void {

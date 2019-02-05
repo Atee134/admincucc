@@ -34,10 +34,10 @@
       </div>
 
       <div class="form-group">
-          <label for="color">Color:</label>
-          <input type="text"  class="form-control" id="color"
-                 required
-                [(ngModel)]="userForEdit.color" name="color">
+        <label for="color">Color:</label>
+        <select class="custom-select form-control" name="color" id="color" [(ngModel)]="userForEdit.color" required [ngStyle]="{'background-color': userForEdit.color}">
+          <option *ngFor="let color of colors" value="{{color}}" [ngStyle]="{'background-color': color}"></option>
+        </select>
       </div>
   
       <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!editForm.form.valid">Save</button>
