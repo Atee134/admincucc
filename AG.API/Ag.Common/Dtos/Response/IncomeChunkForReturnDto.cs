@@ -13,7 +13,7 @@ namespace Ag.Common.Dtos.Response
 
         public double Sum { get; set; }
 
-        public double IncomeForOwner { get; set; }
+        public double IncomeForStudio { get; set; }
 
         public double IncomeForOperator { get; set; }
 

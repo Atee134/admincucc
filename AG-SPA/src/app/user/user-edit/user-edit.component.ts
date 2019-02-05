@@ -82,6 +82,9 @@ export class UserEditComponent implements OnInit {
     } else {
       let changedProperties = '';
 
+      if (this.userForEdit.password) {
+        changedProperties += ('</br>- Jelszó');
+      }
       if (this.userForEdit.userName !== this.user.userName) {
         changedProperties += ('</br>- Felhasználónév');
       }
@@ -180,6 +183,6 @@ export class UserEditComponent implements OnInit {
   }
 
   public hasRole(user: UserForListDto, role: string): boolean {
-    return user.role === role;
+    return user.role.toLowerCase() === role.toLowerCase();
   }
 }

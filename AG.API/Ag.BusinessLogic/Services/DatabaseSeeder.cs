@@ -13,7 +13,7 @@ namespace Ag.BusinessLogic.Services
     public class DatabaseSeeder : IApplicationInitializer
     {
         private static readonly Random _random = new Random();
-        private const int TEST_INCOMES_COUNT = 30;
+        private const int TEST_INCOMES_COUNT = 10;
         private readonly AgDbContext _context;
         private readonly IAuthService _authService;
         private readonly IIncomeService _incomeService;
@@ -72,10 +72,28 @@ namespace Ag.BusinessLogic.Services
 
             for (int i = 0; i < TEST_INCOMES_COUNT; i++)
             {
-                _incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
+                //_incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
+                _incomeService.AddIncomEntry(1, CreateConstantIncomeEntry(i));
             }
 
             _context.SaveChanges();
+        }
+
+        private IncomeEntryAddDto CreateConstantIncomeEntry(int dayOffset)
+        {
+            var date = DateTime.Now.AddDays(dayOffset * (-1));
+
+            return new IncomeEntryAddDto()
+            {
+                Date = date,
+                PerformerId = 2,
+                IncomeChunks = new List<IncomeChunkAddDto>()
+            {
+                new IncomeChunkAddDto { Site = Site.CB, Income = 1},
+                new IncomeChunkAddDto { Site = Site.LJ, Income = 2},
+                new IncomeChunkAddDto { Site = Site.MFC, Income = 3},
+            }
+            };
         }
 
         private IncomeEntryAddDto CreateRandomIncomeEntry(int dayOffset)

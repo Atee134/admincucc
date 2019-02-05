@@ -6,9 +6,9 @@
       "classNames": [
         "Ag.Common.Dtos.Request.IncomeChunkAddDto",
         "Ag.Common.Dtos.Request.IncomeEntryAddDto",
+        "Ag.Common.Dtos.Request.UserForEditDto",
         "Ag.Common.Dtos.Request.UserForLoginDto",
         "Ag.Common.Dtos.Request.UserForRegisterDto",
-        "Ag.Common.Dtos.Response.IncomeChunkForReturnDto",
         "Ag.Common.Dtos.Response.IncomeEntryForReturnDto",
         "Ag.Common.Dtos.Response.UserAuthResponseDto",
         "Ag.Common.Dtos.Response.UserDetailDto",
@@ -17,7 +17,11 @@
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
         "Ag.Common.Enums.Site",
-        "Ag.Web.Models.ErrorDetails"
+        "Ag.Web.Models.ErrorDetails",
+        "Ag.Common.Dtos.Response.IncomeChunkForReturnDto",
+        "Ag.Common.Dtos.Response.IncomeListDataReturnDto",
+        "Ag.Common.Dtos.Response.IncomeStatisticsDto",
+        "Ag.Common.Dtos.Response.IncomeStatisticsSiteSumDto"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",

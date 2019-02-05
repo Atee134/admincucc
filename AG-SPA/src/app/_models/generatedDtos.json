@@ -66,6 +66,54 @@
         }
       }
     },
+    "UserForEditDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id",
+        "UserName",
+        "Color",
+        "Sites",
+        "MinPercent",
+        "MaxPercent"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "UserName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Password": {
+          "type": "string",
+          "minLength": 6
+        },
+        "Color": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Sites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Site"
+          }
+        },
+        "MinPercent": {
+          "type": "number",
+          "format": "double",
+          "maximum": 1.0,
+          "minimum": 0.0
+        },
+        "MaxPercent": {
+          "type": "number",
+          "format": "double",
+          "maximum": 1.0,
+          "minimum": 0.0
+        }
+      }
+    },
     "UserForLoginDto": {
       "type": "object",
       "additionalProperties": false,
@@ -120,43 +168,6 @@
         "Admin"
       ]
     },
-    "IncomeChunkForReturnDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Id",
-        "Site",
-        "Sum",
-        "IncomeForOwner",
-        "IncomeForOperator",
-        "IncomeForPerformer"
-      ],
-      "properties": {
-        "Id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Site": {
-          "$ref": "#/definitions/Site"
-        },
-        "Sum": {
-          "type": "number",
-          "format": "double"
-        },
-        "IncomeForOwner": {
-          "type": "number",
-          "format": "double"
-        },
-        "IncomeForOperator": {
-          "type": "number",
-          "format": "double"
-        },
-        "IncomeForPerformer": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
     "IncomeEntryForReturnDto": {
       "type": "object",
       "additionalProperties": false,
@@ -164,7 +175,7 @@
         "Id",
         "Date",
         "TotalSum",
-        "TotalIncomeForOwner",
+        "TotalIncomeForStudio",
         "TotalIncomeForOperator",
         "TotalIncomeForPerformer"
       ],
@@ -187,7 +198,7 @@
           "type": "number",
           "format": "double"
         },
-        "TotalIncomeForOwner": {
+        "TotalIncomeForStudio": {
           "type": "number",
           "format": "double"
         },
@@ -204,6 +215,43 @@
           "items": {
             "$ref": "#/definitions/IncomeChunkForReturnDto"
           }
+        }
+      }
+    },
+    "IncomeChunkForReturnDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id",
+        "Site",
+        "Sum",
+        "IncomeForStudio",
+        "IncomeForOperator",
+        "IncomeForPerformer"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Site": {
+          "$ref": "#/definitions/Site"
+        },
+        "Sum": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeForStudio": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeForOperator": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeForPerformer": {
+          "type": "number",
+          "format": "double"
         }
       }
     },
@@ -340,51 +388,66 @@
         }
       }
     },
-    "UserForEditDto": {
+    "IncomeListDataReturnDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "OperatorStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "PerformerStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "StudioStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "TotalStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "SiteStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeStatisticsSiteSumDto"
+          }
+        },
+        "IncomeEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeEntryForReturnDto"
+          }
+        }
+      }
+    },
+    "IncomeStatisticsDto": {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "Id",
-        "UserName",
-        "Color",
-        "Sites",
-        "MinPercent",
-        "MaxPercent"
+        "Average",
+        "Total"
       ],
       "properties": {
-        "Id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "UserName": {
-          "type": "string",
-          "minLength": 1
-        },
-        "Password": {
-          "type": "string",
-          "minLength": 6
-        },
-        "Color": {
-          "type": "string",
-          "minLength": 1
-        },
-        "Sites": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Site"
-          }
-        },
-        "MinPercent": {
+        "Average": {
           "type": "number",
-          "format": "double",
-          "maximum": 100.0,
-          "minimum": 0.0
+          "format": "double"
         },
-        "MaxPercent": {
+        "Total": {
           "type": "number",
-          "format": "double",
-          "maximum": 100.0,
-          "minimum": 0.0
+          "format": "double"
+        }
+      }
+    },
+    "IncomeStatisticsSiteSumDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Site"
+      ],
+      "properties": {
+        "Site": {
+          "$ref": "#/definitions/Site"
+        },
+        "Statistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
         }
       }
     }

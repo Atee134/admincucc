@@ -5,8 +5,9 @@
           <th scope="col">Date</th>
           <th class="text-center" scope="col">Operator name</th>
           <th class="text-center" *ngFor="let site of uniqueSites" scope="col">{{site}}</th>
-          <th class="text-center" scope="col">Operator</th>
+          <th class="text-center" scope="col" *ngIf="!isCurrentUser('Performer')">Operator</th>
           <th class="text-center" scope="col">Model</th>
+          <th class="text-center" scope="col" *ngIf="isCurrentUser('Admin')">Studio</th>
           <th class="text-center" scope="col">Total</th>
         </tr>
       </thead>
@@ -15,8 +16,9 @@
           <td scope="row">{{entry.date | date:'yyyy-MM-dd'}}</td>
           <td class="text-right">{{entry.operatorName}}</td>
           <td class="text-right" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum || 0 | currency}}</td>
-          <td class="text-right">{{entry.totalIncomeForOperator | currency}}</td>
+          <td class="text-right" *ngIf="!isCurrentUser('Performer')">{{entry.totalIncomeForOperator | currency}}</td>
           <td class="text-right">{{entry.totalIncomeForPerformer | currency}}</td>
+          <td class="text-right">{{entry.totalIncomeForStudio | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>
         </tr>
       </tbody>

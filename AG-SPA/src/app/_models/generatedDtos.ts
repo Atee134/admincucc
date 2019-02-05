@@ -123,6 +123,84 @@ export interface IIncomeEntryAddDto {
     performerId?: number | null;
 }
 
+export class UserForEditDto implements IUserForEditDto {
+    id!: number;
+    userName!: string;
+    password?: string | null;
+    color!: string;
+    sites!: Site[];
+    minPercent!: number;
+    maxPercent!: number;
+
+    constructor(data?: IUserForEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        if (!data) {
+            this.sites = [];
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
+            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
+            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
+            if (data["Sites"] && data["Sites"].constructor === Array) {
+                this.sites = [] as any;
+                for (let item of data["Sites"])
+                    this.sites!.push(item);
+            }
+            this.minPercent = data["MinPercent"] !== undefined ? data["MinPercent"] : <any>null;
+            this.maxPercent = data["MaxPercent"] !== undefined ? data["MaxPercent"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): UserForEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UserForEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id !== undefined ? this.id : <any>null;
+        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["Password"] = this.password !== undefined ? this.password : <any>null;
+        data["Color"] = this.color !== undefined ? this.color : <any>null;
+        if (this.sites && this.sites.constructor === Array) {
+            data["Sites"] = [];
+            for (let item of this.sites)
+                data["Sites"].push(item);
+        }
+        data["MinPercent"] = this.minPercent !== undefined ? this.minPercent : <any>null;
+        data["MaxPercent"] = this.maxPercent !== undefined ? this.maxPercent : <any>null;
+        return data; 
+    }
+
+    clone(): UserForEditDto {
+        const json = this.toJSON();
+        let result = new UserForEditDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IUserForEditDto {
+    id: number;
+    userName: string;
+    password?: string | null;
+    color: string;
+    sites: Site[];
+    minPercent: number;
+    maxPercent: number;
+}
+
 export class UserForLoginDto implements IUserForLoginDto {
     userName!: string;
     password!: string;
@@ -227,76 +305,13 @@ export enum Role {
     Admin = "Admin", 
 }
 
-export class IncomeChunkForReturnDto implements IIncomeChunkForReturnDto {
-    id!: number;
-    site!: Site;
-    sum!: number;
-    incomeForOwner!: number;
-    incomeForOperator!: number;
-    incomeForPerformer!: number;
-
-    constructor(data?: IIncomeChunkForReturnDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
-            this.site = data["Site"] !== undefined ? data["Site"] : <any>null;
-            this.sum = data["Sum"] !== undefined ? data["Sum"] : <any>null;
-            this.incomeForOwner = data["IncomeForOwner"] !== undefined ? data["IncomeForOwner"] : <any>null;
-            this.incomeForOperator = data["IncomeForOperator"] !== undefined ? data["IncomeForOperator"] : <any>null;
-            this.incomeForPerformer = data["IncomeForPerformer"] !== undefined ? data["IncomeForPerformer"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): IncomeChunkForReturnDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new IncomeChunkForReturnDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["Id"] = this.id !== undefined ? this.id : <any>null;
-        data["Site"] = this.site !== undefined ? this.site : <any>null;
-        data["Sum"] = this.sum !== undefined ? this.sum : <any>null;
-        data["IncomeForOwner"] = this.incomeForOwner !== undefined ? this.incomeForOwner : <any>null;
-        data["IncomeForOperator"] = this.incomeForOperator !== undefined ? this.incomeForOperator : <any>null;
-        data["IncomeForPerformer"] = this.incomeForPerformer !== undefined ? this.incomeForPerformer : <any>null;
-        return data; 
-    }
-
-    clone(): IncomeChunkForReturnDto {
-        const json = this.toJSON();
-        let result = new IncomeChunkForReturnDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IIncomeChunkForReturnDto {
-    id: number;
-    site: Site;
-    sum: number;
-    incomeForOwner: number;
-    incomeForOperator: number;
-    incomeForPerformer: number;
-}
-
 export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
     id!: number;
     date!: Date;
     operatorName?: string | null;
     performerName?: string | null;
     totalSum!: number;
-    totalIncomeForOwner!: number;
+    totalIncomeForStudio!: number;
     totalIncomeForOperator!: number;
     totalIncomeForPerformer!: number;
     incomeChunks?: IncomeChunkForReturnDto[] | null;
@@ -317,7 +332,7 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
             this.operatorName = data["OperatorName"] !== undefined ? data["OperatorName"] : <any>null;
             this.performerName = data["PerformerName"] !== undefined ? data["PerformerName"] : <any>null;
             this.totalSum = data["TotalSum"] !== undefined ? data["TotalSum"] : <any>null;
-            this.totalIncomeForOwner = data["TotalIncomeForOwner"] !== undefined ? data["TotalIncomeForOwner"] : <any>null;
+            this.totalIncomeForStudio = data["TotalIncomeForStudio"] !== undefined ? data["TotalIncomeForStudio"] : <any>null;
             this.totalIncomeForOperator = data["TotalIncomeForOperator"] !== undefined ? data["TotalIncomeForOperator"] : <any>null;
             this.totalIncomeForPerformer = data["TotalIncomeForPerformer"] !== undefined ? data["TotalIncomeForPerformer"] : <any>null;
             if (data["IncomeChunks"] && data["IncomeChunks"].constructor === Array) {
@@ -342,7 +357,7 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
         data["OperatorName"] = this.operatorName !== undefined ? this.operatorName : <any>null;
         data["PerformerName"] = this.performerName !== undefined ? this.performerName : <any>null;
         data["TotalSum"] = this.totalSum !== undefined ? this.totalSum : <any>null;
-        data["TotalIncomeForOwner"] = this.totalIncomeForOwner !== undefined ? this.totalIncomeForOwner : <any>null;
+        data["TotalIncomeForStudio"] = this.totalIncomeForStudio !== undefined ? this.totalIncomeForStudio : <any>null;
         data["TotalIncomeForOperator"] = this.totalIncomeForOperator !== undefined ? this.totalIncomeForOperator : <any>null;
         data["TotalIncomeForPerformer"] = this.totalIncomeForPerformer !== undefined ? this.totalIncomeForPerformer : <any>null;
         if (this.incomeChunks && this.incomeChunks.constructor === Array) {
@@ -367,10 +382,73 @@ export interface IIncomeEntryForReturnDto {
     operatorName?: string | null;
     performerName?: string | null;
     totalSum: number;
-    totalIncomeForOwner: number;
+    totalIncomeForStudio: number;
     totalIncomeForOperator: number;
     totalIncomeForPerformer: number;
     incomeChunks?: IncomeChunkForReturnDto[] | null;
+}
+
+export class IncomeChunkForReturnDto implements IIncomeChunkForReturnDto {
+    id!: number;
+    site!: Site;
+    sum!: number;
+    incomeForStudio!: number;
+    incomeForOperator!: number;
+    incomeForPerformer!: number;
+
+    constructor(data?: IIncomeChunkForReturnDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
+            this.site = data["Site"] !== undefined ? data["Site"] : <any>null;
+            this.sum = data["Sum"] !== undefined ? data["Sum"] : <any>null;
+            this.incomeForStudio = data["IncomeForStudio"] !== undefined ? data["IncomeForStudio"] : <any>null;
+            this.incomeForOperator = data["IncomeForOperator"] !== undefined ? data["IncomeForOperator"] : <any>null;
+            this.incomeForPerformer = data["IncomeForPerformer"] !== undefined ? data["IncomeForPerformer"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): IncomeChunkForReturnDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncomeChunkForReturnDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Id"] = this.id !== undefined ? this.id : <any>null;
+        data["Site"] = this.site !== undefined ? this.site : <any>null;
+        data["Sum"] = this.sum !== undefined ? this.sum : <any>null;
+        data["IncomeForStudio"] = this.incomeForStudio !== undefined ? this.incomeForStudio : <any>null;
+        data["IncomeForOperator"] = this.incomeForOperator !== undefined ? this.incomeForOperator : <any>null;
+        data["IncomeForPerformer"] = this.incomeForPerformer !== undefined ? this.incomeForPerformer : <any>null;
+        return data; 
+    }
+
+    clone(): IncomeChunkForReturnDto {
+        const json = this.toJSON();
+        let result = new IncomeChunkForReturnDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIncomeChunkForReturnDto {
+    id: number;
+    site: Site;
+    sum: number;
+    incomeForStudio: number;
+    incomeForOperator: number;
+    incomeForPerformer: number;
 }
 
 export class UserAuthResponseDto implements IUserAuthResponseDto {
@@ -682,80 +760,175 @@ export interface IErrorDetails {
     messages?: string[] | null;
 }
 
-export class UserForEditDto implements IUserForEditDto {
-    id!: number;
-    userName!: string;
-    password?: string | null;
-    color!: string;
-    sites!: Site[];
-    minPercent!: number;
-    maxPercent!: number;
+export class IncomeListDataReturnDto implements IIncomeListDataReturnDto {
+    operatorStatistics?: IncomeStatisticsDto | null;
+    performerStatistics?: IncomeStatisticsDto | null;
+    studioStatistics?: IncomeStatisticsDto | null;
+    totalStatistics?: IncomeStatisticsDto | null;
+    siteStatistics?: IncomeStatisticsSiteSumDto[] | null;
+    incomeEntries?: IncomeEntryForReturnDto[] | null;
 
-    constructor(data?: IUserForEditDto) {
+    constructor(data?: IIncomeListDataReturnDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
         }
-        if (!data) {
-            this.sites = [];
-        }
     }
 
     init(data?: any) {
         if (data) {
-            this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
-            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
-            this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
-            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
-            if (data["Sites"] && data["Sites"].constructor === Array) {
-                this.sites = [] as any;
-                for (let item of data["Sites"])
-                    this.sites!.push(item);
+            this.operatorStatistics = data["OperatorStatistics"] ? IncomeStatisticsDto.fromJS(data["OperatorStatistics"]) : <any>null;
+            this.performerStatistics = data["PerformerStatistics"] ? IncomeStatisticsDto.fromJS(data["PerformerStatistics"]) : <any>null;
+            this.studioStatistics = data["StudioStatistics"] ? IncomeStatisticsDto.fromJS(data["StudioStatistics"]) : <any>null;
+            this.totalStatistics = data["TotalStatistics"] ? IncomeStatisticsDto.fromJS(data["TotalStatistics"]) : <any>null;
+            if (data["SiteStatistics"] && data["SiteStatistics"].constructor === Array) {
+                this.siteStatistics = [] as any;
+                for (let item of data["SiteStatistics"])
+                    this.siteStatistics!.push(IncomeStatisticsSiteSumDto.fromJS(item));
             }
-            this.minPercent = data["MinPercent"] !== undefined ? data["MinPercent"] : <any>null;
-            this.maxPercent = data["MaxPercent"] !== undefined ? data["MaxPercent"] : <any>null;
+            if (data["IncomeEntries"] && data["IncomeEntries"].constructor === Array) {
+                this.incomeEntries = [] as any;
+                for (let item of data["IncomeEntries"])
+                    this.incomeEntries!.push(IncomeEntryForReturnDto.fromJS(item));
+            }
         }
     }
 
-    static fromJS(data: any): UserForEditDto {
+    static fromJS(data: any): IncomeListDataReturnDto {
         data = typeof data === 'object' ? data : {};
-        let result = new UserForEditDto();
+        let result = new IncomeListDataReturnDto();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["Id"] = this.id !== undefined ? this.id : <any>null;
-        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
-        data["Password"] = this.password !== undefined ? this.password : <any>null;
-        data["Color"] = this.color !== undefined ? this.color : <any>null;
-        if (this.sites && this.sites.constructor === Array) {
-            data["Sites"] = [];
-            for (let item of this.sites)
-                data["Sites"].push(item);
+        data["OperatorStatistics"] = this.operatorStatistics ? this.operatorStatistics.toJSON() : <any>null;
+        data["PerformerStatistics"] = this.performerStatistics ? this.performerStatistics.toJSON() : <any>null;
+        data["StudioStatistics"] = this.studioStatistics ? this.studioStatistics.toJSON() : <any>null;
+        data["TotalStatistics"] = this.totalStatistics ? this.totalStatistics.toJSON() : <any>null;
+        if (this.siteStatistics && this.siteStatistics.constructor === Array) {
+            data["SiteStatistics"] = [];
+            for (let item of this.siteStatistics)
+                data["SiteStatistics"].push(item.toJSON());
         }
-        data["MinPercent"] = this.minPercent !== undefined ? this.minPercent : <any>null;
-        data["MaxPercent"] = this.maxPercent !== undefined ? this.maxPercent : <any>null;
+        if (this.incomeEntries && this.incomeEntries.constructor === Array) {
+            data["IncomeEntries"] = [];
+            for (let item of this.incomeEntries)
+                data["IncomeEntries"].push(item.toJSON());
+        }
         return data; 
     }
 
-    clone(): UserForEditDto {
+    clone(): IncomeListDataReturnDto {
         const json = this.toJSON();
-        let result = new UserForEditDto();
+        let result = new IncomeListDataReturnDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IUserForEditDto {
-    id: number;
-    userName: string;
-    password?: string | null;
-    color: string;
-    sites: Site[];
-    minPercent: number;
-    maxPercent: number;
+export interface IIncomeListDataReturnDto {
+    operatorStatistics?: IncomeStatisticsDto | null;
+    performerStatistics?: IncomeStatisticsDto | null;
+    studioStatistics?: IncomeStatisticsDto | null;
+    totalStatistics?: IncomeStatisticsDto | null;
+    siteStatistics?: IncomeStatisticsSiteSumDto[] | null;
+    incomeEntries?: IncomeEntryForReturnDto[] | null;
+}
+
+export class IncomeStatisticsDto implements IIncomeStatisticsDto {
+    average!: number;
+    total!: number;
+
+    constructor(data?: IIncomeStatisticsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.average = data["Average"] !== undefined ? data["Average"] : <any>null;
+            this.total = data["Total"] !== undefined ? data["Total"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): IncomeStatisticsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncomeStatisticsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Average"] = this.average !== undefined ? this.average : <any>null;
+        data["Total"] = this.total !== undefined ? this.total : <any>null;
+        return data; 
+    }
+
+    clone(): IncomeStatisticsDto {
+        const json = this.toJSON();
+        let result = new IncomeStatisticsDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIncomeStatisticsDto {
+    average: number;
+    total: number;
+}
+
+export class IncomeStatisticsSiteSumDto implements IIncomeStatisticsSiteSumDto {
+    site!: Site;
+    statistics?: IncomeStatisticsDto | null;
+
+    constructor(data?: IIncomeStatisticsSiteSumDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.site = data["Site"] !== undefined ? data["Site"] : <any>null;
+            this.statistics = data["Statistics"] ? IncomeStatisticsDto.fromJS(data["Statistics"]) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): IncomeStatisticsSiteSumDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncomeStatisticsSiteSumDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Site"] = this.site !== undefined ? this.site : <any>null;
+        data["Statistics"] = this.statistics ? this.statistics.toJSON() : <any>null;
+        return data; 
+    }
+
+    clone(): IncomeStatisticsSiteSumDto {
+        const json = this.toJSON();
+        let result = new IncomeStatisticsSiteSumDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIncomeStatisticsSiteSumDto {
+    site: Site;
+    statistics?: IncomeStatisticsDto | null;
 }

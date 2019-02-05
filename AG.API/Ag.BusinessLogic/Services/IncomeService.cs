@@ -1,6 +1,5 @@
 ﻿using Ag.BusinessLogic.Exceptions;
 using Ag.BusinessLogic.Interfaces;
-using Ag.Common.Dtos;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Dtos.Response;
 using Ag.Common.Enums;
@@ -11,8 +10,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ag.BusinessLogic.Services
 {
@@ -72,17 +69,17 @@ namespace Ag.BusinessLogic.Services
             return ConvertIncomeEntryForReturnDto(incomeEntry);
         }
 
-        public List<IncomeEntryForReturnDto> GetIncomeEntries(int? userId = null) // TODO later there will be a filter with ID as param passed in
+        public IncomeListDataReturnDto GetIncomeEntries(int? userId = null) // TODO later there will be a filter with ID as param passed in
         {
             _logger.LogInformation($"Getting income entries of user with ID: {userId}");
 
-            List<IncomeEntryForReturnDto> incomeEntriesToReturn = new List<IncomeEntryForReturnDto>();
+            List<IncomeEntryForReturnDto> incomeEntryDtos = new List<IncomeEntryForReturnDto>();
 
-            IOrderedQueryable<IncomeEntry> incomeEntries; 
+            IOrderedQueryable<IncomeEntry> incomeEntryEntities; 
 
             if (userId != null)
             {
-                incomeEntries = _context.IncomeEntries
+                incomeEntryEntities = _context.IncomeEntries
                 .Include(i => i.IncomeChunks)
                 .Include(i => i.Operator)
                 .Include(i => i.Performer)
@@ -91,19 +88,76 @@ namespace Ag.BusinessLogic.Services
             }
             else
             {
-                incomeEntries = _context.IncomeEntries
+                incomeEntryEntities = _context.IncomeEntries
                  .Include(i => i.IncomeChunks)
                  .Include(i => i.Operator)
                  .Include(i => i.Performer)
                  .OrderByDescending(i => i.Date);
             }
 
-            foreach (var entry in incomeEntries)
+            foreach (var entry in incomeEntryEntities)
             {
-                incomeEntriesToReturn.Add(ConvertIncomeEntryForReturnDto(entry));
+                incomeEntryDtos.Add(ConvertIncomeEntryForReturnDto(entry));
             }
 
-            return incomeEntriesToReturn;
+            IncomeListDataReturnDto incomeListDataDto = new IncomeListDataReturnDto
+            {
+                IncomeEntries = incomeEntryDtos,
+            };
+
+            CalculateStatisticsForIncomeListDataDto(incomeListDataDto);
+
+            return incomeListDataDto;
+        }
+
+        private void CalculateStatisticsForIncomeListDataDto(IncomeListDataReturnDto incomeListDataDto)
+        {
+            incomeListDataDto.OperatorStatistics = new IncomeStatisticsDto
+            {
+                Average = incomeListDataDto.IncomeEntries.Average(i => i.TotalIncomeForOperator),
+                Total = incomeListDataDto.IncomeEntries.Sum(i => i.TotalIncomeForOperator)
+            };
+            incomeListDataDto.PerformerStatistics = new IncomeStatisticsDto
+            {
+                Average = incomeListDataDto.IncomeEntries.Average(i => i.TotalIncomeForPerformer),
+                Total = incomeListDataDto.IncomeEntries.Sum(i => i.TotalIncomeForPerformer)
+            };
+            incomeListDataDto.StudioStatistics = new IncomeStatisticsDto
+            {
+                Average = incomeListDataDto.IncomeEntries.Average(i => i.TotalIncomeForStudio),
+                Total = incomeListDataDto.IncomeEntries.Sum(i => i.TotalIncomeForStudio)
+            };
+            incomeListDataDto.TotalStatistics = new IncomeStatisticsDto
+            {
+                Average = incomeListDataDto.IncomeEntries.Average(i => i.TotalSum),
+                Total = incomeListDataDto.IncomeEntries.Sum(i => i.TotalSum)
+            };
+
+            incomeListDataDto.SiteStatistics = new List<IncomeStatisticsSiteSumDto>();
+
+            List<Site> allSites = Enum.GetValues(typeof(Site)).Cast<Site>().ToList();
+
+            foreach (Site site in allSites)
+            {
+                var relevantIncomeChunks = incomeListDataDto.IncomeEntries.SelectMany(i => i.IncomeChunks).Where(ic => ic.Site == site).ToList();
+
+                if (relevantIncomeChunks.Count == 0)
+                {
+                    continue;
+                }
+
+                var siteStatisticDto = new IncomeStatisticsSiteSumDto
+                {
+                    Site = site,
+                    Statistics = new IncomeStatisticsDto
+                    {
+                        Average = relevantIncomeChunks.Average(i => i.Sum),
+                        Total = relevantIncomeChunks.Sum(i => i.Sum)
+                    }
+                };
+
+                incomeListDataDto.SiteStatistics.Add(siteStatisticDto);
+            }
         }
 
         private IncomeChunk CreateIncomeChunkFromDto(IncomeChunkAddDto incomeChunkDto, double operatorPercent, double performerPercent)
@@ -131,7 +185,7 @@ namespace Ag.BusinessLogic.Services
                 OperatorName = incomeEntry.Operator.UserName,
                 PerformerName = incomeEntry.Performer.UserName,
                 TotalSum = incomeEntry.TotalSum,
-                TotalIncomeForOwner = incomeEntry.TotalIncomeForOwner,
+                TotalIncomeForStudio = incomeEntry.TotalIncomeForOwner,
                 TotalIncomeForOperator = incomeEntry.TotalIncomeForOperator,
                 TotalIncomeForPerformer = incomeEntry.TotalIncomeForPerformer,
                 IncomeChunks = GetIncomeChunks(incomeEntry)
@@ -149,7 +203,7 @@ namespace Ag.BusinessLogic.Services
                     Id = chunk.Id,
                     Site = chunk.Site,
                     Sum = chunk.Sum,
-                    IncomeForOwner = chunk.IncomeForOwner,
+                    IncomeForStudio = chunk.IncomeForOwner,
                     IncomeForOperator = chunk.IncomeForOperator,
                     IncomeForPerformer = chunk.IncomeForPerformer
                 };

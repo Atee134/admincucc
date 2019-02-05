@@ -48,4 +48,8 @@ export class IncomeListComponent implements OnInit {
   getIncomeChunk(entry: IncomeEntryForReturnDto, site: Site): IncomeChunkForReturnDto {
     return entry.incomeChunks.find(i => i.site === site);
   }
+
+  isCurrentUser(role: string): boolean {
+    return this.authService.currentUser.role.toLowerCase() === role.toLowerCase();
+  }
 }
