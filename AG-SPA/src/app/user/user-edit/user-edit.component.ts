@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
-import { UserDetailDto, Role, UserForListDto, Shift, UserForEditDto } from 'src/app/_models/generatedDtos';
+import { UserDetailDto, Role, UserForListDto, Shift, UserForEditDto, Site } from 'src/app/_models/generatedDtos';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { AuthService } from 'src/app/_services/auth.service';
 import { StaticdataService } from 'src/app/_services/staticdata.service';
@@ -61,6 +61,14 @@ export class UserEditComponent implements OnInit {
     });
   }
 
+  get sites(): Site[] {
+    return Object.keys(Site).map(k => Site[k]);
+  }
+
+  public onCancel() {
+    this.initUser();
+  }
+
   public onSubmit() {
     if (this.userForEdit.password === '') {
       this.userForEdit.password = undefined;
@@ -72,12 +80,42 @@ export class UserEditComponent implements OnInit {
     if (this.userForEdit.password !== this.rePassword) {
       this.alertify.error('A két jelszó nem egyezik');
     } else {
-      this.userService.updateUser(this.userForEdit).subscribe(resp => {
-        this.alertify.success('Változtatások mentve.');
-      }, error => {
-        this.alertify.error(error);
-      });
+      let changedProperties = '';
+
+      if (this.userForEdit.userName !== this.user.userName) {
+        changedProperties += ('</br>- Felhasználónév');
+      }
+      if (this.userForEdit.color !== this.user.color) {
+        changedProperties += ('</br>- Szín');
+      }
+      if (this.userForEdit.sites !== this.user.sites) {
+        changedProperties += ('</br>- Honlapok');
+      }
+      if (this.userForEdit.minPercent !== this.user.minPercent) {
+        changedProperties += ('</br>- Minimum százalék');
+      }
+      if (this.userForEdit.maxPercent !== this.user.maxPercent) {
+        changedProperties += ('</br>- Maximum százalék');
+      }
+
+      // if some change occured which the code knows nothing about, we save anyway.
+      if (changedProperties === '') {
+        this.saveChanges();
+      } else {
+        const self = this;
+        this.alertify.confirm('Mented a változtatásokat? Az alábbi mezők módosultak: ' + changedProperties, function() {
+          self.saveChanges();
+        });
+      }
     }
+  }
+
+  private saveChanges(): void {
+    this.userService.updateUser(this.userForEdit).subscribe(resp => {
+      this.alertify.success('Változtatások mentve.');
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 
   // TODO refactor methods below this, probably into a seperate component (add\remove performer component)
