@@ -1,9 +1,10 @@
-<div class="container mt-3" *ngIf="incomeEntries">
+<div class="container mt-3" *ngIf="incomeList">
   <table class="table table-bordered">
       <thead>
         <tr class="table-primary">
           <th scope="col">Date</th>
-          <th class="text-center" scope="col">Operator name</th>
+          <th class="text-center" scope="col">Operátor neve</th>
+          <th class="text-center" scope="col">Modell neve</th>
           <th class="text-center" *ngFor="let site of uniqueSites" scope="col">{{site}}</th>
           <th class="text-center" scope="col" *ngIf="!isCurrentUser('Performer')">Operator</th>
           <th class="text-center" scope="col">Model</th>
@@ -12,14 +13,31 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let entry of incomeEntries">
+        <tr *ngFor="let entry of incomeList.incomeEntries">
           <td scope="row">{{entry.date | date:'yyyy-MM-dd'}}</td>
-          <td class="text-right">{{entry.operatorName}}</td>
+          <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.operatorName}}</td>
+          <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.performerName}}</td>
           <td class="text-right" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum || 0 | currency}}</td>
           <td class="text-right" *ngIf="!isCurrentUser('Performer')">{{entry.totalIncomeForOperator | currency}}</td>
           <td class="text-right">{{entry.totalIncomeForPerformer | currency}}</td>
-          <td class="text-right">{{entry.totalIncomeForStudio | currency}}</td>
+          <td class="text-right" *ngIf="isCurrentUser('Admin')">{{entry.totalIncomeForStudio | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>
+        </tr>
+        <tr class="table-primary">
+            <td colspan="3" class="text-right">Átlag</td>
+            <td class="text-right" *ngFor="let site of uniqueSites">{{getSiteStatistics(site)?.statistics.average || 0 | currency}}</td>
+            <td class="text-right" *ngIf="!isCurrentUser('Performer')">{{incomeList.operatorStatistics.average | currency}}</td>
+            <td class="text-right">{{incomeList.performerStatistics.average | currency}}</td>
+            <td class="text-right" *ngIf="isCurrentUser('Admin')">{{incomeList.studioStatistics.average | currency}}</td>
+            <td class="text-right table-info">{{incomeList.totalStatistics.average | currency}}</td>
+        </tr>
+        <tr class="table-primary">
+            <td colspan="3" class="text-right">Összesen</td>
+            <td class="text-right" *ngFor="let site of uniqueSites">{{getSiteStatistics(site)?.statistics.total || 0 | currency}}</td>
+            <td class="text-right" *ngIf="!isCurrentUser('Performer')">{{incomeList.operatorStatistics.total | currency}}</td>
+            <td class="text-right">{{incomeList.performerStatistics.total | currency}}</td>
+            <td class="text-right" *ngIf="isCurrentUser('Admin')">{{incomeList.studioStatistics.total | currency}}</td>
+            <td class="text-right table-info">{{incomeList.totalStatistics.total | currency}}</td>
         </tr>
       </tbody>
     </table>

@@ -182,6 +182,7 @@ namespace Ag.BusinessLogic.Services
             {
                 Id = incomeEntry.Id,
                 Date = incomeEntry.Date,
+                Color = incomeEntry.Performer?.Color ?? incomeEntry.Operator.Color,
                 OperatorName = incomeEntry.Operator.UserName,
                 PerformerName = incomeEntry.Performer.UserName,
                 TotalSum = incomeEntry.TotalSum,

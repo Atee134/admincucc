@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { IncomeService } from 'src/app/_services/income.service';
-import { IncomeEntryForReturnDto, Site, IncomeChunkForReturnDto, Role } from 'src/app/_models/generatedDtos';
+import { IncomeEntryForReturnDto,
+  Site,
+  IncomeChunkForReturnDto,
+  Role,
+  IncomeListDataReturnDto,
+  IncomeStatisticsSiteSumDto
+} from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
@@ -9,7 +15,7 @@ import { AuthService } from 'src/app/_services/auth.service';
   styleUrls: ['./income-list.component.css']
 })
 export class IncomeListComponent implements OnInit {
-  public incomeEntries: IncomeEntryForReturnDto[];
+  public incomeList: IncomeListDataReturnDto;
 
   constructor(private authService: AuthService, private incomeService: IncomeService) { }
 
@@ -22,17 +28,17 @@ export class IncomeListComponent implements OnInit {
 
     if (this.authService.currentUser.role === Role.Admin) {
       this.incomeService.getAllIncomeEntries().subscribe(resp => {
-        this.incomeEntries = resp;
+        this.incomeList = resp;
       });
     } else {
       this.incomeService.getIncomeEntries(this.authService.currentUser.id).subscribe(resp => {
-        this.incomeEntries = resp;
+        this.incomeList  = resp;
       });
     }
   }
 
   get uniqueSites(): Site[] {
-    const incomeChunks = this.incomeEntries.map(e => e.incomeChunks);
+    const incomeChunks = this.incomeList.incomeEntries.map(e => e.incomeChunks);
 
     const incomeChnksFlattened = <IncomeChunkForReturnDto[]>[].concat(...incomeChunks);
     const uniqueSites: Site[] = [];
@@ -47,6 +53,10 @@ export class IncomeListComponent implements OnInit {
 
   getIncomeChunk(entry: IncomeEntryForReturnDto, site: Site): IncomeChunkForReturnDto {
     return entry.incomeChunks.find(i => i.site === site);
+  }
+
+  getSiteStatistics(site: Site): IncomeStatisticsSiteSumDto {
+    return this.incomeList.siteStatistics.find(s => s.site === site);
   }
 
   isCurrentUser(role: string): boolean {

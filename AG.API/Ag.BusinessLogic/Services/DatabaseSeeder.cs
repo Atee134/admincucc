@@ -72,8 +72,8 @@ namespace Ag.BusinessLogic.Services
 
             for (int i = 0; i < TEST_INCOMES_COUNT; i++)
             {
-                //_incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
-                _incomeService.AddIncomEntry(1, CreateConstantIncomeEntry(i));
+                _incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
+                //_incomeService.AddIncomEntry(1, CreateConstantIncomeEntry(i));
             }
 
             _context.SaveChanges();

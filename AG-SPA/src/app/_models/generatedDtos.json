@@ -168,56 +168,6 @@
         "Admin"
       ]
     },
-    "IncomeEntryForReturnDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Id",
-        "Date",
-        "TotalSum",
-        "TotalIncomeForStudio",
-        "TotalIncomeForOperator",
-        "TotalIncomeForPerformer"
-      ],
-      "properties": {
-        "Id": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Date": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "OperatorName": {
-          "type": "string"
-        },
-        "PerformerName": {
-          "type": "string"
-        },
-        "TotalSum": {
-          "type": "number",
-          "format": "double"
-        },
-        "TotalIncomeForStudio": {
-          "type": "number",
-          "format": "double"
-        },
-        "TotalIncomeForOperator": {
-          "type": "number",
-          "format": "double"
-        },
-        "TotalIncomeForPerformer": {
-          "type": "number",
-          "format": "double"
-        },
-        "IncomeChunks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IncomeChunkForReturnDto"
-          }
-        }
-      }
-    },
     "IncomeChunkForReturnDto": {
       "type": "object",
       "additionalProperties": false,
@@ -252,6 +202,122 @@
         "IncomeForPerformer": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "IncomeEntryForReturnDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Id",
+        "Date",
+        "TotalSum",
+        "TotalIncomeForStudio",
+        "TotalIncomeForOperator",
+        "TotalIncomeForPerformer"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Color": {
+          "type": "string"
+        },
+        "OperatorName": {
+          "type": "string"
+        },
+        "PerformerName": {
+          "type": "string"
+        },
+        "TotalSum": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalIncomeForStudio": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalIncomeForOperator": {
+          "type": "number",
+          "format": "double"
+        },
+        "TotalIncomeForPerformer": {
+          "type": "number",
+          "format": "double"
+        },
+        "IncomeChunks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeChunkForReturnDto"
+          }
+        }
+      }
+    },
+    "IncomeListDataReturnDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "OperatorStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "PerformerStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "StudioStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "TotalStatistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
+        },
+        "SiteStatistics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeStatisticsSiteSumDto"
+          }
+        },
+        "IncomeEntries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeEntryForReturnDto"
+          }
+        }
+      }
+    },
+    "IncomeStatisticsDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Average",
+        "Total"
+      ],
+      "properties": {
+        "Average": {
+          "type": "number",
+          "format": "double"
+        },
+        "Total": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "IncomeStatisticsSiteSumDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Site"
+      ],
+      "properties": {
+        "Site": {
+          "$ref": "#/definitions/Site"
+        },
+        "Statistics": {
+          "$ref": "#/definitions/IncomeStatisticsDto"
         }
       }
     },
@@ -385,69 +451,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "IncomeListDataReturnDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "OperatorStatistics": {
-          "$ref": "#/definitions/IncomeStatisticsDto"
-        },
-        "PerformerStatistics": {
-          "$ref": "#/definitions/IncomeStatisticsDto"
-        },
-        "StudioStatistics": {
-          "$ref": "#/definitions/IncomeStatisticsDto"
-        },
-        "TotalStatistics": {
-          "$ref": "#/definitions/IncomeStatisticsDto"
-        },
-        "SiteStatistics": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IncomeStatisticsSiteSumDto"
-          }
-        },
-        "IncomeEntries": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/IncomeEntryForReturnDto"
-          }
-        }
-      }
-    },
-    "IncomeStatisticsDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Average",
-        "Total"
-      ],
-      "properties": {
-        "Average": {
-          "type": "number",
-          "format": "double"
-        },
-        "Total": {
-          "type": "number",
-          "format": "double"
-        }
-      }
-    },
-    "IncomeStatisticsSiteSumDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "Site"
-      ],
-      "properties": {
-        "Site": {
-          "$ref": "#/definitions/Site"
-        },
-        "Statistics": {
-          "$ref": "#/definitions/IncomeStatisticsDto"
         }
       }
     }
