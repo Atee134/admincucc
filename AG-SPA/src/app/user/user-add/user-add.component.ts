@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserForRegisterDto, Role } from 'src/app/_models/generatedDtos';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { AuthService } from 'src/app/_services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-add',
@@ -12,7 +13,7 @@ export class UserAddComponent implements OnInit {
   public user: UserForRegisterDto;
   public rePassword: string;
 
-  constructor(private alertify: AlertifyService, private authService: AuthService) {
+  constructor(private alertify: AlertifyService, private authService: AuthService, private router: Router) {
     this.user = new UserForRegisterDto();
     this.rePassword = '';
   }
@@ -30,6 +31,7 @@ export class UserAddComponent implements OnInit {
     } else {
       this.authService.register(this.user).subscribe(resp => {
         this.alertify.success('User successfully added.');
+        this.router.navigate(['/users/' + resp.id]);
       }, error => {
         this.alertify.error(error);
       });

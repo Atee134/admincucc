@@ -50,7 +50,7 @@
       <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!editForm.form.valid">Save</button>
     </form>
 
-    <button class="float-right btn btn-warning btn-lg mr-3" (click)="onCancel()">Cancel changes</button>
+    <button class="float-right btn btn-info btn-lg mr-3" (click)="onCancel()">Cancel changes</button>
 
   <div class="col-lg-4 col-sm-12" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
     <table class="table table-bordered">

@@ -22,7 +22,6 @@ export class UserEditComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private alertify: AlertifyService,
-    private authService: AuthService,
     private staticDataService: StaticdataService
     ) { }
 

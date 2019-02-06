@@ -4,11 +4,13 @@ import { IncomeListComponent } from './income-list/income-list.component';
 import { IncomeEditComponent } from './income-edit/income-edit.component';
 import { FormsModule } from '@angular/forms';
 import { IncomeAddComponent } from './income-add/income-add.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   declarations: [IncomeListComponent, IncomeEditComponent, IncomeAddComponent],
   exports: [

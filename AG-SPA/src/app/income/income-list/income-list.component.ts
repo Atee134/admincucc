@@ -8,6 +8,7 @@ import { IncomeEntryForReturnDto,
   IncomeStatisticsSiteSumDto
 } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-income-list',
@@ -17,13 +18,13 @@ import { AuthService } from 'src/app/_services/auth.service';
 export class IncomeListComponent implements OnInit {
   public incomeList: IncomeListDataReturnDto;
 
-  constructor(private authService: AuthService, private incomeService: IncomeService) { }
+  constructor(private authService: AuthService, private router: Router, private incomeService: IncomeService) { }
 
   ngOnInit() {
     this.getIncomeEntries();
   }
 
-  getIncomeEntries(): void {
+  public getIncomeEntries(): void {
     // TODO add a filter component maybe which handles admin/operator lisings, as well as filters
 
     if (this.authService.currentUser.role === Role.Admin) {
@@ -51,15 +52,15 @@ export class IncomeListComponent implements OnInit {
     return uniqueSites;
   }
 
-  getIncomeChunk(entry: IncomeEntryForReturnDto, site: Site): IncomeChunkForReturnDto {
+  public getIncomeChunk(entry: IncomeEntryForReturnDto, site: Site): IncomeChunkForReturnDto {
     return entry.incomeChunks.find(i => i.site === site);
   }
 
-  getSiteStatistics(site: Site): IncomeStatisticsSiteSumDto {
+  public getSiteStatistics(site: Site): IncomeStatisticsSiteSumDto {
     return this.incomeList.siteStatistics.find(s => s.site === site);
   }
 
-  isCurrentUser(role: string): boolean {
+  public isCurrentUser(role: string): boolean {
     return this.authService.currentUser.role.toLowerCase() === role.toLowerCase();
   }
 }

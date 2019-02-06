@@ -38,6 +38,16 @@ namespace Ag.Web.Controllers
             return Ok(incomeEntries);
         }
 
+        [HttpGet("{incomeId}")]
+        [Authorize(Roles = "Operator, Admin")]
+        public IActionResult GetIncome(int userId, int incomeId)
+        {
+            // TODO userid is only good for validation, if the requesting user is not an admin, id must match with the logged in user id
+            var incomeEntry = _incomeService.GetIncomeEntry(incomeId);
+
+            return Ok(incomeEntry);
+        }
+
         [HttpPost]
         [Authorize("Operator")]
         public IActionResult AddIncome(int userId, IncomeEntryAddDto incomeEntryDto)

@@ -14,8 +14,19 @@
                 >
         </div>
 
-        <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeForm.form.valid || responseEntry">Add</button>
+        <div class="form-group">
+            <label for="performer">Modell:</label>
+            <select class="custom-select form-control" name="performer" id="performer" [(ngModel)]="incomeEntry.performerId" required [disabled]="responseEntry">
+              <option *ngFor="let colleague of colleagues" value="{{colleague.id}}" >{{colleague.userName}}</option>
+            </select>
+        </div>
+
+        <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeForm.form.valid" *ngIf="!responseEntry">Add</button>
       </form>
+
+      <button class="float-right btn btn-primary btn-lg" *ngIf="responseEntry" routerLink="/incomes/{{responseEntry.id}}">Edit</button>
+      <button class="float-right btn btn-info btn-lg mr-3" *ngIf="responseEntry" routerLink="/incomes">Back</button>
+    
     </div>
     <div class="col-lg-4"></div>
     <div class="col-lg-4 col-sm-12" *ngIf="responseEntry">

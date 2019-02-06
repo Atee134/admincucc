@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { IncomeEntryAddDto, Site, IncomeChunkAddDto, IncomeEntryForReturnDto } from 'src/app/_models/generatedDtos';
+import { IncomeEntryAddDto, Site, IncomeChunkAddDto, IncomeEntryForReturnDto, UserForListDto } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
 import { IncomeService } from 'src/app/_services/income.service';
 import { Router } from '@angular/router';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-income-add',
@@ -13,18 +14,27 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 export class IncomeAddComponent implements OnInit {
   public incomeEntry: IncomeEntryAddDto;
   public responseEntry: IncomeEntryForReturnDto;
+  public colleagues: UserForListDto;
 
   constructor(
     private authService: AuthService,
     private incomeService: IncomeService,
+    private userService: UserService,
+    private router: Router,
     private alertify: AlertifyService
     ) { }
 
   ngOnInit() {
-    // TODO if we come from an ADD route, we make a new incomeEntry, otherwise we fetch it from the server
-    // if we fetch it from the server, we have to make sure to include new dtos to newly assigned sites
-    // !!!!!probably better to make a new, edit component, and rename this to add!!!!!!!
+    this.getColleagues();
     this.incomeEntry = this.createIncomeEntry();
+  }
+
+  private getColleagues(): void {
+      this.userService.getColleagues(this.authService.currentUser.id).subscribe(resp => {
+        this.colleagues = resp;
+      }, error => {
+        this.alertify.error(error);
+      });
   }
 
   private createIncomeEntry(): IncomeEntryAddDto {

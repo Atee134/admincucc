@@ -69,6 +69,19 @@ namespace Ag.BusinessLogic.Services
             return ConvertIncomeEntryForReturnDto(incomeEntry);
         }
 
+        public IncomeEntryForReturnDto GetIncomeEntry(int incomeId)
+        {
+            var incomeEntry = _context.IncomeEntries
+                .Include(i => i.Operator)
+                .Include(i => i.Performer)
+                .Include(i => i.IncomeChunks)
+                .SingleOrDefault(i => i.Id == incomeId);
+
+            if (incomeEntry == null) throw new AgUnfulfillableActionException($"Income entry with ID: {incomeId} does not exist.");
+
+            return ConvertIncomeEntryForReturnDto(incomeEntry);
+        }
+
         public IncomeListDataReturnDto GetIncomeEntries(int? userId = null) // TODO later there will be a filter with ID as param passed in
         {
             _logger.LogInformation($"Getting income entries of user with ID: {userId}");

@@ -17,6 +17,10 @@ export class IncomeService {
     return this.authService.currentUser.sites;
   }
 
+  getIncomeEntry(userId: number, incomeId: number): Observable<IncomeEntryForReturnDto> {
+    return this.http.get<IncomeEntryForReturnDto>(this.baseUrl + 'users/' + userId + '/incomes/' + incomeId);
+  }
+
   getIncomeEntries(userId: number): Observable<IncomeListDataReturnDto> {
     return this.http.get<IncomeListDataReturnDto>(this.baseUrl + 'users/' + userId + '/incomes');
   }

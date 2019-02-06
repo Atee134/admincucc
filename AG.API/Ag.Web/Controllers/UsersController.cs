@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Ag.BusinessLogic.Interfaces;
+using Ag.BusinessLogic.Interfaces.Converters;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Enums;
 using Ag.Web.Filters;
@@ -19,10 +20,14 @@ namespace Ag.Web.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IJoinTableHelperService _joinTableHelperService;
+        private readonly IUserConverter _userConverter;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IJoinTableHelperService joinTableHelperService, IUserConverter userConverter)
         {
            _userService = userService;
+           _joinTableHelperService = joinTableHelperService;
+            _userConverter = userConverter;
         }
 
         [HttpGet]
@@ -50,6 +55,15 @@ namespace Ag.Web.Controllers
             _userService.UpdateUser(userDto);
 
             return NoContent();
+        }
+
+        [Authorize("Operator")]
+        [HttpGet("{userId}/colleagues")]
+        public IActionResult GetColleagues(int userId)
+        {
+            var colleagues = _joinTableHelperService.GetColleagues(userId).Select(c => _userConverter.ConvertToUserToListDto(c)).ToList();
+
+            return Ok(colleagues);
         }
 
         [Authorize("Admin")]

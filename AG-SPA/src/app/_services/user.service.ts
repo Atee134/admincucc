@@ -31,6 +31,10 @@ export class UserService {
     return this.http.put(`${this.baseUrl}users`, userForEdit);
   }
 
+  getColleagues(userId: number): Observable<UserForListDto> {
+    return this.http.get<UserForListDto>(this.baseUrl + 'users/' + userId + '/colleagues');
+  }
+
   addPerformer(operatorId: number, performerId: number) {
     return this.http.put(`${this.baseUrl}users/${operatorId}/performer/${performerId}`, {});
   }
