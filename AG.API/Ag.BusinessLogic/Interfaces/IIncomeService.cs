@@ -7,6 +7,8 @@ namespace Ag.BusinessLogic.Interfaces
     {
         IncomeEntryForReturnDto GetIncomeEntry(int incomeId);
         IncomeListDataReturnDto GetIncomeEntries(int? userId = null);
+        void ValidateAuthorityToUpdateIncome(int userId, int incomeId);
+        IncomeEntryForReturnDto UpdateIncomeEntry(int incomeEntryId, IncomeEntryUpdateDto incomeEntryDto);
         IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto);
     }
 }

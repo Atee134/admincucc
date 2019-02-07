@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IncomeEntryAddDto, IncomeChunkAddDto, Site, IncomeEntryForReturnDto } from 'src/app/_models/generatedDtos';
+import { IncomeEntryForReturnDto } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
 import { IncomeService } from 'src/app/_services/income.service';
 import { ActivatedRoute } from '@angular/router';

@@ -3,10 +3,6 @@ using Ag.Common.Dtos.Request;
 using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Ag.Web.Controllers
 {
@@ -54,6 +50,24 @@ namespace Ag.Web.Controllers
         {
             var addedIncomeEntry = _incomeService.AddIncomEntry(userId, incomeEntryDto);
             return Ok(addedIncomeEntry);
+        }
+
+        [HttpPut("{incomeId}")]
+        [Authorize(Roles = "Operator, Admin")]
+        public IActionResult UpdateIncome(int userId, int incomeId, IncomeEntryUpdateDto incomeEntryDto)
+        {
+            // TODO userid is only good for validation, if the requesting user is not an admin, id must match with the logged in user id
+
+            bool isAdmin = User.IsInRole("Admin");
+
+            if (!isAdmin)
+            {
+                _incomeService.ValidateAuthorityToUpdateIncome(userId, incomeId);
+            }
+
+            var incomeEntry = _incomeService.UpdateIncomeEntry(incomeId, incomeEntryDto);
+
+            return Ok(incomeEntry);
         }
     }
 }

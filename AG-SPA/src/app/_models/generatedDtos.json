@@ -453,6 +453,55 @@
           }
         }
       }
+    },
+    "IncomeChunkUpdateDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Site",
+        "Income"
+      ],
+      "properties": {
+        "Id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Site": {
+          "minLength": 1,
+          "allOf": [
+            {
+              "$ref": "#/definitions/Site"
+            }
+          ]
+        },
+        "Income": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "IncomeEntryUpdateDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Date"
+      ],
+      "properties": {
+        "Date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "IncomeChunks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IncomeChunkUpdateDto"
+          }
+        },
+        "PerformerId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
     }
   }
 }

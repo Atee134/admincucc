@@ -1,15 +1,11 @@
 ﻿using Ag.BusinessLogic.Exceptions;
-using Ag.Common.Dtos;
-using Ag.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Ag.Web.Extensions
 {
@@ -42,6 +38,12 @@ namespace Ag.Web.Extensions
                             errorMessages.Add($"Unable to perform action, {contextFeature.Error.Message}");
                             logger.LogWarning($"Unable to perform action. Sending bad request to client, with message: {contextFeature.Error.Message}");
                             context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        }
+                        else if (contextFeature.Error is AgUnauthorizedException)
+                        {
+                            errorMessages.Add($"Unauthorized");
+                            logger.LogWarning($"Server side authorization exception was thrown, which means either the client doesn't function correctly, or someone is trying to attack the system.");
+                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         }
                         else
                         {
