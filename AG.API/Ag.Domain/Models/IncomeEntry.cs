@@ -1,8 +1,6 @@
-﻿using Ag.Common.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Ag.Domain.Models
 {
@@ -18,7 +16,7 @@ namespace Ag.Domain.Models
         public double TotalSum { get; set; }
 
         [Required]
-        public double TotalIncomeForOwner { get; set; }
+        public double TotalIncomeForStudio { get; set; }
 
         [Required]
         public double TotalIncomeForOperator { get; set; }

@@ -44,7 +44,7 @@ namespace Ag.Domain.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Date = table.Column<DateTime>(nullable: false),
                     TotalSum = table.Column<double>(nullable: false),
-                    TotalIncomeForOwner = table.Column<double>(nullable: false),
+                    TotalIncomeForStudio = table.Column<double>(nullable: false),
                     TotalIncomeForOperator = table.Column<double>(nullable: false),
                     TotalIncomeForPerformer = table.Column<double>(nullable: false),
                     OperatorId = table.Column<int>(nullable: false),
@@ -127,7 +127,7 @@ namespace Ag.Domain.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Site = table.Column<int>(nullable: false),
                     Sum = table.Column<double>(nullable: false),
-                    IncomeForOwner = table.Column<double>(nullable: false),
+                    IncomeForStudio = table.Column<double>(nullable: false),
                     IncomeForOperator = table.Column<double>(nullable: false),
                     IncomeForPerformer = table.Column<double>(nullable: false),
                     IncomeEntryId = table.Column<long>(nullable: false)

@@ -57,7 +57,7 @@ namespace Ag.BusinessLogic.Services
                 Performer = performer,
                 IncomeChunks = incomeChunks,
                 TotalSum = incomeChunks.Sum(i => i.Sum),
-                TotalIncomeForOwner = incomeChunks.Sum(i => i.IncomeForOwner),
+                TotalIncomeForStudio = incomeChunks.Sum(i => i.IncomeForStudio),
                 TotalIncomeForOperator = incomeChunks.Sum(i => i.IncomeForOperator),
                 TotalIncomeForPerformer = incomeChunks.Sum(i => i.IncomeForPerformer)
             };
@@ -87,47 +87,44 @@ namespace Ag.BusinessLogic.Services
 
             if (incomeEntryEntity == null) throw new AgUnfulfillableActionException($"Income entry with ID: {incomeId} does not exist.");
 
-            var operatorPercent = incomeEntryEntity.Operator.MinPercent;
-            var performerPercent = incomeEntryEntity.Performer.MinPercent;
+            if (incomeEntryDto.PerformerId != null && incomeEntryEntity.Performer.Id != incomeEntryDto.PerformerId)
+            {
+                var colleagues = _joinTableHelperService.GetColleagues(incomeEntryEntity.Operator.Id);
+
+                var newPerformer = colleagues.FirstOrDefault(c => c.Id == incomeEntryDto.PerformerId);
+
+                if (newPerformer == null) throw new AgUnfulfillableActionException($"Performer is not assigned to the operator, can not update income entry.");
+
+                _logger.LogInformation($"Performer changed of income entry with ID: {incomeId}. Old performer ID: {incomeEntryEntity.Performer.Id}, new performer ID: {incomeEntryDto.PerformerId}");
+
+                incomeEntryEntity.Performer = newPerformer;
+            }
+
+            if (incomeEntryDto.Date != null && incomeEntryEntity.Date != incomeEntryDto.Date.Value)
+            {
+                _logger.LogInformation($"Date changed of income entry with ID: {incomeEntryEntity.Id}. Old date: {incomeEntryEntity.Date.ToString()}, new date: {incomeEntryDto.Date.ToString()}");
+
+                incomeEntryEntity.Date = incomeEntryDto.Date.Value;
+            }
 
             var incomeChunksToUpdate = incomeEntryDto.IncomeChunks.Where(i => i.Id.HasValue).ToList();
 
             if (incomeChunksToUpdate.Count > 0)
             {
-                _logger.LogInformation($"Updating income chunks of income entry with ID: {incomeEntryEntity.Id}, income chunk IDs: {String.Join(", ", incomeChunksToUpdate.Select(i => i.Id.Value))}");
-
-                foreach (IncomeChunkUpdateDto incomeChunkDto in incomeChunksToUpdate)
-                {
-                    var incomeChunkEntity = incomeEntryEntity.IncomeChunks.FirstOrDefault(i => i.Id == incomeChunkDto.Id);
-
-                    if (incomeChunkEntity == null) throw new AgUnfulfillableActionException($"Income chunk with ID: {incomeChunkDto.Id} does not exist");
-
-                    var incomes = CalculateIncomes(incomeChunkDto.Income.Value, operatorPercent, performerPercent);
-
-                    incomeChunkEntity.IncomeForOwner = incomes.IncomeForStudio;
-                    incomeChunkEntity.IncomeForOperator = incomes.IncomeForOperator;
-                    incomeChunkEntity.IncomeForPerformer = incomes.IncomeForPerformer;
-                }
+                UpdateIncomeChunksOfIncomeEntry(incomeEntryEntity, incomeChunksToUpdate);
             }
 
             var newlyAddedIncomeChunks = incomeEntryDto.IncomeChunks.Where(i => !i.Id.HasValue).ToList();
 
             if (newlyAddedIncomeChunks.Count > 0)
             {
-                // TODO add currentpercent to entiy, and use it here instead of minpercent
-                foreach (IncomeChunkUpdateDto incomeChunkDto in newlyAddedIncomeChunks)
-                {
-                    if (incomeEntryEntity.IncomeChunks.FirstOrDefault(i => i.Site == incomeChunkDto.Site.Value) != null) throw new AgUnfulfillableActionException($"Income entry already contains income for site: {incomeChunkDto.Site.Value.ToString()}");
-
-                    IncomeChunkAddDto incomeChunkAddDto = new IncomeChunkAddDto
-                    {
-                        Income = incomeChunkDto.Income.Value,
-                        Site = incomeChunkDto.Site.Value
-                    };
-
-                    incomeEntryEntity.IncomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkAddDto, operatorPercent, performerPercent)); // TODO add logic for currentPercent to not use always minimum (above $251 logic)
-                }
+                AddIncomeChunksToIncomeEntry(incomeEntryEntity, newlyAddedIncomeChunks);
             }
+
+            incomeEntryEntity.TotalSum = incomeEntryEntity.IncomeChunks.Sum(c => c.Sum);
+            incomeEntryEntity.TotalIncomeForStudio = incomeEntryEntity.IncomeChunks.Sum(c => c.IncomeForStudio);
+            incomeEntryEntity.TotalIncomeForOperator = incomeEntryEntity.IncomeChunks.Sum(c => c.IncomeForOperator);
+            incomeEntryEntity.TotalIncomeForPerformer = incomeEntryEntity.IncomeChunks.Sum(c => c.IncomeForPerformer);
 
             _context.SaveChanges();
 
@@ -140,6 +137,47 @@ namespace Ag.BusinessLogic.Services
             _logger.LogInformation($"Updating income entry with ID: {incomeEntryEntity.Id} was successful.");
 
             return ConvertIncomeEntryForReturnDto(incomeEntryEntity);
+        }
+
+        private void UpdateIncomeChunksOfIncomeEntry(IncomeEntry incomeEntry, List<IncomeChunkUpdateDto> incomeChunkDtos)
+        {
+            _logger.LogInformation($"Updating income chunks of income entry with ID: {incomeEntry.Id}, income chunk IDs: {String.Join(", ", incomeChunkDtos.Select(i => i.Id.Value))}");
+
+            var operatorPercent = incomeEntry.Operator.MinPercent;
+            var performerPercent = incomeEntry.Performer.MinPercent;
+
+            foreach (IncomeChunkUpdateDto incomeChunkDto in incomeChunkDtos)
+            {
+                var incomeChunkEntity = incomeEntry.IncomeChunks.FirstOrDefault(i => i.Id == incomeChunkDto.Id && i.Site == incomeChunkDto.Site);
+
+                if (incomeChunkEntity == null) throw new AgUnfulfillableActionException($"Income chunk with ID: {incomeChunkDto.Id} does not exist");
+
+                var incomes = CalculateIncomes(incomeChunkDto.Income.Value, operatorPercent, performerPercent);
+
+                incomeChunkEntity.Sum = incomeChunkDto.Income.Value;
+                incomeChunkEntity.IncomeForStudio = incomes.IncomeForStudio;
+                incomeChunkEntity.IncomeForOperator = incomes.IncomeForOperator;
+                incomeChunkEntity.IncomeForPerformer = incomes.IncomeForPerformer;
+            }
+        }
+
+        private void AddIncomeChunksToIncomeEntry(IncomeEntry incomeEntry, List<IncomeChunkUpdateDto> incomeChunkDtos)
+        {
+            var operatorPercent = incomeEntry.Operator.MinPercent;
+            var performerPercent = incomeEntry.Performer.MinPercent;
+
+            foreach (IncomeChunkUpdateDto incomeChunkDto in incomeChunkDtos)
+            {
+                if (incomeEntry.IncomeChunks.FirstOrDefault(i => i.Site == incomeChunkDto.Site.Value) != null) throw new AgUnfulfillableActionException($"Income entry already contains income for site: {incomeChunkDto.Site.Value.ToString()}");
+
+                IncomeChunkAddDto incomeChunkAddDto = new IncomeChunkAddDto
+                {
+                    Income = incomeChunkDto.Income.Value,
+                    Site = incomeChunkDto.Site.Value
+                };
+
+                incomeEntry.IncomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkAddDto, operatorPercent, performerPercent)); // TODO add logic for currentPercent to not use always minimum (above $251 logic)
+            }
         }
 
         public IncomeEntryForReturnDto GetIncomeEntry(int incomeId)
@@ -254,7 +292,7 @@ namespace Ag.BusinessLogic.Services
             {
                 Site = incomeChunkDto.Site,
                 Sum = incomeChunkDto.Income,
-                IncomeForOwner = incomes.IncomeForStudio, // TODO rename incomechunk entity owner to studio
+                IncomeForStudio = incomes.IncomeForStudio, // TODO rename incomechunk entity owner to studio
                 IncomeForOperator = incomes.IncomeForOperator,
                 IncomeForPerformer = incomes.IncomeForPerformer
             };
@@ -284,7 +322,7 @@ namespace Ag.BusinessLogic.Services
                 OperatorName = incomeEntry.Operator.UserName,
                 PerformerName = incomeEntry.Performer.UserName,
                 TotalSum = incomeEntry.TotalSum,
-                TotalIncomeForStudio = incomeEntry.TotalIncomeForOwner,
+                TotalIncomeForStudio = incomeEntry.TotalIncomeForStudio,
                 TotalIncomeForOperator = incomeEntry.TotalIncomeForOperator,
                 TotalIncomeForPerformer = incomeEntry.TotalIncomeForPerformer,
                 IncomeChunks = GetIncomeChunks(incomeEntry)
@@ -302,7 +340,7 @@ namespace Ag.BusinessLogic.Services
                     Id = chunk.Id,
                     Site = chunk.Site,
                     Sum = chunk.Sum,
-                    IncomeForStudio = chunk.IncomeForOwner,
+                    IncomeForStudio = chunk.IncomeForStudio,
                     IncomeForOperator = chunk.IncomeForOperator,
                     IncomeForPerformer = chunk.IncomeForPerformer
                 };
