@@ -10,7 +10,8 @@
           <th class="text-center" scope="col">Model</th>
           <th class="text-center" scope="col" *ngIf="isCurrentUser('Admin')">Studio</th>
           <th class="text-center" scope="col">Total</th>
-          <th></th>
+          <th *ngIf="isCurrentUser('Operator') || isCurrentUser('Admin')"></th>
+          <th *ngIf="isCurrentUser('Admin')"></th>
         </tr>
       </thead>
       <tbody>
@@ -23,8 +24,12 @@
           <td class="text-right">{{entry.totalIncomeForPerformer | currency}}</td>
           <td class="text-right" *ngIf="isCurrentUser('Admin')">{{entry.totalIncomeForStudio | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>
-          <td class="text-right mt-0 pt-0 mb-0 pb-0">
+          <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="!isCurrentUser('Performer')">
               <a class="btn btn-primary btn-lg mt-2 pt-0 mb-0 pb-0" routerLink="/incomes/{{entry.id}}">Edit</a>
+          </td>
+          <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="isCurrentUser('Admin')">
+            <button class="btn btn-success btn-lg mt-2 pt-0 mb-0 pb-0" *ngIf="!entry.locked" (click)="onLock(entry.operatorId, entry.id)">Lock</button>
+            <button class="btn btn-danger btn-lg mt-2 pt-0 mb-0 pb-0" *ngIf="entry.locked" (click)="onUnlock(entry.operatorId, entry.id)">Unlock</button>
           </td>
         </tr>
         <tr class="table-primary">

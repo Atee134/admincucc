@@ -8,7 +8,7 @@ import { IncomeEntryForReturnDto,
   IncomeStatisticsSiteSumDto
 } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
-import { Router } from '@angular/router';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-income-list',
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 export class IncomeListComponent implements OnInit {
   public incomeList: IncomeListDataReturnDto;
 
-  constructor(private authService: AuthService, private router: Router, private incomeService: IncomeService) { }
+  constructor(private authService: AuthService, private alertify: AlertifyService, private incomeService: IncomeService) { }
 
   ngOnInit() {
     this.getIncomeEntries();
@@ -62,5 +62,33 @@ export class IncomeListComponent implements OnInit {
 
   public isCurrentUser(role: string): boolean {
     return this.authService.currentUser.role.toLowerCase() === role.toLowerCase();
+  }
+
+  public onLock(userId: number, incomeId: number): void {
+    this.incomeService.lockIncomeEntry(userId, incomeId).subscribe(resp => {
+      if (resp) {
+        this.alertify.success('Income locked');
+        const incomeEntry = this.incomeList.incomeEntries.find(i => i.id === incomeId);
+        incomeEntry.locked = true;
+      } else {
+        this.alertify.message('Income already locked');
+      }
+    }, error => {
+      this.alertify.error(error);
+    });
+  }
+
+  public onUnlock(userId: number, incomeId: number): void {
+    this.incomeService.unlockIncomeEntry(userId, incomeId).subscribe(resp => {
+      if (resp) {
+        this.alertify.success('Income unlocked');
+        const incomeEntry = this.incomeList.incomeEntries.find(i => i.id === incomeId);
+        incomeEntry.locked = false;
+      } else {
+        this.alertify.message('Income already unlocked');
+      }
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 }

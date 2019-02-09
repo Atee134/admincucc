@@ -36,4 +36,12 @@ export class IncomeService {
   addIncomeEntry(userId: number, incomeEntry: IncomeEntryAddDto): Observable<IncomeEntryForReturnDto> {
     return this.http.post<IncomeEntryForReturnDto>(this.baseUrl + 'users/' + userId + '/incomes', incomeEntry);
   }
+
+  lockIncomeEntry(userId: number, incomeId: number): Observable<boolean> {
+    return this.http.put<boolean>(this.baseUrl + 'users/' + userId + '/incomes/' + incomeId + '/lock', {});
+  }
+
+  unlockIncomeEntry(userId: number, incomeId: number): Observable<boolean> {
+    return this.http.put<boolean>(this.baseUrl + 'users/' + userId + '/incomes/' + incomeId + '/unlock', {});
+  }
 }
