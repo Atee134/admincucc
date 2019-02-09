@@ -180,6 +180,22 @@ namespace Ag.BusinessLogic.Services
             }
         }
 
+        public bool UpdateIncomeEntryLockedState(int incomeId, bool newLockState)
+        {
+            var incomeEntry = _context.IncomeEntries.FirstOrDefault(i => i.Id == incomeId);
+
+            if (incomeEntry == null) throw new AgUnfulfillableActionException($"Income with ID: {incomeId} does not exist.");
+
+            if (incomeEntry.Locked == newLockState) return false;
+
+            _logger.LogInformation($"Changing locked state of income entry with ID: {incomeId}. Old state: {!newLockState}, new state: {newLockState}");
+
+            incomeEntry.Locked = newLockState;
+            _context.SaveChanges();
+
+            return true;
+        }
+
         public IncomeEntryForReturnDto GetIncomeEntry(int incomeId)
         {
             var incomeEntry = _context.IncomeEntries
@@ -318,6 +334,7 @@ namespace Ag.BusinessLogic.Services
             {
                 Id = incomeEntry.Id,
                 Date = incomeEntry.Date,
+                Locked = incomeEntry.Locked,
                 Color = incomeEntry.Performer?.Color ?? incomeEntry.Operator.Color,
                 OperatorId = incomeEntry.Operator.Id,
                 OperatorName = incomeEntry.Operator.UserName,

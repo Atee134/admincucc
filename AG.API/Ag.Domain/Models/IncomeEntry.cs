@@ -13,6 +13,9 @@ namespace Ag.Domain.Models
         public DateTime Date { get; set; }
 
         [Required]
+        public bool Locked { get; set; }
+
+        [Required]
         public double TotalSum { get; set; }
 
         [Required]

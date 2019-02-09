@@ -69,5 +69,23 @@ namespace Ag.Web.Controllers
 
             return Ok(incomeEntry);
         }
+
+        [HttpPut("{incomeId}/lock")]
+        [Authorize("Admin")]
+        public IActionResult LockIncome(int userId, int incomeId)
+        {
+            bool result = _incomeService.UpdateIncomeEntryLockedState(incomeId, true);
+
+            return Ok(result);
+        }
+
+        [HttpPut("{incomeId}/unlock")]
+        [Authorize("Admin")]
+        public IActionResult UnlockIncome(int userId, int incomeId)
+        {
+            bool result = _incomeService.UpdateIncomeEntryLockedState(incomeId, false);
+
+            return Ok(result);
+        }
     }
 }

@@ -481,6 +481,7 @@ export interface IIncomeChunkForReturnDto {
 export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
     id!: number;
     date!: Date;
+    locked!: boolean;
     color?: string | null;
     operatorId!: number;
     operatorName?: string | null;
@@ -505,6 +506,7 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
         if (data) {
             this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
             this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>null;
+            this.locked = data["Locked"] !== undefined ? data["Locked"] : <any>null;
             this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
             this.operatorId = data["OperatorId"] !== undefined ? data["OperatorId"] : <any>null;
             this.operatorName = data["OperatorName"] !== undefined ? data["OperatorName"] : <any>null;
@@ -533,6 +535,7 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
         data = typeof data === 'object' ? data : {};
         data["Id"] = this.id !== undefined ? this.id : <any>null;
         data["Date"] = this.date ? this.date.toISOString() : <any>null;
+        data["Locked"] = this.locked !== undefined ? this.locked : <any>null;
         data["Color"] = this.color !== undefined ? this.color : <any>null;
         data["OperatorId"] = this.operatorId !== undefined ? this.operatorId : <any>null;
         data["OperatorName"] = this.operatorName !== undefined ? this.operatorName : <any>null;
@@ -561,6 +564,7 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
 export interface IIncomeEntryForReturnDto {
     id: number;
     date: Date;
+    locked: boolean;
     color?: string | null;
     operatorId: number;
     operatorName?: string | null;

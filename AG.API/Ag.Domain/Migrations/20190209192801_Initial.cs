@@ -43,6 +43,7 @@ namespace Ag.Domain.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Date = table.Column<DateTime>(nullable: false),
+                    Locked = table.Column<bool>(nullable: false),
                     TotalSum = table.Column<double>(nullable: false),
                     TotalIncomeForStudio = table.Column<double>(nullable: false),
                     TotalIncomeForOperator = table.Column<double>(nullable: false),

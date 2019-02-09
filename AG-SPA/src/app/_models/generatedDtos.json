@@ -257,6 +257,7 @@
       "required": [
         "Id",
         "Date",
+        "Locked",
         "OperatorId",
         "PerformerId",
         "TotalSum",
@@ -272,6 +273,9 @@
         "Date": {
           "type": "string",
           "format": "date-time"
+        },
+        "Locked": {
+          "type": "boolean"
         },
         "Color": {
           "type": "string"

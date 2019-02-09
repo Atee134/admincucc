@@ -9,6 +9,8 @@ namespace Ag.Common.Dtos.Response
 
         public DateTime Date { get; set; }
 
+        public bool Locked { get; set; }
+
         public string Color { get; set; }
 
         public int OperatorId { get; set; }

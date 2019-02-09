@@ -50,6 +50,8 @@ namespace Ag.Domain.Migrations
 
                     b.Property<DateTime>("Date");
 
+                    b.Property<bool>("Locked");
+
                     b.Property<int>("OperatorId");
 
                     b.Property<int>("PerformerId");

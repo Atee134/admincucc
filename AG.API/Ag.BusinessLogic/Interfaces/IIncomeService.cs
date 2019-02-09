@@ -10,5 +10,6 @@ namespace Ag.BusinessLogic.Interfaces
         void ValidateAuthorityToUpdateIncome(int userId, int incomeId);
         IncomeEntryForReturnDto UpdateIncomeEntry(int incomeEntryId, IncomeEntryUpdateDto incomeEntryDto);
         IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto);
+        bool UpdateIncomeEntryLockedState(int incomeId, bool newLockState);
     }
 }
