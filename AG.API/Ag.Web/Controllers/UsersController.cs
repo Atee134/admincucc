@@ -57,7 +57,7 @@ namespace Ag.Web.Controllers
             return NoContent();
         }
 
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator, Admin")]
         [HttpGet("{userId}/colleagues")]
         public IActionResult GetColleagues(int userId)
         {

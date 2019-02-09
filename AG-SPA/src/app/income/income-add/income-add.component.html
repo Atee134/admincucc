@@ -1,4 +1,4 @@
-<div class="container" *ngIf="incomeEntry">
+<div class="container" *ngIf="incomeEntry && colleagues">
   <h1 class="text-center mt-4">Add income</h1>
   <hr>
   <div class="row">
@@ -18,7 +18,7 @@
           required>
         </div>
 
-        <div *ngFor="let site of uniqueSites" class="form-group">
+        <div *ngFor="let site of sites" class="form-group">
           <label [for]="site">{{site}}</label>
           <input type="number" placeholder="0.00" step=".1"
                 class="form-control" [id]="site"

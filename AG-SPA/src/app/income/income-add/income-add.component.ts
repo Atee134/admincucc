@@ -14,7 +14,7 @@ import { UserService } from 'src/app/_services/user.service';
 export class IncomeAddComponent implements OnInit {
   public incomeEntry: IncomeEntryAddDto;
   public responseEntry: IncomeEntryForReturnDto;
-  public colleagues: UserForListDto;
+  public colleagues: UserForListDto[];
 
   constructor(
     private authService: AuthService,
@@ -53,26 +53,8 @@ export class IncomeAddComponent implements OnInit {
     return chunk;
   }
 
-  /**
-   * gets the union of the dto's current sites, and the user's assigned sites.
-   * In case of editing an income which has not yet had the newly assigned site,
-   * or editing an old income, which still as a site, but it's not assigned to the user anymore.
-   */
-  get uniqueSites(): Site[] {
-    const uniqueSites: Site[] = [];
-    for (const incomeChunk of this.incomeEntry.incomeChunks) {
-      if (!uniqueSites.includes(incomeChunk.site)) {
-        uniqueSites.push(incomeChunk.site);
-      }
-    }
-
-    for (const site of this.authService.currentUser.sites) {
-      if (!uniqueSites.includes(site)) {
-        uniqueSites.push(site);
-      }
-    }
-
-    return uniqueSites;
+  get sites(): Site[] {
+    return this.authService.currentUser.sites;
   }
 
   private getInitialDate(): Date {
@@ -91,6 +73,8 @@ export class IncomeAddComponent implements OnInit {
     this.incomeService.addIncomeEntry(this.authService.currentUser.id, this.incomeEntry).subscribe(resp => {
       this.responseEntry = resp;
       this.alertify.success('Successfully added icome.');
+    }, error => {
+      this.alertify.error(error);
     });
   }
 }

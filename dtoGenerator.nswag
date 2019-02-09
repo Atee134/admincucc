@@ -5,7 +5,9 @@
     "typesToSwagger": {
       "classNames": [
         "Ag.Common.Dtos.Request.IncomeChunkAddDto",
+        "Ag.Common.Dtos.Request.IncomeChunkUpdateDto",
         "Ag.Common.Dtos.Request.IncomeEntryAddDto",
+        "Ag.Common.Dtos.Request.IncomeEntryUpdateDto",
         "Ag.Common.Dtos.Request.UserForEditDto",
         "Ag.Common.Dtos.Request.UserForLoginDto",
         "Ag.Common.Dtos.Request.UserForRegisterDto",
@@ -21,9 +23,7 @@
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
         "Ag.Common.Enums.Site",
-        "Ag.Web.Models.ErrorDetails",
-        "Ag.Common.Dtos.Request.IncomeChunkUpdateDto",
-        "Ag.Common.Dtos.Request.IncomeEntryUpdateDto"
+        "Ag.Web.Models.ErrorDetails"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",

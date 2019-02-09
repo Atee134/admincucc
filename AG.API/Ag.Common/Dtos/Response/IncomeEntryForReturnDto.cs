@@ -11,9 +11,13 @@ namespace Ag.Common.Dtos.Response
 
         public string Color { get; set; }
 
+        public int OperatorId { get; set; }
+
         public string OperatorName { get; set; }
 
         public string PerformerName { get; set; }
+
+        public int PerformerId { get; set; }
 
         public double TotalSum { get; set; }
 

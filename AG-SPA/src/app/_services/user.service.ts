@@ -31,8 +31,8 @@ export class UserService {
     return this.http.put(`${this.baseUrl}users`, userForEdit);
   }
 
-  getColleagues(userId: number): Observable<UserForListDto> {
-    return this.http.get<UserForListDto>(this.baseUrl + 'users/' + userId + '/colleagues');
+  getColleagues(userId: number): Observable<UserForListDto[]> {
+    return this.http.get<UserForListDto[]>(this.baseUrl + 'users/' + userId + '/colleagues');
   }
 
   addPerformer(operatorId: number, performerId: number) {
