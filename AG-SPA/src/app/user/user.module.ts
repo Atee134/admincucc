@@ -10,7 +10,8 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+
   ],
   declarations: [UserAddComponent, UserEditComponent, UserListComponent]
 })

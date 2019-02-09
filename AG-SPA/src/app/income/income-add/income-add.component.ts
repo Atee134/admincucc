@@ -15,6 +15,7 @@ export class IncomeAddComponent implements OnInit {
   public incomeEntry: IncomeEntryAddDto;
   public responseEntry: IncomeEntryForReturnDto;
   public colleagues: UserForListDto;
+  public date: Date;
 
   constructor(
     private authService: AuthService,
