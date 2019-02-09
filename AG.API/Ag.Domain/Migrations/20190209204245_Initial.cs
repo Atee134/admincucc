@@ -19,6 +19,7 @@ namespace Ag.Domain.Migrations
                     PasswordSalt = table.Column<byte[]>(nullable: false),
                     MinPercent = table.Column<double>(nullable: false),
                     MaxPercent = table.Column<double>(nullable: false),
+                    LastPercent = table.Column<double>(nullable: false),
                     Role = table.Column<int>(nullable: false),
                     Shift = table.Column<int>(nullable: false),
                     Color = table.Column<string>(nullable: false),
@@ -48,6 +49,8 @@ namespace Ag.Domain.Migrations
                     TotalIncomeForStudio = table.Column<double>(nullable: false),
                     TotalIncomeForOperator = table.Column<double>(nullable: false),
                     TotalIncomeForPerformer = table.Column<double>(nullable: false),
+                    CurrentOperatorPercent = table.Column<double>(nullable: false),
+                    CurrentPerformerPercent = table.Column<double>(nullable: false),
                     OperatorId = table.Column<int>(nullable: false),
                     PerformerId = table.Column<int>(nullable: false)
                 },

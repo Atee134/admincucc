@@ -202,6 +202,41 @@ namespace Ag.BusinessLogic.Services
             return true;
         }
 
+        private IncomeEntry GetIncomeEntriesOfPeriod(DateTime date)
+        {
+            // TODO 
+            GetDatesOfPeriod(date); // TODO dont need all days, only start and end date
+            return null;
+        }
+
+        private List<DateTime> GetDatesOfPeriod(DateTime date) 
+        {
+            const int periodSeparatorDay = 15; // TODO is this 100% fix?
+            DateTime toAdd;
+            int count;
+
+            List<DateTime> availableDates = new List<DateTime>();
+
+            if (date.Day <= periodSeparatorDay)
+            {
+                toAdd = new DateTime(date.Year, date.Month, 1);
+                count = periodSeparatorDay;
+            }
+            else
+            {
+                toAdd = new DateTime(date.Year, date.Month, periodSeparatorDay + 1);
+                count = DateTime.DaysInMonth(date.Year, date.Month) - periodSeparatorDay;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                availableDates.Add(toAdd);
+                toAdd = toAdd.AddDays(1);
+            }
+
+            return availableDates;
+        }
+
         public IncomeEntryForReturnDto GetIncomeEntry(int incomeId)
         {
             var incomeEntry = _context.IncomeEntries

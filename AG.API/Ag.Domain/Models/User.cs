@@ -1,9 +1,7 @@
 ﻿using Ag.Common.Enums;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Ag.Domain.Models
 {
@@ -26,6 +24,9 @@ namespace Ag.Domain.Models
 
         [Required]
         public double MaxPercent { get; set; }
+
+        [Required]
+        public double LastPercent { get; set; }
 
         [Required]
         public Role Role { get; set; }

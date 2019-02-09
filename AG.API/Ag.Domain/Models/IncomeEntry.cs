@@ -28,6 +28,12 @@ namespace Ag.Domain.Models
         public double TotalIncomeForPerformer { get; set; }
 
         [Required]
+        public double CurrentOperatorPercent { get; set; }
+
+        [Required]
+        public double CurrentPerformerPercent { get; set; }
+
+        [Required]
         public virtual User Operator { get; set; }
 
         [Required]

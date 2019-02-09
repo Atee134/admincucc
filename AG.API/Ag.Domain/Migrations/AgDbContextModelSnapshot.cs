@@ -48,6 +48,10 @@ namespace Ag.Domain.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<double>("CurrentOperatorPercent");
+
+                    b.Property<double>("CurrentPerformerPercent");
+
                     b.Property<DateTime>("Date");
 
                     b.Property<bool>("Locked");
@@ -82,6 +86,8 @@ namespace Ag.Domain.Migrations
 
                     b.Property<string>("Color")
                         .IsRequired();
+
+                    b.Property<double>("LastPercent");
 
                     b.Property<double>("MaxPercent");
 

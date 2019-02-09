@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20190209192801_Initial")]
+    [Migration("20190209204245_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,10 @@ namespace Ag.Domain.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<double>("CurrentOperatorPercent");
+
+                    b.Property<double>("CurrentPerformerPercent");
+
                     b.Property<DateTime>("Date");
 
                     b.Property<bool>("Locked");
@@ -84,6 +88,8 @@ namespace Ag.Domain.Migrations
 
                     b.Property<string>("Color")
                         .IsRequired();
+
+                    b.Property<double>("LastPercent");
 
                     b.Property<double>("MaxPercent");
 
