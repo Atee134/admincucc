@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IncomeEntryAddDto, Site, IncomeChunkAddDto, IncomeEntryForReturnDto, UserForListDto } from 'src/app/_models/generatedDtos';
+import { IncomeEntryAddDto, Site, IncomeChunkAddDto, IncomeEntryForReturnDto, UserForListDto, Shift } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
 import { IncomeService } from 'src/app/_services/income.service';
 import { Router } from '@angular/router';
@@ -15,13 +15,11 @@ export class IncomeAddComponent implements OnInit {
   public incomeEntry: IncomeEntryAddDto;
   public responseEntry: IncomeEntryForReturnDto;
   public colleagues: UserForListDto;
-  public date: Date;
 
   constructor(
     private authService: AuthService,
     private incomeService: IncomeService,
     private userService: UserService,
-    private router: Router,
     private alertify: AlertifyService
     ) { }
 
@@ -40,7 +38,7 @@ export class IncomeAddComponent implements OnInit {
 
   private createIncomeEntry(): IncomeEntryAddDto {
     const entry = new IncomeEntryAddDto();
-    entry.date = new Date();
+    entry.date = this.getInitialDate();
 
     for (const site of this.authService.currentUser.sites) {
       entry.incomeChunks.push(this.createIncomeChunk(site));
@@ -75,6 +73,14 @@ export class IncomeAddComponent implements OnInit {
     }
 
     return uniqueSites;
+  }
+
+  private getInitialDate(): Date {
+    const date = new Date();
+    if (this.authService.currentUser.shift === Shift.Night) {
+       date.setDate(date.getDate() - 1);
+    }
+    return date;
   }
 
   public getIncomeChunk(site: Site): IncomeChunkAddDto {

@@ -4,6 +4,20 @@
   <div class="row">
     <div class="col-lg-4 col-sm-12">
       <form (ngSubmit)="onSubmit()" #incomeForm="ngForm">
+
+        <div class="form-group">
+          <label for="datum">Dátum:</label>
+          <input type="text"
+          class="form-control"
+          name="datum"
+          id="datum"
+          bsDatepicker 
+          [bsConfig]="{ dateInputFormat: 'YYYY.MM.DD' }"
+          [(ngModel)]="incomeEntry.date"
+          [disabled]="responseEntry"
+          required>
+        </div>
+
         <div *ngFor="let site of uniqueSites" class="form-group">
           <label [for]="site">{{site}}</label>
           <input type="number" placeholder="0.00" step=".1"
@@ -19,21 +33,6 @@
             <select class="custom-select form-control" name="performer" id="performer" [(ngModel)]="incomeEntry.performerId" required [disabled]="responseEntry">
               <option *ngFor="let colleague of colleagues" value="{{colleague.id}}" >{{colleague.userName}}</option>
             </select>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-12 col-md-4 form-group">
-            <input type="text"
-                   placeholder="Datepicker"
-                   class="form-control"
-                   bsDatepicker>
-          </div>
-          <div class="col-xs-12 col-12 col-md-4 form-group">
-            <input type="text"
-                   placeholder="Daterangepicker"
-                   class="form-control"
-                   bsDaterangepicker>
-          </div>
         </div>
 
         <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeForm.form.valid" *ngIf="!responseEntry">Add</button>
