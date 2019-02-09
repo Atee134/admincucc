@@ -25,7 +25,7 @@
           <td class="text-right" *ngIf="isCurrentUser('Admin')">{{entry.totalIncomeForStudio | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>
           <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="!isCurrentUser('Performer')">
-              <a class="btn btn-primary btn-lg mt-2 pt-0 mb-0 pb-0" routerLink="/incomes/{{entry.id}}">Edit</a>
+              <button class="btn btn-primary btn-lg mt-2 pt-0 mb-0 pb-0" routerLink="/incomes/{{entry.id}}" [disabled]="isCurrentUser('Operator') && entry.locked" title="{{(isCurrentUser('Operator') && entry.locked) ? 'Income is locked, can\'t modify it anymore' : ''}}">Edit</button>
           </td>
           <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="isCurrentUser('Admin')">
             <button class="btn btn-success btn-lg mt-2 pt-0 mb-0 pb-0" *ngIf="!entry.locked" (click)="onLock(entry.operatorId, entry.id)">Lock</button>

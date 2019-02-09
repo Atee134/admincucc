@@ -47,7 +47,10 @@ namespace Ag.BusinessLogic.Services
 
             foreach (var incomeChunkDto in incomeEntryDto.IncomeChunks)
             {
-                incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, op.MinPercent, performer.MinPercent)); // TODO add logic for currentPercent to not use always minimum (above $251 logic)
+                if (incomeChunkDto.Income > 0)
+                {
+                    incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, op.MinPercent, performer.MinPercent)); // TODO add logic for currentPercent to not use always minimum (above $251 logic)
+                }
             }
 
             var incomeEntry = new IncomeEntry()
@@ -72,7 +75,10 @@ namespace Ag.BusinessLogic.Services
 
         public void ValidateAuthorityToUpdateIncome(int userId, int incomeId)
         {
-            if (_context.IncomeEntries.Include(i => i.Operator).SingleOrDefault(i => i.Id == incomeId).Operator.Id != userId) throw new AgUnauthorizedException("Unauthorized");
+            var incomeEntry = _context.IncomeEntries.Include(i => i.Operator).SingleOrDefault(i => i.Id == incomeId);
+
+            if (incomeEntry.Operator.Id != userId) throw new AgUnauthorizedException("Unauthorized");
+            if (incomeEntry.Locked) throw new AgUnfulfillableActionException("Income is locked, can not modify anymore");
         }
 
         public IncomeEntryForReturnDto UpdateIncomeEntry(int incomeId, IncomeEntryUpdateDto incomeEntryDto)
@@ -114,7 +120,7 @@ namespace Ag.BusinessLogic.Services
                 UpdateIncomeChunksOfIncomeEntry(incomeEntryEntity, incomeChunksToUpdate);
             }
 
-            var newlyAddedIncomeChunks = incomeEntryDto.IncomeChunks.Where(i => !i.Id.HasValue).ToList();
+            var newlyAddedIncomeChunks = incomeEntryDto.IncomeChunks.Where(i => !i.Id.HasValue && i.Income > 0).ToList();
 
             if (newlyAddedIncomeChunks.Count > 0)
             {
