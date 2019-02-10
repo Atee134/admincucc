@@ -160,7 +160,13 @@ export class UserEditComponent implements OnInit {
     this.alertify.confirm('Biztos, hogy egymáshoz akarod rendelni a felhasználókat?', function() {
       const ids = self.getIds(linkedUserId);
       self.userService.addPerformer(ids[0], ids[1]).subscribe(resp => {
-        self.user.colleagues.push(new UserForListDto({id: linkedUserId, userName: 'dummy', shift: Shift.Afternoon, role: Role.Operator}));
+        self.user.colleagues.push(new UserForListDto({
+          id: linkedUserId,
+          userName: 'dummy',
+          shift: Shift.Afternoon,
+          role: Role.Operator,
+          lastPercent: 0
+        }));
         self.alertify.success('Felhasználók sikeresen összerendelve.');
       }, error => {
         self.alertify.error(error);

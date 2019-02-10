@@ -485,8 +485,10 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
     color?: string | null;
     operatorId!: number;
     operatorName?: string | null;
-    performerName?: string | null;
+    currentOperatorPercent!: number;
     performerId!: number;
+    performerName?: string | null;
+    currentPerformerPercent!: number;
     totalSum!: number;
     totalIncomeForStudio!: number;
     totalIncomeForOperator!: number;
@@ -510,8 +512,10 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
             this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
             this.operatorId = data["OperatorId"] !== undefined ? data["OperatorId"] : <any>null;
             this.operatorName = data["OperatorName"] !== undefined ? data["OperatorName"] : <any>null;
-            this.performerName = data["PerformerName"] !== undefined ? data["PerformerName"] : <any>null;
+            this.currentOperatorPercent = data["CurrentOperatorPercent"] !== undefined ? data["CurrentOperatorPercent"] : <any>null;
             this.performerId = data["PerformerId"] !== undefined ? data["PerformerId"] : <any>null;
+            this.performerName = data["PerformerName"] !== undefined ? data["PerformerName"] : <any>null;
+            this.currentPerformerPercent = data["CurrentPerformerPercent"] !== undefined ? data["CurrentPerformerPercent"] : <any>null;
             this.totalSum = data["TotalSum"] !== undefined ? data["TotalSum"] : <any>null;
             this.totalIncomeForStudio = data["TotalIncomeForStudio"] !== undefined ? data["TotalIncomeForStudio"] : <any>null;
             this.totalIncomeForOperator = data["TotalIncomeForOperator"] !== undefined ? data["TotalIncomeForOperator"] : <any>null;
@@ -539,8 +543,10 @@ export class IncomeEntryForReturnDto implements IIncomeEntryForReturnDto {
         data["Color"] = this.color !== undefined ? this.color : <any>null;
         data["OperatorId"] = this.operatorId !== undefined ? this.operatorId : <any>null;
         data["OperatorName"] = this.operatorName !== undefined ? this.operatorName : <any>null;
-        data["PerformerName"] = this.performerName !== undefined ? this.performerName : <any>null;
+        data["CurrentOperatorPercent"] = this.currentOperatorPercent !== undefined ? this.currentOperatorPercent : <any>null;
         data["PerformerId"] = this.performerId !== undefined ? this.performerId : <any>null;
+        data["PerformerName"] = this.performerName !== undefined ? this.performerName : <any>null;
+        data["CurrentPerformerPercent"] = this.currentPerformerPercent !== undefined ? this.currentPerformerPercent : <any>null;
         data["TotalSum"] = this.totalSum !== undefined ? this.totalSum : <any>null;
         data["TotalIncomeForStudio"] = this.totalIncomeForStudio !== undefined ? this.totalIncomeForStudio : <any>null;
         data["TotalIncomeForOperator"] = this.totalIncomeForOperator !== undefined ? this.totalIncomeForOperator : <any>null;
@@ -568,8 +574,10 @@ export interface IIncomeEntryForReturnDto {
     color?: string | null;
     operatorId: number;
     operatorName?: string | null;
-    performerName?: string | null;
+    currentOperatorPercent: number;
     performerId: number;
+    performerName?: string | null;
+    currentPerformerPercent: number;
     totalSum: number;
     totalIncomeForStudio: number;
     totalIncomeForOperator: number;
@@ -897,6 +905,7 @@ export enum Shift {
 export class UserForListDto implements IUserForListDto {
     id!: number;
     userName?: string | null;
+    lastPercent!: number;
     shift!: Shift;
     role!: Role;
     color?: string | null;
@@ -914,6 +923,7 @@ export class UserForListDto implements IUserForListDto {
         if (data) {
             this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
             this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.lastPercent = data["LastPercent"] !== undefined ? data["LastPercent"] : <any>null;
             this.shift = data["Shift"] !== undefined ? data["Shift"] : <any>null;
             this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
             this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
@@ -931,6 +941,7 @@ export class UserForListDto implements IUserForListDto {
         data = typeof data === 'object' ? data : {};
         data["Id"] = this.id !== undefined ? this.id : <any>null;
         data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["LastPercent"] = this.lastPercent !== undefined ? this.lastPercent : <any>null;
         data["Shift"] = this.shift !== undefined ? this.shift : <any>null;
         data["Role"] = this.role !== undefined ? this.role : <any>null;
         data["Color"] = this.color !== undefined ? this.color : <any>null;
@@ -948,6 +959,7 @@ export class UserForListDto implements IUserForListDto {
 export interface IUserForListDto {
     id: number;
     userName?: string | null;
+    lastPercent: number;
     shift: Shift;
     role: Role;
     color?: string | null;

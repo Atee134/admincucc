@@ -43,9 +43,17 @@
               <label for="operator">Operator:</label>
               <input type="text" class="form-control" name="operator" disabled [(ngModel)]="incomeEntry.totalIncomeForOperator">
             </div>
+            <div class="form-group" *ngIf="isCurrentUser('Admin')">
+              <label for="operatorPercent">Operator percent:</label>
+              <input type="text" class="form-control" name="operatorPercent" disabled [(ngModel)]="incomeEntry.currentOperatorPercent">
+            </div>
             <div class="form-group">
               <label for="performer">Model:</label>
               <input type="text" class="form-control" name="performer" disabled [(ngModel)]="incomeEntry.totalIncomeForPerformer">
+            </div>
+            <div class="form-group" *ngIf="isCurrentUser('Admin')">
+              <label for="performerPercent">Model percent:</label>
+              <input type="text" class="form-control" name="performerPercent" disabled [(ngModel)]="incomeEntry.currentPerformerPercent">
             </div>
             <div class="form-group">
                     <label for="studio">Studio:</label>

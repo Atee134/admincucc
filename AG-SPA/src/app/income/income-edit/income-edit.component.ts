@@ -117,6 +117,10 @@ export class IncomeEditComponent implements OnInit {
     return uniqueSites;
   }
 
+  public isCurrentUser(role: string): boolean {
+    return this.authService.currentUser.role.toLowerCase() === role.toLowerCase();
+  }
+
   public onSubmit(): void {
     this.incomeService.updateIncomeEntry(
       this.authService.currentUser.id,

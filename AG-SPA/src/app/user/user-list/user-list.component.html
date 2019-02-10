@@ -4,6 +4,7 @@
         <tr class="table-primary">
           <th scope="col">User name</th>
           <th class="text-center" scope="col">Role</th>
+          <th class="text-center" scope="col">Last percent</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -11,6 +12,7 @@
         <tr *ngFor="let user of users">
           <td scope="row">{{user.userName}}</td>
           <td class="text-right">{{user.role}}</td>
+          <td class="text-right">{{user.lastPercent | percent}}</td>
           <td class="text-right">
               <a routerLink="/users/{{user.id}}" class="btn btn-primary btn-sm text-center">Edit</a>
           </td>

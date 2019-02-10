@@ -51,7 +51,7 @@
       "properties": {
         "Id": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
         },
         "Site": {
           "minLength": 1,
@@ -259,7 +259,9 @@
         "Date",
         "Locked",
         "OperatorId",
+        "CurrentOperatorPercent",
         "PerformerId",
+        "CurrentPerformerPercent",
         "TotalSum",
         "TotalIncomeForStudio",
         "TotalIncomeForOperator",
@@ -287,12 +289,20 @@
         "OperatorName": {
           "type": "string"
         },
-        "PerformerName": {
-          "type": "string"
+        "CurrentOperatorPercent": {
+          "type": "number",
+          "format": "double"
         },
         "PerformerId": {
           "type": "integer",
           "format": "int32"
+        },
+        "PerformerName": {
+          "type": "string"
+        },
+        "CurrentPerformerPercent": {
+          "type": "number",
+          "format": "double"
         },
         "TotalSum": {
           "type": "number",
@@ -461,6 +471,7 @@
       "additionalProperties": false,
       "required": [
         "Id",
+        "LastPercent",
         "Shift",
         "Role"
       ],
@@ -471,6 +482,10 @@
         },
         "UserName": {
           "type": "string"
+        },
+        "LastPercent": {
+          "type": "number",
+          "format": "double"
         },
         "Shift": {
           "$ref": "#/definitions/Shift"

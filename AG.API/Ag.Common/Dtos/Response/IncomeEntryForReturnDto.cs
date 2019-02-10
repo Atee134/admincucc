@@ -17,9 +17,13 @@ namespace Ag.Common.Dtos.Response
 
         public string OperatorName { get; set; }
 
-        public string PerformerName { get; set; }
+        public double CurrentOperatorPercent { get; set; }
 
         public int PerformerId { get; set; }
+
+        public string PerformerName { get; set; }
+
+        public double CurrentPerformerPercent { get; set; }
 
         public double TotalSum { get; set; }
 

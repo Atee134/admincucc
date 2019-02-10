@@ -8,6 +8,8 @@ namespace Ag.Common.Dtos.Response
 
         public string UserName { get; set; }
 
+        public double LastPercent { get; set; }
+
         public Shift Shift { get; set; }
 
         public Role Role { get; set; }

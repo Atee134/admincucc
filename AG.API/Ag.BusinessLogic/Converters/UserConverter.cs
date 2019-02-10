@@ -24,6 +24,7 @@ namespace Ag.BusinessLogic.Converters
             {
                 Id = user.Id,
                 UserName = user.UserName,
+                LastPercent = user.LastPercent,
                 Role = user.Role,
                 Shift = user.Shift,
                 Color = user.Color

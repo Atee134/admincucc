@@ -101,6 +101,10 @@ namespace Ag.BusinessLogic.Services
             CalculateIncomeEntryTotals(incomeEntry, incomeChunks);
 
             _context.IncomeEntries.Add(incomeEntry);
+
+            UpdateUserLastPercent(op, operatorPercent);
+            UpdateUserLastPercent(performer, performerPercent);
+
             _context.SaveChanges();
 
             _logger.LogInformation($"Income successfully added to operator with ID: {userId}, model ID: {performer.Id}, income ID: {incomeEntry.Id}, income chunk IDs: {String.Join(", ",incomeEntry.IncomeChunks.Select(i => i.Id))}");
@@ -187,6 +191,9 @@ namespace Ag.BusinessLogic.Services
             incomeEntryEntity.AboveAverageThreshold = isIncomeEntryAboveAverageThreshold;
 
             CalculateIncomeEntryTotals(incomeEntryEntity, incomeEntryEntity.IncomeChunks.ToList());
+
+            UpdateUserLastPercent(incomeEntryEntity.Operator, operatorPercent);
+            UpdateUserLastPercent(incomeEntryEntity.Performer, performerPercent);
 
             _context.SaveChanges();
 
@@ -484,8 +491,10 @@ namespace Ag.BusinessLogic.Services
                 Color = incomeEntry.Performer?.Color ?? incomeEntry.Operator.Color,
                 OperatorId = incomeEntry.Operator.Id,
                 OperatorName = incomeEntry.Operator.UserName,
+                CurrentOperatorPercent = incomeEntry.CurrentOperatorPercent,
                 PerformerId = incomeEntry.Performer.Id,
                 PerformerName = incomeEntry.Performer.UserName,
+                CurrentPerformerPercent = incomeEntry.CurrentPerformerPercent,
                 TotalSum = incomeEntry.TotalSum,
                 TotalIncomeForStudio = incomeEntry.TotalIncomeForStudio,
                 TotalIncomeForOperator = incomeEntry.TotalIncomeForOperator,
@@ -514,6 +523,11 @@ namespace Ag.BusinessLogic.Services
             }
 
             return incomeChunksForReturn;
+        }
+
+        private void UpdateUserLastPercent(User user, double newPercent)
+        {
+            user.LastPercent = newPercent;
         }
     }
 }
