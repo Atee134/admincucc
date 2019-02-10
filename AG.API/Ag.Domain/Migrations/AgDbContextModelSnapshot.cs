@@ -48,6 +48,8 @@ namespace Ag.Domain.Migrations
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("AboveAverageThreshold");
+
                     b.Property<double>("CurrentOperatorPercent");
 
                     b.Property<double>("CurrentPerformerPercent");

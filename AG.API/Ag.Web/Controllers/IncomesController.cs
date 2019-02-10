@@ -36,7 +36,7 @@ namespace Ag.Web.Controllers
 
         [HttpGet("{incomeId}")]
         [Authorize(Roles = "Operator, Admin")]
-        public IActionResult GetIncome(int userId, int incomeId)
+        public IActionResult GetIncome(int userId, long incomeId)
         {
             // TODO userid is only good for validation, if the requesting user is not an admin, id must match with the logged in user id
             var incomeEntry = _incomeService.GetIncomeEntry(incomeId);
@@ -54,7 +54,7 @@ namespace Ag.Web.Controllers
 
         [HttpPut("{incomeId}")]
         [Authorize(Roles = "Operator, Admin")]
-        public IActionResult UpdateIncome(int userId, int incomeId, IncomeEntryUpdateDto incomeEntryDto)
+        public IActionResult UpdateIncome(int userId, long incomeId, IncomeEntryUpdateDto incomeEntryDto)
         {
             // TODO userid is only good for validation, if the requesting user is not an admin, id must match with the logged in user id
 
@@ -72,7 +72,7 @@ namespace Ag.Web.Controllers
 
         [HttpPut("{incomeId}/lock")]
         [Authorize("Admin")]
-        public IActionResult LockIncome(int userId, int incomeId)
+        public IActionResult LockIncome(int userId, long incomeId)
         {
             bool result = _incomeService.UpdateIncomeEntryLockedState(incomeId, true);
 
@@ -81,7 +81,7 @@ namespace Ag.Web.Controllers
 
         [HttpPut("{incomeId}/unlock")]
         [Authorize("Admin")]
-        public IActionResult UnlockIncome(int userId, int incomeId)
+        public IActionResult UnlockIncome(int userId, long incomeId)
         {
             bool result = _incomeService.UpdateIncomeEntryLockedState(incomeId, false);
 

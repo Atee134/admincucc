@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Ag.Common.Dtos.Response
 {
     public class IncomeListDataReturnDto
     {
-        public IncomeStatisticsDto OperatorStatistics { get; set; }
+        public IncomeStatisticsDto OperatorStatistics { get; set; } = new IncomeStatisticsDto();
 
-        public IncomeStatisticsDto PerformerStatistics { get; set; }
+        public IncomeStatisticsDto PerformerStatistics { get; set; } = new IncomeStatisticsDto();
 
-        public IncomeStatisticsDto StudioStatistics { get; set; }
+        public IncomeStatisticsDto StudioStatistics { get; set; } = new IncomeStatisticsDto();
 
-        public IncomeStatisticsDto TotalStatistics { get; set; }
+        public IncomeStatisticsDto TotalStatistics { get; set; } = new IncomeStatisticsDto();
 
-        public List<IncomeStatisticsSiteSumDto> SiteStatistics { get; set; }
+        public List<IncomeStatisticsSiteSumDto> SiteStatistics { get; set; } = new List<IncomeStatisticsSiteSumDto>();
 
-        public List<IncomeEntryForReturnDto> IncomeEntries { get; set; }
+        public List<IncomeEntryForReturnDto> IncomeEntries { get; set; } = new List<IncomeEntryForReturnDto>();
     }
 }

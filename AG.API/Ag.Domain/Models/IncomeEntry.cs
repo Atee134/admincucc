@@ -34,6 +34,9 @@ namespace Ag.Domain.Models
         public double CurrentPerformerPercent { get; set; }
 
         [Required]
+        public bool AboveAverageThreshold { get; set; }
+
+        [Required]
         public virtual User Operator { get; set; }
 
         [Required]

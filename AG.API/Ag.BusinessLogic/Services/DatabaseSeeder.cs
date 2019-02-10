@@ -70,11 +70,11 @@ namespace Ag.BusinessLogic.Services
 
             _userService.AddPerformer(1, 2);
 
-            for (int i = 0; i < TEST_INCOMES_COUNT; i++)
-            {
-                _incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
-                //_incomeService.AddIncomEntry(1, CreateConstantIncomeEntry(i));
-            }
+            //for (int i = 0; i < TEST_INCOMES_COUNT; i++)
+            //{
+            //    _incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
+            //    //_incomeService.AddIncomEntry(1, CreateConstantIncomeEntry(i));
+            //}
 
             _context.SaveChanges();
         }

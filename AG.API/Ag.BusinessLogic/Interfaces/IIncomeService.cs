@@ -5,11 +5,11 @@ namespace Ag.BusinessLogic.Interfaces
 {
     public interface IIncomeService
     {
-        IncomeEntryForReturnDto GetIncomeEntry(int incomeId);
+        IncomeEntryForReturnDto GetIncomeEntry(long incomeId);
         IncomeListDataReturnDto GetIncomeEntries(int? userId = null);
-        void ValidateAuthorityToUpdateIncome(int userId, int incomeId);
-        IncomeEntryForReturnDto UpdateIncomeEntry(int incomeEntryId, IncomeEntryUpdateDto incomeEntryDto);
+        void ValidateAuthorityToUpdateIncome(int userId, long incomeId);
+        IncomeEntryForReturnDto UpdateIncomeEntry(long incomeEntryId, IncomeEntryUpdateDto incomeEntryDto);
         IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto);
-        bool UpdateIncomeEntryLockedState(int incomeId, bool newLockState);
+        bool UpdateIncomeEntryLockedState(long incomeId, bool newLockState);
     }
 }

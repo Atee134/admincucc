@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ag.Common.Dtos.Response
+﻿namespace Ag.Common.Dtos.Response
 {
     public class IncomeStatisticsDto
     {

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ag.Domain.Migrations
 {
     [DbContext(typeof(AgDbContext))]
-    [Migration("20190209204245_Initial")]
+    [Migration("20190210185317_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,8 @@ namespace Ag.Domain.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("AboveAverageThreshold");
 
                     b.Property<double>("CurrentOperatorPercent");
 

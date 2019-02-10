@@ -43,13 +43,47 @@ namespace Ag.BusinessLogic.Services
             var performer = _joinTableHelperService.GetColleagues(userId).SingleOrDefault(c => c.Id == incomeEntryDto.PerformerId);
 
             if (performer == null) throw new AgUnfulfillableActionException($"Model with ID:{incomeEntryDto.PerformerId} is not assigned to Operator with ID:{userId}");
+
+            // above, they were above all along, no modification, income add as above
+            // above, they were below before, recalculation needed, income add as above
+            // below, they were below all along, no modification, income add as below
+            // below, they were above before, recalculation needed, income add as below
+
+            bool isIncomeEntryAboveAverageThreshold;
+            double operatorPercent;
+            double performerPercent;
+
+            var incomeEntries = GetIncomeEntriesOfPeriod(incomeEntryDto.Date, op.Id, performer.Id);
+            if (IsAverageAboveThreshold(incomeEntries, incomeEntryDto.IncomeChunks.Sum(i => i.Income)))
+            {
+                isIncomeEntryAboveAverageThreshold = true;
+                operatorPercent = op.MaxPercent;
+                performerPercent = performer.MaxPercent;
+
+                if (incomeEntries.Any(i => !i.AboveAverageThreshold))
+                {
+                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
+                }
+            }
+            else
+            {
+                isIncomeEntryAboveAverageThreshold = false;
+                operatorPercent = op.MinPercent;
+                performerPercent = performer.MinPercent;
+
+                if (incomeEntries.Any(i => i.AboveAverageThreshold))
+                {
+                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
+                }
+            }
+
             List<IncomeChunk> incomeChunks = new List<IncomeChunk>();
 
             foreach (var incomeChunkDto in incomeEntryDto.IncomeChunks)
             {
                 if (incomeChunkDto.Income > 0)
                 {
-                    incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, op.MinPercent, performer.MinPercent)); // TODO add logic for currentPercent to not use always minimum (above $251 logic)
+                    incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, operatorPercent, performerPercent));
                 }
             }
 
@@ -59,21 +93,22 @@ namespace Ag.BusinessLogic.Services
                 Operator = op,
                 Performer = performer,
                 IncomeChunks = incomeChunks,
-                TotalSum = incomeChunks.Sum(i => i.Sum),
-                TotalIncomeForStudio = incomeChunks.Sum(i => i.IncomeForStudio),
-                TotalIncomeForOperator = incomeChunks.Sum(i => i.IncomeForOperator),
-                TotalIncomeForPerformer = incomeChunks.Sum(i => i.IncomeForPerformer)
+                CurrentOperatorPercent = operatorPercent,
+                CurrentPerformerPercent = performerPercent,
+                AboveAverageThreshold = isIncomeEntryAboveAverageThreshold
             };
+
+            CalculateIncomeEntryTotals(incomeEntry, incomeChunks);
 
             _context.IncomeEntries.Add(incomeEntry);
             _context.SaveChanges();
 
             _logger.LogInformation($"Income successfully added to operator with ID: {userId}, model ID: {performer.Id}, income ID: {incomeEntry.Id}, income chunk IDs: {String.Join(", ",incomeEntry.IncomeChunks.Select(i => i.Id))}");
 
-            return ConvertIncomeEntryForReturnDto(incomeEntry);
+            return GetIncomeEntry(incomeEntry.Id);
         }
 
-        public void ValidateAuthorityToUpdateIncome(int userId, int incomeId)
+        public void ValidateAuthorityToUpdateIncome(int userId, long incomeId)
         {
             var incomeEntry = _context.IncomeEntries.Include(i => i.Operator).SingleOrDefault(i => i.Id == incomeId);
 
@@ -81,7 +116,7 @@ namespace Ag.BusinessLogic.Services
             if (incomeEntry.Locked) throw new AgUnfulfillableActionException("Income is locked, can not modify anymore");
         }
 
-        public IncomeEntryForReturnDto UpdateIncomeEntry(int incomeId, IncomeEntryUpdateDto incomeEntryDto)
+        public IncomeEntryForReturnDto UpdateIncomeEntry(long incomeId, IncomeEntryUpdateDto incomeEntryDto)
         {
             _logger.LogInformation($"Updating income with ID: {incomeId}");
 
@@ -127,10 +162,7 @@ namespace Ag.BusinessLogic.Services
                 AddIncomeChunksToIncomeEntry(incomeEntryEntity, newlyAddedIncomeChunks);
             }
 
-            incomeEntryEntity.TotalSum = incomeEntryEntity.IncomeChunks.Sum(c => c.Sum);
-            incomeEntryEntity.TotalIncomeForStudio = incomeEntryEntity.IncomeChunks.Sum(c => c.IncomeForStudio);
-            incomeEntryEntity.TotalIncomeForOperator = incomeEntryEntity.IncomeChunks.Sum(c => c.IncomeForOperator);
-            incomeEntryEntity.TotalIncomeForPerformer = incomeEntryEntity.IncomeChunks.Sum(c => c.IncomeForPerformer);
+            CalculateIncomeEntryTotals(incomeEntryEntity, incomeEntryEntity.IncomeChunks.ToList());
 
             _context.SaveChanges();
 
@@ -142,15 +174,15 @@ namespace Ag.BusinessLogic.Services
 
             _logger.LogInformation($"Updating income entry with ID: {incomeEntryEntity.Id} was successful.");
 
-            return ConvertIncomeEntryForReturnDto(incomeEntryEntity);
+            return GetIncomeEntry(incomeEntryEntity.Id);
         }
 
         private void UpdateIncomeChunksOfIncomeEntry(IncomeEntry incomeEntry, List<IncomeChunkUpdateDto> incomeChunkDtos)
         {
             _logger.LogInformation($"Updating income chunks of income entry with ID: {incomeEntry.Id}, income chunk IDs: {String.Join(", ", incomeChunkDtos.Select(i => i.Id.Value))}");
 
-            var operatorPercent = incomeEntry.Operator.MinPercent;
-            var performerPercent = incomeEntry.Performer.MinPercent;
+            var operatorPercent = GetProbableCurrentPercentOfUser(incomeEntry.Operator);
+            var performerPercent = GetProbableCurrentPercentOfUser(incomeEntry.Performer);
 
             foreach (IncomeChunkUpdateDto incomeChunkDto in incomeChunkDtos)
             {
@@ -158,19 +190,14 @@ namespace Ag.BusinessLogic.Services
 
                 if (incomeChunkEntity == null) throw new AgUnfulfillableActionException($"Income chunk with ID: {incomeChunkDto.Id} does not exist");
 
-                var incomes = CalculateIncomes(incomeChunkDto.Income.Value, operatorPercent, performerPercent);
-
-                incomeChunkEntity.Sum = incomeChunkDto.Income.Value;
-                incomeChunkEntity.IncomeForStudio = incomes.IncomeForStudio;
-                incomeChunkEntity.IncomeForOperator = incomes.IncomeForOperator;
-                incomeChunkEntity.IncomeForPerformer = incomes.IncomeForPerformer;
+                CalculateIncomeChunkTotals(incomeChunkEntity, incomeChunkDto.Income.Value, operatorPercent, performerPercent);
             }
         }
 
         private void AddIncomeChunksToIncomeEntry(IncomeEntry incomeEntry, List<IncomeChunkUpdateDto> incomeChunkDtos)
         {
-            var operatorPercent = incomeEntry.Operator.MinPercent;
-            var performerPercent = incomeEntry.Performer.MinPercent;
+            var operatorPercent = GetProbableCurrentPercentOfUser(incomeEntry.Operator);
+            var performerPercent = GetProbableCurrentPercentOfUser(incomeEntry.Performer);
 
             foreach (IncomeChunkUpdateDto incomeChunkDto in incomeChunkDtos)
             {
@@ -186,7 +213,7 @@ namespace Ag.BusinessLogic.Services
             }
         }
 
-        public bool UpdateIncomeEntryLockedState(int incomeId, bool newLockState)
+        public bool UpdateIncomeEntryLockedState(long incomeId, bool newLockState)
         {
             var incomeEntry = _context.IncomeEntries.FirstOrDefault(i => i.Id == incomeId);
 
@@ -202,42 +229,75 @@ namespace Ag.BusinessLogic.Services
             return true;
         }
 
-        private IncomeEntry GetIncomeEntriesOfPeriod(DateTime date)
+        private bool IsAverageAboveThreshold(List<IncomeEntry> incomeEntries, double incomeToBeAdded, long? updatedIncomeId = null)
         {
-            // TODO 
-            GetDatesOfPeriod(date); // TODO dont need all days, only start and end date
-            return null;
+            if (updatedIncomeId != null)
+            {
+                incomeEntries = incomeEntries.Where(i => i.Id != updatedIncomeId).ToList();
+            }
+
+            var oldEntries = incomeEntries.Select(i => i.TotalSum).ToList();
+            oldEntries.Add(incomeToBeAdded);
+
+            var average = oldEntries.Average();
+
+            return average >= 250; // TODO TODO TODO this shit should be in a config
         }
 
-        private List<DateTime> GetDatesOfPeriod(DateTime date) 
+        private List<IncomeEntry> GetIncomeEntriesOfPeriod(DateTime date, int operatorId, int performerId)
+        {
+            var bounds = GetBoundsOfPeriod(date);
+
+            var incomeEntries = _context.IncomeEntries
+                .Include(i => i.Operator)
+                .Include(i => i.Performer)
+                .Include(i => i.IncomeChunks)
+                .Where(i =>
+                    i.Operator.Id == operatorId &&
+                    i.Performer.Id == performerId &&
+                    i.Date.Date >= bounds.Start.Date &&
+                    i.Date.Date <= bounds.End.Date);
+
+            return incomeEntries.ToList();
+        }
+
+        private DateRange GetBoundsOfPeriod(DateTime dateInPeriod)
         {
             const int periodSeparatorDay = 15; // TODO is this 100% fix?
-            DateTime toAdd;
-            int count;
+            DateRange dateRange = new DateRange();
 
-            List<DateTime> availableDates = new List<DateTime>();
-
-            if (date.Day <= periodSeparatorDay)
+            if (dateInPeriod.Day <= periodSeparatorDay)
             {
-                toAdd = new DateTime(date.Year, date.Month, 1);
-                count = periodSeparatorDay;
+                dateRange.Start = new DateTime(dateInPeriod.Year, dateInPeriod.Month, 1);
+                dateRange.End = new DateTime(dateInPeriod.Year, dateInPeriod.Month, periodSeparatorDay);
             }
             else
             {
-                toAdd = new DateTime(date.Year, date.Month, periodSeparatorDay + 1);
-                count = DateTime.DaysInMonth(date.Year, date.Month) - periodSeparatorDay;
+                dateRange.Start = new DateTime(dateInPeriod.Year, dateInPeriod.Month, periodSeparatorDay + 1);
+                dateRange.End = new DateTime(dateInPeriod.Year, dateInPeriod.Month, DateTime.DaysInMonth(dateInPeriod.Year, dateInPeriod.Month));
             }
 
-            for (int i = 0; i < count; i++)
-            {
-                availableDates.Add(toAdd);
-                toAdd = toAdd.AddDays(1);
-            }
-
-            return availableDates;
+            return dateRange;
         }
 
-        public IncomeEntryForReturnDto GetIncomeEntry(int incomeId)
+        private void RecalculateIncomePercentsOfPeriod(List<IncomeEntry> incomeEntries, double newOperatorPercent, double newPerformerPercent, bool aboveAverageThreshold)
+        {
+            foreach (IncomeEntry incomeEntry in incomeEntries)
+            {
+                foreach (IncomeChunk incomeChunk in incomeEntry.IncomeChunks)
+                {
+                    CalculateIncomeChunkTotals(incomeChunk, incomeChunk.Sum, newOperatorPercent, newPerformerPercent);
+                }
+
+                CalculateIncomeEntryTotals(incomeEntry, incomeEntry.IncomeChunks.ToList());
+
+                incomeEntry.AboveAverageThreshold = aboveAverageThreshold;
+                incomeEntry.CurrentOperatorPercent = newOperatorPercent;
+                incomeEntry.CurrentPerformerPercent = newPerformerPercent;
+            }
+        }
+
+        public IncomeEntryForReturnDto GetIncomeEntry(long incomeId)
         {
             var incomeEntry = _context.IncomeEntries
                 .Include(i => i.Operator)
@@ -293,6 +353,8 @@ namespace Ag.BusinessLogic.Services
 
         private void CalculateStatisticsForIncomeListDataDto(IncomeListDataReturnDto incomeListDataDto)
         {
+            if (incomeListDataDto.IncomeEntries.Count == 0) return;
+
             incomeListDataDto.OperatorStatistics = new IncomeStatisticsDto
             {
                 Average = incomeListDataDto.IncomeEntries.Average(i => i.TotalIncomeForOperator),
@@ -341,32 +403,38 @@ namespace Ag.BusinessLogic.Services
             }
         }
 
-        private IncomeChunk CreateIncomeChunkFromDto(IncomeChunkAddDto incomeChunkDto, double operatorPercent, double performerPercent)
+        private void CalculateIncomeEntryTotals(IncomeEntry incomeEntry, List<IncomeChunk> incomeChunks)
         {
-            var incomes = CalculateIncomes(incomeChunkDto.Income, operatorPercent, performerPercent);
-
-            return new IncomeChunk()
-            {
-                Site = incomeChunkDto.Site,
-                Sum = incomeChunkDto.Income,
-                IncomeForStudio = incomes.IncomeForStudio, // TODO rename incomechunk entity owner to studio
-                IncomeForOperator = incomes.IncomeForOperator,
-                IncomeForPerformer = incomes.IncomeForPerformer
-            };
+            incomeEntry.TotalSum = incomeChunks.Sum(c => c.Sum);
+            incomeEntry.TotalIncomeForStudio = incomeChunks.Sum(c => c.IncomeForStudio);
+            incomeEntry.TotalIncomeForOperator = incomeChunks.Sum(c => c.IncomeForOperator);
+            incomeEntry.TotalIncomeForPerformer = incomeChunks.Sum(c => c.IncomeForPerformer);
         }
 
-        private IncomeRatio CalculateIncomes(double totalIncome, double operatorPercent, double performerPercent)
+        private void CalculateIncomeChunkTotals(IncomeChunk incomeChunk, double totalIncome, double operatorPercent, double performerPercent)
         {
-            double incomeForOperator = totalIncome * operatorPercent;
-            double incomeForPerformer = totalIncome * performerPercent;
-            double incomeForStudio = totalIncome - (incomeForOperator + incomeForPerformer);
+            incomeChunk.Sum = totalIncome;
+            incomeChunk.IncomeForOperator = totalIncome * operatorPercent;
+            incomeChunk.IncomeForPerformer = totalIncome * performerPercent;
+            incomeChunk.IncomeForStudio = totalIncome - (incomeChunk.IncomeForOperator + incomeChunk.IncomeForPerformer);
+        }
 
-            return new IncomeRatio
+        private double GetProbableCurrentPercentOfUser(User user)
+        {
+            if (user.MaxPercent == user.LastPercent) return user.MaxPercent;
+            return user.MinPercent;
+        }
+
+        private IncomeChunk CreateIncomeChunkFromDto(IncomeChunkAddDto incomeChunkDto, double operatorPercent, double performerPercent)
+        {
+            var incomeChunk = new IncomeChunk
             {
-                IncomeForOperator = incomeForOperator,
-                IncomeForPerformer = incomeForPerformer,
-                IncomeForStudio = incomeForStudio
+                Site = incomeChunkDto.Site
             };
+
+            CalculateIncomeChunkTotals(incomeChunk, incomeChunkDto.Income, operatorPercent, performerPercent);
+
+            return incomeChunk;
         }
 
         private IncomeEntryForReturnDto ConvertIncomeEntryForReturnDto(IncomeEntry incomeEntry)

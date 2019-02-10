@@ -5,8 +5,8 @@ namespace Ag.Common.Dtos.Request
 {
     public class IncomeChunkUpdateDto
     {
-        public int? Id { get; set; }
-
+        public long? Id { get; set; }
+        
         [Required]
         public Site? Site { get; set; }
 

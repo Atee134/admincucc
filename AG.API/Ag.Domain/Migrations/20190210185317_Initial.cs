@@ -51,6 +51,7 @@ namespace Ag.Domain.Migrations
                     TotalIncomeForPerformer = table.Column<double>(nullable: false),
                     CurrentOperatorPercent = table.Column<double>(nullable: false),
                     CurrentPerformerPercent = table.Column<double>(nullable: false),
+                    AboveAverageThreshold = table.Column<bool>(nullable: false),
                     OperatorId = table.Column<int>(nullable: false),
                     PerformerId = table.Column<int>(nullable: false)
                 },
