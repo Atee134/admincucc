@@ -105,7 +105,7 @@ namespace Ag.BusinessLogic.Services
 
             _logger.LogInformation($"Income successfully added to operator with ID: {userId}, model ID: {performer.Id}, income ID: {incomeEntry.Id}, income chunk IDs: {String.Join(", ",incomeEntry.IncomeChunks.Select(i => i.Id))}");
 
-            return GetIncomeEntry(incomeEntry.Id);
+            return ConvertIncomeEntryForReturnDto(incomeEntry);
         }
 
         public void ValidateAuthorityToUpdateIncome(int userId, long incomeId)
@@ -130,22 +130,42 @@ namespace Ag.BusinessLogic.Services
 
             if (incomeEntryDto.PerformerId != null && incomeEntryEntity.Performer.Id != incomeEntryDto.PerformerId)
             {
-                var colleagues = _joinTableHelperService.GetColleagues(incomeEntryEntity.Operator.Id);
-
-                var newPerformer = colleagues.FirstOrDefault(c => c.Id == incomeEntryDto.PerformerId);
-
-                if (newPerformer == null) throw new AgUnfulfillableActionException($"Performer is not assigned to the operator, can not update income entry.");
-
-                _logger.LogInformation($"Performer changed of income entry with ID: {incomeId}. Old performer ID: {incomeEntryEntity.Performer.Id}, new performer ID: {incomeEntryDto.PerformerId}");
-
-                incomeEntryEntity.Performer = newPerformer;
+                UpdatePerformerOfIncomeEntry(incomeEntryEntity, incomeEntryDto.PerformerId.Value);
             }
 
-            if (incomeEntryDto.Date != null && incomeEntryEntity.Date != incomeEntryDto.Date.Value)
+            if (incomeEntryDto.Date != null && incomeEntryEntity.Date != incomeEntryDto.Date.Value) // TODO add block to prevent cross period income updates
             {
                 _logger.LogInformation($"Date changed of income entry with ID: {incomeEntryEntity.Id}. Old date: {incomeEntryEntity.Date.ToString()}, new date: {incomeEntryDto.Date.ToString()}");
 
                 incomeEntryEntity.Date = incomeEntryDto.Date.Value;
+            }
+
+            bool isIncomeEntryAboveAverageThreshold;
+            double operatorPercent;
+            double performerPercent;
+
+            var incomeEntries = GetIncomeEntriesOfPeriod(incomeEntryDto.Date.Value, incomeEntryEntity.Operator.Id, incomeEntryEntity.Performer.Id, incomeId);
+            if (IsAverageAboveThreshold(incomeEntries, incomeEntryDto.IncomeChunks.Sum(i => i.Income.Value)))
+            {
+                isIncomeEntryAboveAverageThreshold = true;
+                operatorPercent = incomeEntryEntity.Operator.MaxPercent;
+                performerPercent = incomeEntryEntity.Performer.MaxPercent;
+
+                if (incomeEntries.Any(i => !i.AboveAverageThreshold))
+                {
+                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
+                }
+            }
+            else
+            {
+                isIncomeEntryAboveAverageThreshold = false;
+                operatorPercent = incomeEntryEntity.Operator.MinPercent;
+                performerPercent = incomeEntryEntity.Performer.MaxPercent;
+
+                if (incomeEntries.Any(i => i.AboveAverageThreshold))
+                {
+                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
+                }
             }
 
             var incomeChunksToUpdate = incomeEntryDto.IncomeChunks.Where(i => i.Id.HasValue).ToList();
@@ -162,6 +182,10 @@ namespace Ag.BusinessLogic.Services
                 AddIncomeChunksToIncomeEntry(incomeEntryEntity, newlyAddedIncomeChunks);
             }
 
+            incomeEntryEntity.CurrentOperatorPercent = operatorPercent;
+            incomeEntryEntity.CurrentPerformerPercent = performerPercent;
+            incomeEntryEntity.AboveAverageThreshold = isIncomeEntryAboveAverageThreshold;
+
             CalculateIncomeEntryTotals(incomeEntryEntity, incomeEntryEntity.IncomeChunks.ToList());
 
             _context.SaveChanges();
@@ -174,7 +198,20 @@ namespace Ag.BusinessLogic.Services
 
             _logger.LogInformation($"Updating income entry with ID: {incomeEntryEntity.Id} was successful.");
 
-            return GetIncomeEntry(incomeEntryEntity.Id);
+            return ConvertIncomeEntryForReturnDto(incomeEntryEntity);
+        }
+
+        private void UpdatePerformerOfIncomeEntry(IncomeEntry incomeEntry, int newPerformerId)
+        {
+            var colleagues = _joinTableHelperService.GetColleagues(incomeEntry.Operator.Id);
+
+            var newPerformer = colleagues.FirstOrDefault(c => c.Id == newPerformerId);
+
+            if (newPerformer == null) throw new AgUnfulfillableActionException($"Performer is not assigned to the operator, can not update income entry.");
+
+            _logger.LogInformation($"Performer changed of income entry with ID: {incomeEntry.Id}. Old performer ID: {incomeEntry.Performer.Id}, new performer ID: {newPerformerId}");
+
+            incomeEntry.Performer = newPerformer;
         }
 
         private void UpdateIncomeChunksOfIncomeEntry(IncomeEntry incomeEntry, List<IncomeChunkUpdateDto> incomeChunkDtos)
@@ -229,13 +266,8 @@ namespace Ag.BusinessLogic.Services
             return true;
         }
 
-        private bool IsAverageAboveThreshold(List<IncomeEntry> incomeEntries, double incomeToBeAdded, long? updatedIncomeId = null)
+        private bool IsAverageAboveThreshold(List<IncomeEntry> incomeEntries, double incomeToBeAdded)
         {
-            if (updatedIncomeId != null)
-            {
-                incomeEntries = incomeEntries.Where(i => i.Id != updatedIncomeId).ToList();
-            }
-
             var oldEntries = incomeEntries.Select(i => i.TotalSum).ToList();
             oldEntries.Add(incomeToBeAdded);
 
@@ -244,7 +276,7 @@ namespace Ag.BusinessLogic.Services
             return average >= 250; // TODO TODO TODO this shit should be in a config
         }
 
-        private List<IncomeEntry> GetIncomeEntriesOfPeriod(DateTime date, int operatorId, int performerId)
+        private List<IncomeEntry> GetIncomeEntriesOfPeriod(DateTime date, int operatorId, int performerId, long? updatedIncomeId = null)
         {
             var bounds = GetBoundsOfPeriod(date);
 
@@ -256,9 +288,14 @@ namespace Ag.BusinessLogic.Services
                     i.Operator.Id == operatorId &&
                     i.Performer.Id == performerId &&
                     i.Date.Date >= bounds.Start.Date &&
-                    i.Date.Date <= bounds.End.Date);
+                    i.Date.Date <= bounds.End.Date).ToList();
 
-            return incomeEntries.ToList();
+            if (updatedIncomeId != null)
+            {
+                incomeEntries = incomeEntries.Where(i => i.Id != updatedIncomeId).ToList();
+            }
+
+            return incomeEntries;
         }
 
         private DateRange GetBoundsOfPeriod(DateTime dateInPeriod)
