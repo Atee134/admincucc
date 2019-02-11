@@ -1,4 +1,5 @@
 ﻿using Ag.BusinessLogic.Interfaces;
+using Ag.BusinessLogic.Models;
 using Ag.Common.Dtos.Request;
 using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -20,17 +21,19 @@ namespace Ag.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetIncomes(int userId)
+        public IActionResult GetIncomes([FromQuery] IncomeListFilterParams filterParams)
         {
-            var incomeEntries = _incomeService.GetIncomeEntries(userId);
+            //TODO add validation, filterparams MUST contain userid, and userid must be equal to logged in user
+
+            var incomeEntries = _incomeService.GetIncomeEntries(filterParams);
             return Ok(incomeEntries);
         }
 
         [HttpGet("~/api/incomes")]
         [Authorize("Admin")]
-        public IActionResult GetAllIncomes()
+        public IActionResult GetAllIncomes([FromQuery] IncomeListFilterParams filterParams)
         {
-            var incomeEntries = _incomeService.GetIncomeEntries();
+            var incomeEntries = _incomeService.GetIncomeEntries(filterParams);
             return Ok(incomeEntries);
         }
 

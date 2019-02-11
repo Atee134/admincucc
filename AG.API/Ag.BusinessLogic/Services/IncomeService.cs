@@ -354,30 +354,61 @@ namespace Ag.BusinessLogic.Services
             return ConvertIncomeEntryForReturnDto(incomeEntry);
         }
 
-        public IncomeListDataReturnDto GetIncomeEntries(int? userId = null) // TODO later there will be a filter with ID as param passed in
+        public IncomeListDataReturnDto GetIncomeEntries(IncomeListFilterParams filterParams)
         {
-            _logger.LogInformation($"Getting income entries of user with ID: {userId}");
-
             List<IncomeEntryForReturnDto> incomeEntryDtos = new List<IncomeEntryForReturnDto>();
 
-            IOrderedQueryable<IncomeEntry> incomeEntryEntities; 
-
-            if (userId != null)
-            {
-                incomeEntryEntities = _context.IncomeEntries
+            IQueryable<IncomeEntry> incomeEntryEntities = _context.IncomeEntries
                 .Include(i => i.IncomeChunks)
                 .Include(i => i.Operator)
-                .Include(i => i.Performer)
-                .Where(i => i.Operator.Id == userId || i.Performer.Id == userId)
-                .OrderByDescending(i => i.Date);
-            }
-            else
+                .Include(i => i.Performer);
+
+            if (filterParams.UserId != null)
             {
-                incomeEntryEntities = _context.IncomeEntries
-                 .Include(i => i.IncomeChunks)
-                 .Include(i => i.Operator)
-                 .Include(i => i.Performer)
-                 .OrderByDescending(i => i.Date);
+                incomeEntryEntities = incomeEntryEntities.Where(i => i.Operator.Id == filterParams.UserId || i.Performer.Id == filterParams.UserId);
+            }
+            else if (!String.IsNullOrEmpty(filterParams.UserName))
+            {
+                string userNameParamLc = filterParams.UserName.ToLower();
+                incomeEntryEntities = incomeEntryEntities.Where(i => i.Operator.UserName.Contains(userNameParamLc) || i.Performer.UserName.ToLower().Contains(userNameParamLc));
+            }
+
+            if (filterParams.From == null) filterParams.From = DateTime.MinValue;
+            if (filterParams.To == null) filterParams.To = DateTime.MaxValue;
+            incomeEntryEntities = incomeEntryEntities.Where(i => i.Date >= filterParams.From.Value.Date && i.Date <= filterParams.To.Value.Date);
+
+            if (filterParams.HideLocked.HasValue && filterParams.HideLocked.Value)
+            {
+                incomeEntryEntities = incomeEntryEntities.Where(i => !i.Locked);
+            }
+
+            if (filterParams.MinTotal != null) incomeEntryEntities = incomeEntryEntities.Where(i => i.TotalSum >= filterParams.MinTotal);
+            if (filterParams.MaxTotal != null && filterParams.MaxTotal > 0) incomeEntryEntities = incomeEntryEntities.Where(i => i.TotalSum <= filterParams.MaxTotal);
+
+            switch (filterParams.OrderByColumn)
+            {
+                case ("total"):
+                    incomeEntryEntities = filterParams.OrderDescending ?
+                        incomeEntryEntities.OrderByDescending(i => i.TotalSum) :
+                        incomeEntryEntities.OrderBy(i => i.TotalSum);
+                    break;
+                case ("date"):
+                    incomeEntryEntities = filterParams.OrderDescending ?
+                        incomeEntryEntities.OrderByDescending(i => i.Date) :
+                        incomeEntryEntities.OrderBy(i => i.Date);
+                    break;
+                case ("operator"):
+                    incomeEntryEntities = filterParams.OrderDescending ?
+                        incomeEntryEntities.OrderByDescending(i => i.Operator.UserName) :
+                        incomeEntryEntities.OrderBy(i => i.Operator.UserName);
+                    break;
+                case ("performer"):
+                    incomeEntryEntities = filterParams.OrderDescending ?
+                        incomeEntryEntities.OrderByDescending(i => i.Performer.UserName) :
+                        incomeEntryEntities.OrderBy(i => i.Performer.UserName);
+                    break;
+                default:
+                    throw new AgUnfulfillableActionException($"Unknown column name at order by criterion: '{filterParams.OrderByColumn.ToLower()}'!");
             }
 
             foreach (var entry in incomeEntryEntities)

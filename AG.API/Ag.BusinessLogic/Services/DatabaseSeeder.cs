@@ -13,7 +13,7 @@ namespace Ag.BusinessLogic.Services
     public class DatabaseSeeder : IApplicationInitializer
     {
         private static readonly Random _random = new Random();
-        private const int TEST_INCOMES_COUNT = 10;
+        private const int TEST_INCOMES_COUNT = 1000;
         private readonly AgDbContext _context;
         private readonly IAuthService _authService;
         private readonly IIncomeService _incomeService;
@@ -70,11 +70,11 @@ namespace Ag.BusinessLogic.Services
 
             _userService.AddPerformer(1, 2);
 
-            //for (int i = 0; i < TEST_INCOMES_COUNT; i++)
-            //{
-            //    _incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
-            //    //_incomeService.AddIncomEntry(1, CreateConstantIncomeEntry(i));
-            //}
+            for (int i = 0; i < TEST_INCOMES_COUNT; i++)
+            {
+                _incomeService.AddIncomEntry(1, CreateRandomIncomeEntry(i));
+                //_incomeService.AddIncomEntry(1, CreateConstantIncomeEntry(i));
+            }
 
             _context.SaveChanges();
         }
