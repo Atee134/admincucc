@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { IncomeService } from 'src/app/_services/income.service';
 import { IncomeEntryForReturnDto,
   Site,
   IncomeChunkForReturnDto,
   Role,
   IncomeListDataReturnDto,
-  IncomeStatisticsSiteSumDto
+  IncomeStatisticsSiteSumDto,
+  IncomeListFilterParams
 } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
@@ -16,12 +17,12 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
   styleUrls: ['./income-list.component.css']
 })
 export class IncomeListComponent implements OnInit {
+  @Input() incomeFilters: IncomeListFilterParams;
   public incomeList: IncomeListDataReturnDto;
 
   constructor(private authService: AuthService, private alertify: AlertifyService, private incomeService: IncomeService) { }
 
   ngOnInit() {
-    this.getIncomeEntries();
   }
 
   public getIncomeEntries(): void {

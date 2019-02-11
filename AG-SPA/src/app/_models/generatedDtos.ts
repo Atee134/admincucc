@@ -1070,3 +1070,78 @@ export class ErrorDetails implements IErrorDetails {
 export interface IErrorDetails {
     messages?: string[] | null;
 }
+
+export class IncomeListFilterParams implements IIncomeListFilterParams {
+    userId?: number | null;
+    userName?: string | null;
+    from?: Date | null;
+    to?: Date | null;
+    hideLocked?: boolean | null;
+    minTotal?: number | null;
+    maxTotal?: number | null;
+    orderByColumn?: string | null;
+    orderDescending!: boolean;
+
+    constructor(data?: IIncomeListFilterParams) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.userId = data["UserId"] !== undefined ? data["UserId"] : <any>null;
+            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.from = data["From"] ? new Date(data["From"].toString()) : <any>null;
+            this.to = data["To"] ? new Date(data["To"].toString()) : <any>null;
+            this.hideLocked = data["HideLocked"] !== undefined ? data["HideLocked"] : <any>null;
+            this.minTotal = data["MinTotal"] !== undefined ? data["MinTotal"] : <any>null;
+            this.maxTotal = data["MaxTotal"] !== undefined ? data["MaxTotal"] : <any>null;
+            this.orderByColumn = data["OrderByColumn"] !== undefined ? data["OrderByColumn"] : <any>null;
+            this.orderDescending = data["OrderDescending"] !== undefined ? data["OrderDescending"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): IncomeListFilterParams {
+        data = typeof data === 'object' ? data : {};
+        let result = new IncomeListFilterParams();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["UserId"] = this.userId !== undefined ? this.userId : <any>null;
+        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["From"] = this.from ? this.from.toISOString() : <any>null;
+        data["To"] = this.to ? this.to.toISOString() : <any>null;
+        data["HideLocked"] = this.hideLocked !== undefined ? this.hideLocked : <any>null;
+        data["MinTotal"] = this.minTotal !== undefined ? this.minTotal : <any>null;
+        data["MaxTotal"] = this.maxTotal !== undefined ? this.maxTotal : <any>null;
+        data["OrderByColumn"] = this.orderByColumn !== undefined ? this.orderByColumn : <any>null;
+        data["OrderDescending"] = this.orderDescending !== undefined ? this.orderDescending : <any>null;
+        return data; 
+    }
+
+    clone(): IncomeListFilterParams {
+        const json = this.toJSON();
+        let result = new IncomeListFilterParams();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IIncomeListFilterParams {
+    userId?: number | null;
+    userName?: string | null;
+    from?: Date | null;
+    to?: Date | null;
+    hideLocked?: boolean | null;
+    minTotal?: number | null;
+    maxTotal?: number | null;
+    orderByColumn?: string | null;
+    orderDescending: boolean;
+}

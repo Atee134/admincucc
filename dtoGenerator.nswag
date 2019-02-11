@@ -23,7 +23,8 @@
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
         "Ag.Common.Enums.Site",
-        "Ag.Web.Models.ErrorDetails"
+        "Ag.Web.Models.ErrorDetails",
+        "Ag.BusinessLogic.Models.IncomeListFilterParams"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",
@@ -37,7 +38,8 @@
       "outputType": "Swagger2",
       "assemblyPaths": [
         "AG.API/Ag.Web/bin/Debug/netcoreapp2.1/Ag.Common.dll",
-        "AG.API/Ag.Web/bin/Debug/netcoreapp2.1/Ag.Web.dll"
+        "AG.API/Ag.Web/bin/Debug/netcoreapp2.1/Ag.Web.dll",
+        "AG.API/Ag.Web/bin/Debug/netcoreapp2.1/Ag.BusinessLogic.dll"
       ],
       "assemblyConfig": null,
       "referencePaths": [],

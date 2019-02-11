@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { IncomeAddComponent } from './income-add/income-add.component';
 import { RouterModule } from '@angular/router';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { IncomeFilterComponent } from './income-filter/income-filter.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     RouterModule,
     BsDatepickerModule.forRoot(),
   ],
-  declarations: [IncomeListComponent, IncomeEditComponent, IncomeAddComponent],
+  declarations: [IncomeListComponent, IncomeEditComponent, IncomeAddComponent, IncomeFilterComponent],
   exports: [
     IncomeListComponent,
     IncomeEditComponent
