@@ -11,7 +11,12 @@ export class IncomeFilterComponent implements OnInit {
   @ViewChild(IncomeListComponent) incomeList: IncomeListComponent;
   public incomeListReady = false;
 
-  public incomeFilters: IncomeListFilterParams;
+  public incomeFilters: IncomeListFilterParams = new IncomeListFilterParams({
+    hideLocked: false,
+    orderDescending: true,
+  });
+
+  public datePickerCollapsed = true;
 
   constructor() { }
 
@@ -21,9 +26,11 @@ export class IncomeFilterComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.incomeFilters.from = new Date();
+    this.incomeFilters.from .setDate(1);
   }
 
   onGetIncomes(): void {
-    this.incomeList.getIncomeEntries();
+    this.incomeList.getIncomeEntries(this.incomeFilters);
   }
 }

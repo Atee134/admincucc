@@ -17,7 +17,6 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
   styleUrls: ['./income-list.component.css']
 })
 export class IncomeListComponent implements OnInit {
-  @Input() incomeFilters: IncomeListFilterParams;
   public incomeList: IncomeListDataReturnDto;
 
   constructor(private authService: AuthService, private alertify: AlertifyService, private incomeService: IncomeService) { }
@@ -25,18 +24,12 @@ export class IncomeListComponent implements OnInit {
   ngOnInit() {
   }
 
-  public getIncomeEntries(): void {
-    // TODO add a filter component maybe which handles admin/operator lisings, as well as filters
-
-    if (this.authService.currentUser.role === Role.Admin) {
-      this.incomeService.getAllIncomeEntries().subscribe(resp => {
-        this.incomeList = resp;
-      });
-    } else {
-      this.incomeService.getIncomeEntries(this.authService.currentUser.id).subscribe(resp => {
-        this.incomeList  = resp;
-      });
-    }
+  public getIncomeEntries(incomeFilters: IncomeListFilterParams): void {
+    this.incomeService.getIncomeEntries(incomeFilters).subscribe(resp => {
+      this.incomeList = resp;
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 
   get uniqueSites(): Site[] {

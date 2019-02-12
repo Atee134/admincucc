@@ -5,6 +5,48 @@
     "version": "1.0.0"
   },
   "definitions": {
+    "IncomeListFilterParams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "HideLocked",
+        "OrderDescending"
+      ],
+      "properties": {
+        "UserId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "UserName": {
+          "type": "string"
+        },
+        "From": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "To": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "HideLocked": {
+          "type": "boolean"
+        },
+        "MinTotal": {
+          "type": "number",
+          "format": "double"
+        },
+        "MaxTotal": {
+          "type": "number",
+          "format": "double"
+        },
+        "OrderByColumn": {
+          "type": "string"
+        },
+        "OrderDescending": {
+          "type": "boolean"
+        }
+      }
+    },
     "IncomeChunkAddDto": {
       "type": "object",
       "additionalProperties": false,
@@ -526,47 +568,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "IncomeListFilterParams": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "OrderDescending"
-      ],
-      "properties": {
-        "UserId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "UserName": {
-          "type": "string"
-        },
-        "From": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "To": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "HideLocked": {
-          "type": "boolean"
-        },
-        "MinTotal": {
-          "type": "number",
-          "format": "double"
-        },
-        "MaxTotal": {
-          "type": "number",
-          "format": "double"
-        },
-        "OrderByColumn": {
-          "type": "string"
-        },
-        "OrderDescending": {
-          "type": "boolean"
         }
       }
     }

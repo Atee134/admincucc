@@ -12,7 +12,7 @@ namespace Ag.BusinessLogic.Models
 
         public DateTime? To { get; set; }
 
-        public bool? HideLocked { get; set; }
+        public bool HideLocked { get; set; }
 
         public double? MinTotal { get; set; }
 

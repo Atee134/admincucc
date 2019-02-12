@@ -1,6 +1,20 @@
-<p>
-  income-filter works!
-</p>
-<button class="btn btn-primary btn-lg" (click)="onGetIncomes()">GetIncomes</button>
+<div class="container">
+  <form (ngSubmit)="onGetIncomes()" #incomeEditForm="ngForm">
+    <div class="col-xs-12 col-12 col-md-4 form-group">
+        <input type="text"
+               class="form-control"
+               name="datum"
+               id="datum"
+               [bsConfig]="{ dateInputFormat: 'YYYY.MM', minMode : 'month' }"
+               #dp="bsDatepicker"
+               bsDatepicker
+               [(ngModel)]="incomeFilters.from"
+               required
+               >
+      </div>
+    
+    <button type="submit" class="btn btn-primary btn-lg">GetIncomes</button>
+  </form>
+</div>
 
-<app-income-list [incomeFilters]="incomeFilters" #incomeList></app-income-list>
+<app-income-list #incomeList></app-income-list>
