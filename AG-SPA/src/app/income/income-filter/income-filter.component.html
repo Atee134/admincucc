@@ -1,6 +1,6 @@
 <div class="container">
   <form (ngSubmit)="onGetIncomes()" #incomeEditForm="ngForm">
-    <div class="row">
+    <div class="row mt-2">
       <div class="col-lg-3 col-sm-4 form-group" *ngIf="isCurrentUser('Admin')">
         <label for="userName">Modell:</label>
         <input type="text" class="form-control" id="userName"
@@ -15,7 +15,7 @@
                [bsConfig]="{ dateInputFormat: 'YYYY.MM', minMode : 'month' }"
                #dp="bsDatepicker"
                bsDatepicker
-               [(ngModel)]="incomeFilters.from"
+               [(ngModel)]="incomeFilters.month"
                required
                autocomplete="off"
                >
@@ -23,17 +23,17 @@
       <div class="col-lg-2 col-sm-4 form-group">
         <label for="period">Periódus:</label>
           <div class="custom-control custom-radio">
-            <input type="radio" id="period1" name="period" class="custom-control-input" checked="">
+            <input type="radio" id="period1" name="period" class="custom-control-input" checked [value]="1" [(ngModel)]="incomeFilters.period">
             <label class="custom-control-label" for="period1">1</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" id="period2" name="period" class="custom-control-input">
+            <input type="radio" id="period2" name="period" class="custom-control-input" [value]="2" [(ngModel)]="incomeFilters.period">
             <label class="custom-control-label" for="period2">2</label>
           </div>
       </div>
       <div class="col-lg-2 col-sm-4 form-group" *ngIf="isCurrentUser('Admin')">
         <div class="mt-4 custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="hideLocked" checked="">
+          <input type="checkbox" class="custom-control-input" id="hideLocked" name="hideLocked" [(ngModel)]="incomeFilters.hideLocked">
           <label class="custom-control-label" for="hideLocked">Csak lezáratlan</label>
         </div>
       </div>

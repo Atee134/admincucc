@@ -28,6 +28,14 @@
           "type": "string",
           "format": "date-time"
         },
+        "Month": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Period": {
+          "type": "integer",
+          "format": "int32"
+        },
         "HideLocked": {
           "type": "boolean"
         },

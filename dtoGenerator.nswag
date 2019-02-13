@@ -4,6 +4,7 @@
   "swaggerGenerator": {
     "typesToSwagger": {
       "classNames": [
+        "Ag.BusinessLogic.Models.IncomeListFilterParams",
         "Ag.Common.Dtos.Request.IncomeChunkAddDto",
         "Ag.Common.Dtos.Request.IncomeChunkUpdateDto",
         "Ag.Common.Dtos.Request.IncomeEntryAddDto",
@@ -23,8 +24,7 @@
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
         "Ag.Common.Enums.Site",
-        "Ag.Web.Models.ErrorDetails",
-        "Ag.BusinessLogic.Models.IncomeListFilterParams"
+        "Ag.Web.Models.ErrorDetails"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",

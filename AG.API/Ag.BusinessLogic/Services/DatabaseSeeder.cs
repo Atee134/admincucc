@@ -13,7 +13,7 @@ namespace Ag.BusinessLogic.Services
     public class DatabaseSeeder : IApplicationInitializer
     {
         private static readonly Random _random = new Random();
-        private const int TEST_INCOMES_COUNT = 100;
+        private const int TEST_INCOMES_COUNT = 1000;
         private readonly AgDbContext _context;
         private readonly IAuthService _authService;
         private readonly IIncomeService _incomeService;

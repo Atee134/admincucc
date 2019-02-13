@@ -13,6 +13,8 @@ export class IncomeListFilterParams implements IIncomeListFilterParams {
     userName?: string | null;
     from?: Date | null;
     to?: Date | null;
+    month?: Date | null;
+    period?: number | null;
     hideLocked!: boolean;
     minTotal?: number | null;
     maxTotal?: number | null;
@@ -34,6 +36,8 @@ export class IncomeListFilterParams implements IIncomeListFilterParams {
             this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
             this.from = data["From"] ? new Date(data["From"].toString()) : <any>null;
             this.to = data["To"] ? new Date(data["To"].toString()) : <any>null;
+            this.month = data["Month"] ? new Date(data["Month"].toString()) : <any>null;
+            this.period = data["Period"] !== undefined ? data["Period"] : <any>null;
             this.hideLocked = data["HideLocked"] !== undefined ? data["HideLocked"] : <any>null;
             this.minTotal = data["MinTotal"] !== undefined ? data["MinTotal"] : <any>null;
             this.maxTotal = data["MaxTotal"] !== undefined ? data["MaxTotal"] : <any>null;
@@ -55,6 +59,8 @@ export class IncomeListFilterParams implements IIncomeListFilterParams {
         data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
         data["From"] = this.from ? this.from.toISOString() : <any>null;
         data["To"] = this.to ? this.to.toISOString() : <any>null;
+        data["Month"] = this.month ? this.month.toISOString() : <any>null;
+        data["Period"] = this.period !== undefined ? this.period : <any>null;
         data["HideLocked"] = this.hideLocked !== undefined ? this.hideLocked : <any>null;
         data["MinTotal"] = this.minTotal !== undefined ? this.minTotal : <any>null;
         data["MaxTotal"] = this.maxTotal !== undefined ? this.maxTotal : <any>null;
@@ -76,6 +82,8 @@ export interface IIncomeListFilterParams {
     userName?: string | null;
     from?: Date | null;
     to?: Date | null;
+    month?: Date | null;
+    period?: number | null;
     hideLocked: boolean;
     minTotal?: number | null;
     maxTotal?: number | null;
