@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IncomeListFilterParams } from 'src/app/_models/generatedDtos';
 import { IncomeListComponent } from '../income-list/income-list.component';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-income-filter',
@@ -18,7 +19,7 @@ export class IncomeFilterComponent implements OnInit {
 
   public datePickerCollapsed = true;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngAfterViewInit(): void {
@@ -27,10 +28,14 @@ export class IncomeFilterComponent implements OnInit {
 
   ngOnInit() {
     this.incomeFilters.from = new Date();
-    this.incomeFilters.from .setDate(1);
+    this.incomeFilters.from.setDate(1);
   }
 
   onGetIncomes(): void {
     this.incomeList.getIncomeEntries(this.incomeFilters);
+  }
+
+  public isCurrentUser(role: string): boolean {
+    return this.authService.currentUser.role.toLowerCase() === role.toLowerCase();
   }
 }

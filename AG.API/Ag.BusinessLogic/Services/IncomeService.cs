@@ -375,9 +375,20 @@ namespace Ag.BusinessLogic.Services
                     incomeEntryEntities = incomeEntryEntities.Where(i => i.Operator.UserName.Contains(userNameParamLc) || i.Performer.UserName.ToLower().Contains(userNameParamLc));
                 }
 
-                if (filterParams.From == null) filterParams.From = DateTime.MinValue;
-                if (filterParams.To == null) filterParams.To = DateTime.MaxValue;
-                incomeEntryEntities = incomeEntryEntities.Where(i => i.Date >= filterParams.From.Value.Date && i.Date <= filterParams.To.Value.Date);
+                if (filterParams.Month.HasValue && filterParams.Period.HasValue)
+                {
+                    bool firstPeriod = filterParams.Period.Value == 1;
+                    DateTime date = filterParams.Month.Value;
+                    filterParams.From = new DateTime(date.Year, date.Month, firstPeriod ? 1 : 16); // TODO period separator into config, dem numbers, bleck megic
+                    filterParams.To = firstPeriod ? new DateTime(date.Year, date.Month, 15) : new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+                }
+                else
+                {
+                    if (filterParams.From == null) filterParams.From = DateTime.MinValue;
+                    if (filterParams.To == null) filterParams.To = DateTime.MaxValue;
+                }
+
+                incomeEntryEntities = incomeEntryEntities.Where(i => i.Date.Date >= filterParams.From.Value.Date && i.Date.Date <= filterParams.To.Value.Date);
 
                 if (filterParams.HideLocked)
                 {
