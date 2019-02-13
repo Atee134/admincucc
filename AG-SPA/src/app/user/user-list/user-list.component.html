@@ -1,22 +1,28 @@
 <div class="container mt-3" *ngIf="users">
-  <table class="table table-bordered">
-      <thead>
-        <tr class="table-primary">
-          <th scope="col">User name</th>
-          <th class="text-center" scope="col">Role</th>
-          <th class="text-center" scope="col">Last percent</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users">
-          <td scope="row">{{user.userName}}</td>
-          <td class="text-right">{{user.role}}</td>
-          <td class="text-right">{{user.lastPercent | percent}}</td>
-          <td class="text-right">
-              <a routerLink="/users/{{user.id}}" class="btn btn-primary btn-sm text-center">Edit</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="row">
+    <div class="col-lg-3 col-sm-12"></div>
+    <div class="col-lg-6 col-sm-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr class="table-primary">
+            <th scope="col">Felhasználónév</th>
+            <th class="text-center" scope="col">Szerepkör</th>
+            <th class="text-center" scope="col">Utolsó százalék</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td scope="row">{{user.userName}}</td>
+            <td class="text-right">{{user.role}}</td>
+            <td class="text-right">{{user.lastPercent | percent}}</td>
+            <td class="text-right">
+              <a routerLink="/users/{{user.id}}" class="btn btn-primary btn-sm text-center">Szerkesztés</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-lg-3 col-sm-12"></div>
+  </div>
 </div>

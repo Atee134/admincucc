@@ -6,6 +6,7 @@
         <input type="text" class="form-control" id="userName"
                name="userName" [(ngModel)]="incomeFilters.userName">
      </div>
+     <div class="col-lg-3 col-sm-4" *ngIf="!isCurrentUser('Admin')"></div>
      <div class="col-lg-3 col-sm-4 form-group">
         <label for="date">Hónap:</label>
         <input type="text"
@@ -37,9 +38,10 @@
           <label class="custom-control-label" for="hideLocked">Csak lezáratlan</label>
         </div>
       </div>
+      <div class="col-lg-2 col-sm-4" *ngIf="!isCurrentUser('Admin')"></div>
 
       <div class="col-lg-2 col-sm-8">
-        <button type="submit" class="mt-3 float-right btn btn-primary btn-sm">GetIncomes</button>
+        <button type="submit" class="mt-3 float-right btn btn-primary btn-sm">Bevételek listázása</button>
       </div>
    </div>
   </form>

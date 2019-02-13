@@ -2,14 +2,14 @@
   <table class="table table-bordered">
       <thead>
         <tr class="table-primary">
-          <th scope="col">Date</th>
-          <th class="text-center" scope="col">Operátor neve</th>
-          <th class="text-center" scope="col">Modell neve</th>
+          <th scope="col">Dátum</th>
+          <th class="text-center" scope="col">Operátor</th>
+          <th class="text-center" scope="col">Modell</th>
           <th class="text-center" *ngFor="let site of uniqueSites" scope="col">{{site}}</th>
-          <th class="text-center" scope="col" *ngIf="!isCurrentUser('Performer')">Operator</th>
-          <th class="text-center" scope="col">Model</th>
+          <th class="text-center" scope="col" *ngIf="!isCurrentUser('Performer')">Operátor</th>
+          <th class="text-center" scope="col">Modell</th>
           <th class="text-center" scope="col" *ngIf="isCurrentUser('Admin')">Studio</th>
-          <th class="text-center" scope="col">Total</th>
+          <th class="text-center" scope="col">Összesen</th>
           <th *ngIf="isCurrentUser('Operator') || isCurrentUser('Admin')"></th>
           <th *ngIf="isCurrentUser('Admin')"></th>
         </tr>
@@ -25,11 +25,11 @@
           <td class="text-right" *ngIf="isCurrentUser('Admin')">{{entry.totalIncomeForStudio | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>
           <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="!isCurrentUser('Performer')">
-              <button class="btn btn-primary btn-lg mt-2 pt-0 mb-0 pb-0" routerLink="/incomes/{{entry.id}}" [disabled]="isCurrentUser('Operator') && entry.locked" title="{{(isCurrentUser('Operator') && entry.locked) ? 'Income is locked, can\'t modify it anymore' : ''}}">Edit</button>
+              <button class="btn btn-primary btn-lg mt-2 pt-0 mb-0 pb-0" routerLink="/incomes/{{entry.id}}" [disabled]="isCurrentUser('Operator') && entry.locked" title="{{(isCurrentUser('Operator') && entry.locked) ? 'Bevétel lezárva, nem szerkeszthető' : ''}}">Szerkeszt</button>
           </td>
           <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="isCurrentUser('Admin')">
-            <button class="btn btn-success btn-lg mt-2 pt-0 mb-0 pb-0" *ngIf="!entry.locked" (click)="onLock(entry.operatorId, entry.id)">Lock</button>
-            <button class="btn btn-danger btn-lg mt-2 pt-0 mb-0 pb-0" *ngIf="entry.locked" (click)="onUnlock(entry.operatorId, entry.id)">Unlock</button>
+            <button class="btn btn-success btn-lg mt-2 pt-0 mb-0 pb-0" *ngIf="!entry.locked" (click)="onLock(entry.operatorId, entry.id)">Lezárás</button>
+            <button class="btn btn-danger btn-lg mt-2 pt-0 mb-0 pb-0" *ngIf="entry.locked" (click)="onUnlock(entry.operatorId, entry.id)">Feloldás</button>
           </td>
         </tr>
         <tr class="table-primary">

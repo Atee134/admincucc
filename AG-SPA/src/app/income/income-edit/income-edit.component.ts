@@ -128,7 +128,7 @@ export class IncomeEditComponent implements OnInit {
       this.incomeEntryUpdateDto).subscribe(
         resp => {
            this.incomeEntry = resp;
-           this.alertify.success('Successfully saved income.');
+           this.alertify.success('Változtatások mentve.');
            this.incomeEntryUpdateDto = this.createIncomeEntryUpdateDto();
         }, error => {
            this.alertify.error(error);

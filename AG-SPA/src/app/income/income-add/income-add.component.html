@@ -1,8 +1,9 @@
 <div class="container" *ngIf="incomeEntry && colleagues">
-  <h1 class="text-center mt-4">Add income</h1>
+  <h1 class="text-center mt-4">Bevétel hozzáadás</h1>
   <hr>
   <div class="row">
-    <div class="col-lg-4 col-sm-12">
+      <div class="col-lg-2 col-sm-12"></div>
+      <div class="col-lg-3 col-sm-12">
       <form (ngSubmit)="onSubmit()" #incomeForm="ngForm">
 
         <div class="form-group">
@@ -35,27 +36,28 @@
             </select>
         </div>
 
-        <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeForm.form.valid" *ngIf="!responseEntry">Add</button>
+        <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeForm.form.valid" *ngIf="!responseEntry">Hozzáad</button>
       </form>
 
-      <button class="float-right btn btn-primary btn-lg" *ngIf="responseEntry" routerLink="/incomes/{{responseEntry.id}}">Edit</button>
-      <button class="float-right btn btn-info btn-lg mr-3" *ngIf="responseEntry" routerLink="/incomes">Back</button>
+      <button class="float-right btn btn-primary btn-lg" *ngIf="responseEntry" routerLink="/incomes/{{responseEntry.id}}">Szerkesztés</button>
+      <button class="float-right btn btn-info btn-lg mr-3" *ngIf="responseEntry" routerLink="/incomes">Vissza</button>
     
     </div>
-    <div class="col-lg-4"></div>
-    <div class="col-lg-4 col-sm-12" *ngIf="responseEntry">
+    <div class="col-lg-2 col-sm-12"></div>
+    <div class="col-lg-3 col-sm-12" *ngIf="responseEntry">
       <div class="form-group">
-        <label for="operator">Operator:</label>
-        <input type="text" class="form-control" name="operator" disabled [(ngModel)]="responseEntry.totalIncomeForOperator">
+        <label for="operator">Operátor:</label>
+        <input type="text" class="form-control" name="operator" disabled [value]="responseEntry.totalIncomeForOperator | currency">
       </div>
       <div class="form-group">
-        <label for="performer">Model:</label>
-        <input type="text" class="form-control" name="performer" disabled [(ngModel)]="responseEntry.totalIncomeForPerformer">
+        <label for="performer">Modell:</label>
+        <input type="text" class="form-control" name="performer" disabled [value]="responseEntry.totalIncomeForPerformer | currency">
       </div>
       <div class="form-group">
-        <label for="total">Total:</label>
-        <input type="text" class="form-control" name="total" disabled [(ngModel)]="responseEntry.totalSum">
+        <label for="total">Összesen:</label>
+        <input type="text" class="form-control" name="total" disabled [value]="responseEntry.totalSum | currency">
       </div>
     </div>
+    <div class="col-lg-2 col-sm-12"></div>
   </div>
 </div>

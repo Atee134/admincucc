@@ -72,7 +72,7 @@ export class IncomeAddComponent implements OnInit {
   public onSubmit(): void {
     this.incomeService.addIncomeEntry(this.authService.currentUser.id, this.incomeEntry).subscribe(resp => {
       this.responseEntry = resp;
-      this.alertify.success('Successfully added icome.');
+      this.alertify.success('Bevétel hozzáadva.');
     }, error => {
       this.alertify.error(error);
     });

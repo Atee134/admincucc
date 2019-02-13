@@ -17,7 +17,7 @@ export class NavComponent implements OnInit {
   }
 
   onLogout() {
-    this.alertify.message('Logged out');
+    this.alertify.message('Kijelentkezve');
     this.authService.logout();
   }
 

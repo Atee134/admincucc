@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     this.authService.login(this.user).subscribe(resp => {
-      this.alertify.success('Successfully logged in');
+      this.alertify.success('Sikeres bejelentkezés');
       this.router.navigate(['/incomes']);
     }, error => {
       this.alertify.error('Invalid username or password.');

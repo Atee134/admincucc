@@ -27,10 +27,10 @@ export class UserAddComponent implements OnInit {
 
   onSubmit() {
     if (this.user.password !== this.rePassword) {
-      this.alertify.error('The passwords don\'t match.');
+      this.alertify.error('A két jelszó különböző');
     } else {
       this.authService.register(this.user).subscribe(resp => {
-        this.alertify.success('User successfully added.');
+        this.alertify.success('Felhasználó hozzáadva.');
         this.router.navigate(['/users/' + resp.id]);
       }, error => {
         this.alertify.error(error);

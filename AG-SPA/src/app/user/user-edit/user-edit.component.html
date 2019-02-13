@@ -1,63 +1,67 @@
 <div class="container mt-3" *ngIf="users">
-  <form (ngSubmit)="onSubmit()" #editForm="ngForm">
-      <div class="form-group">
-        <label for="userName">Username</label>
-        <input type="text" class="form-control" id="userName"
-              required
-              [(ngModel)]="userForEdit.userName" name="userName">
-      </div>
-  
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password"  class="form-control" id="password"
-              [(ngModel)]="userForEdit.password" name="password">
-      </div>
-  
-      <div class="form-group">
-        <label for="repassword">Re-enter password</label>
-        <input type="password"  class="form-control" id="repassword"
-              [(ngModel)]="rePassword" name="repassword">
-      </div>
+  <div class="row">
+    <div class="col-lg-2 col-sm-12"></div>
+    <div class="col-lg-4 col-sm-12">
+      <form (ngSubmit)="onSubmit()" #editForm="ngForm">
+        <div class="form-group">
+          <label for="userName">Felhasználónév</label>
+          <input type="text" class="form-control" id="userName"
+                required
+                [(ngModel)]="userForEdit.userName" name="userName">
+        </div>
+    
+        <div class="form-group">
+          <label for="password">Jelszó</label>
+          <input type="password"  class="form-control" id="password"
+                [(ngModel)]="userForEdit.password" name="password">
+        </div>
+    
+        <div class="form-group">
+          <label for="repassword">Jelszó ismét</label>
+          <input type="password"  class="form-control" id="repassword"
+                [(ngModel)]="rePassword" name="repassword">
+        </div>
 
-      <div class="form-group">
-          <label for="minPercent">Minimum income percent:</label>
-          <input type="number"  class="form-control" id="minPercent"
-                 required
-                [(ngModel)]="userForEdit.minPercent" name="minPercent">
-      </div>
+        <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
+            <label for="minPercent">Minimum százalék</label>
+            <input type="number"  class="form-control" id="minPercent"
+                  required
+                  [(ngModel)]="userForEdit.minPercent" name="minPercent">
+        </div>
 
-      <div class="form-group">
-          <label for="maxPercent">Maximum income percent:</label>
-          <input type="number"  class="form-control" id="maxPercent"
-                 required
-                [(ngModel)]="userForEdit.maxPercent" name="maxPercent">
-      </div>
+        <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
+            <label for="maxPercent">Maximum százalék</label>
+            <input type="number"  class="form-control" id="maxPercent"
+                  required
+                  [(ngModel)]="userForEdit.maxPercent" name="maxPercent">
+        </div>
 
-      <div class="form-group">
-        <label for="color">Color:</label>
-        <select class="custom-select form-control" name="color" id="color" [(ngModel)]="userForEdit.color" required [ngStyle]="{'background-color': userForEdit.color}">
-          <option *ngFor="let color of colors" value="{{color}}" [ngStyle]="{'background-color': color}"></option>
-        </select>
-      </div>
+        <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
+          <label for="color">Szín</label>
+          <select class="custom-select form-control" name="color" id="color" [(ngModel)]="userForEdit.color" required [ngStyle]="{'background-color': userForEdit.color}">
+            <option *ngFor="let color of colors" value="{{color}}" [ngStyle]="{'background-color': color}"></option>
+          </select>
+        </div>
+        
+        <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
+          <label for="siteSelect">Honlapok</label>
+          <select multiple class="custom-select form-control" [(ngModel)]="userForEdit.sites" id="siteSelect" name="siteSelect" required>
+            <option *ngFor="let site of sites" value="{{site}}">{{site}}</option>
+          </select>
+        </div>
       
-      <div class="form-group">
-        <label for="siteSelect">User sites:</label>
-        <select multiple class="custom-select form-control" [(ngModel)]="userForEdit.sites" id="siteSelect" name="siteSelect" required>
-          <option *ngFor="let site of sites" value="{{site}}">{{site}}</option>
-        </select>
-      </div>
-     
-      <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!editForm.form.valid">Save</button>
-    </form>
-
-    <button class="float-right btn btn-info btn-lg mr-3" (click)="onCancel()">Cancel changes</button>
+        <button type="submit" class="float-right btn btn-primary btn-lg mb-3" [disabled]="!editForm.form.valid">Mentés</button>
+      </form>
+      <button class="float-right btn btn-info btn-lg mr-3 mb-3" (click)="onCancel()">Módosítások elvetése</button>
+    </div>
 
   <div class="col-lg-4 col-sm-12" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
+    <label for="siteSelect">Felhasználók egymáshoz rendelése</label>
     <table class="table table-bordered">
         <thead>
           <tr class="table-primary">
-            <th scope="col">User name</th>
-            <th class="text-center" scope="col">Role</th>
+            <th scope="col">Felhasználónév</th>
+            <th class="text-center" scope="col">Szerepkör</th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -66,11 +70,12 @@
             <td scope="row">{{user.userName}}</td>
             <td class="text-right">{{user.role}}</td>
             <td class="text-right">
-                <button *ngIf="isUserColleague(user)" (click)="removeLink(user.id)" class="btn btn-danger btn-sm text-center">Remove link</button>
-                <button *ngIf="!isUserColleague(user)" (click)="addLink(user.id)" class="btn btn-success btn-sm text-center">Add link</button>
+                <button *ngIf="isUserColleague(user)" (click)="removeLink(user.id)" class="btn btn-danger btn-sm text-center">Összerendelés törlése</button>
+                <button *ngIf="!isUserColleague(user)" (click)="addLink(user.id)" class="btn btn-success btn-sm text-center">Összerendelés</button>
             </td>
           </tr>
         </tbody>
     </table>
   </div>
+  <div class="col-lg-2 col-sm-12"></div>
 </div>

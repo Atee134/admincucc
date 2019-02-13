@@ -61,11 +61,11 @@ export class IncomeListComponent implements OnInit {
   public onLock(userId: number, incomeId: number): void {
     this.incomeService.lockIncomeEntry(userId, incomeId).subscribe(resp => {
       if (resp) {
-        this.alertify.success('Income locked');
+        this.alertify.success('Bevétel lezárva');
         const incomeEntry = this.incomeList.incomeEntries.find(i => i.id === incomeId);
         incomeEntry.locked = true;
       } else {
-        this.alertify.message('Income already locked');
+        this.alertify.message('Bevétel már le van zárva');
       }
     }, error => {
       this.alertify.error(error);
@@ -75,11 +75,11 @@ export class IncomeListComponent implements OnInit {
   public onUnlock(userId: number, incomeId: number): void {
     this.incomeService.unlockIncomeEntry(userId, incomeId).subscribe(resp => {
       if (resp) {
-        this.alertify.success('Income unlocked');
+        this.alertify.success('Bevétel feloldva');
         const incomeEntry = this.incomeList.incomeEntries.find(i => i.id === incomeId);
         incomeEntry.locked = false;
       } else {
-        this.alertify.message('Income already unlocked');
+        this.alertify.message('Bevétel már fel van oldva');
       }
     }, error => {
       this.alertify.error(error);

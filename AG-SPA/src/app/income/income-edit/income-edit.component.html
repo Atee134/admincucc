@@ -1,68 +1,70 @@
 <div class="container" *ngIf="incomeEntryUpdateDto && colleagues">
-        <h1 class="text-center mt-4">Edit income</h1>
-        <hr>
-        <div class="row">
-          <div class="col-lg-4 col-sm-12">
-            <form (ngSubmit)="onSubmit()" #incomeEditForm="ngForm">
-      
-              <div class="form-group">
-                <label for="datum">Dátum:</label>
-                <input type="text"
-                class="form-control"
-                name="datum"
-                id="datum"
-                bsDatepicker 
-                [bsConfig]="{ dateInputFormat: 'YYYY.MM.DD' }"
-                [(ngModel)]="incomeEntryUpdateDto.date"
-                required>
-              </div>
-      
-              <div *ngFor="let incomeChunk of incomeEntryUpdateDto.incomeChunks" class="form-group">
-                <label [for]="incomeChunk.site">{{incomeChunk.site}}</label>
-                <input type="number" placeholder="0.00" step=".1"
-                      class="form-control" [id]="incomeChunk.site"
-                      [(ngModel)]="incomeChunk.income" [name]="incomeChunk.site"
-                      #income="ngModel"
-                      >
-              </div>
-      
-              <div class="form-group">
-                  <label for="performer">Modell:</label>
-                  <select class="custom-select form-control" name="performer" id="performer" [(ngModel)]="incomeEntryUpdateDto.performerId" required>
-                    <option *ngFor="let colleague of colleagues" value="{{colleague.id}}">{{colleague.userName}}</option>
-                  </select>
-              </div>
-      
-              <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeEditForm.form.valid">Save</button>
-            </form>
-      
-          </div>
-          <div class="col-lg-4"></div>
-          <div class="col-lg-4 col-sm-12" *ngIf="incomeEntry">
-            <div class="form-group">
-              <label for="operator">Operator:</label>
-              <input type="text" class="form-control" name="operator" disabled [(ngModel)]="incomeEntry.totalIncomeForOperator">
-            </div>
-            <div class="form-group" *ngIf="isCurrentUser('Admin')">
-              <label for="operatorPercent">Operator percent:</label>
-              <input type="text" class="form-control" name="operatorPercent" disabled [(ngModel)]="incomeEntry.currentOperatorPercent">
-            </div>
-            <div class="form-group">
-              <label for="performer">Model:</label>
-              <input type="text" class="form-control" name="performer" disabled [(ngModel)]="incomeEntry.totalIncomeForPerformer">
-            </div>
-            <div class="form-group" *ngIf="isCurrentUser('Admin')">
-              <label for="performerPercent">Model percent:</label>
-              <input type="text" class="form-control" name="performerPercent" disabled [(ngModel)]="incomeEntry.currentPerformerPercent">
-            </div>
-            <div class="form-group">
-                    <label for="studio">Studio:</label>
-                    <input type="text" class="form-control" name="studio" disabled [(ngModel)]="incomeEntry.totalIncomeForStudio">
-            </div>
-            <div class="form-group">
-              <label for="total">Total:</label>
-              <input type="text" class="form-control" name="total" disabled [(ngModel)]="incomeEntry.totalSum">
-            </div>
-          </div>
+  <h1 class="text-center mt-4">Bevétel szerkesztés</h1>
+  <hr>
+  <div class="row">
+    <div class="col-lg-2 col-sm-12"></div>
+    <div class="col-lg-3 col-sm-12">
+      <form (ngSubmit)="onSubmit()" #incomeEditForm="ngForm">
+
+        <div class="form-group">
+          <label for="datum">Dátum:</label>
+          <input type="text"
+          class="form-control"
+          name="datum"
+          id="datum"
+          bsDatepicker 
+          [bsConfig]="{ dateInputFormat: 'YYYY.MM.DD' }"
+          [(ngModel)]="incomeEntryUpdateDto.date"
+          required>
         </div>
+
+        <div *ngFor="let incomeChunk of incomeEntryUpdateDto.incomeChunks" class="form-group">
+          <label [for]="incomeChunk.site">{{incomeChunk.site}}</label>
+          <input type="number" placeholder="0.00" step=".1"
+                class="form-control" [id]="incomeChunk.site"
+                [(ngModel)]="incomeChunk.income" [name]="incomeChunk.site"
+                #income="ngModel"
+                >
+        </div>
+
+        <div class="form-group">
+            <label for="performer">Modell:</label>
+            <select class="custom-select form-control" name="performer" id="performer" [(ngModel)]="incomeEntryUpdateDto.performerId" required>
+              <option *ngFor="let colleague of colleagues" value="{{colleague.id}}">{{colleague.userName}}</option>
+            </select>
+        </div>
+
+        <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!incomeEditForm.form.valid">Mentés</button>
+      </form>
+
+    </div>
+    <div class="col-lg-2 col-sm-12"></div>
+    <div class="col-lg-3 col-sm-12" *ngIf="incomeEntry">
+      <div class="form-group">
+        <label for="operator">Operátor:</label>
+        <input type="text" class="form-control" name="operator" disabled [value]="incomeEntry.totalIncomeForOperator | currency">
       </div>
+      <div class="form-group" *ngIf="isCurrentUser('Admin')">
+        <label for="operatorPercent">Operátor százaléka:</label>
+        <input type="text" class="form-control" name="operatorPercent" disabled [value]="incomeEntry.currentOperatorPercent | percent">
+      </div>
+      <div class="form-group">
+        <label for="performer">Modell:</label>
+        <input type="text" class="form-control" name="performer" disabled [value]="incomeEntry.totalIncomeForPerformer | currency">
+      </div>
+      <div class="form-group" *ngIf="isCurrentUser('Admin')">
+        <label for="performerPercent">Modell százaléka:</label>
+        <input type="text" class="form-control" name="performerPercent" disabled [value]="incomeEntry.currentPerformerPercent | percent">
+      </div>
+      <div class="form-group" *ngIf="isCurrentUser('Admin')">
+              <label for="studio">Studio:</label>
+              <input type="text" class="form-control" name="studio" disabled [value]="incomeEntry.totalIncomeForStudio | currency">
+      </div>
+      <div class="form-group">
+        <label for="total">Összesen:</label>
+        <input type="text" class="form-control" name="total" disabled [value]="incomeEntry.totalSum | currency">
+      </div>
+    </div>
+    <div class="col-lg-2 col-sm-12"></div>
+  </div>
+</div>

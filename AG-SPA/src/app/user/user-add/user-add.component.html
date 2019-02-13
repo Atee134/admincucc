@@ -1,35 +1,44 @@
 <div class="container">
-  <h1 class="text-center mt-4">Add user</h1>
+  <h1 class="text-center mt-4">Felhasználó hozzáadás</h1>
   <hr>
-  <form (ngSubmit)="onSubmit()" #registerFrom="ngForm">
-    <div class="form-group">
-      <label for="userName">Username</label>
-      <input type="text" class="form-control" id="userName"
-            required
-            [(ngModel)]="user.userName" name="userName">
-    </div>
+  <div class="row">
+    <div class="col-lg-3 col-sm-12"></div>
+    <div class="col-lg-6 col-sm-12">
+      <form (ngSubmit)="onSubmit()" #registerFrom="ngForm">
+        <div class="form-group">
+          <label for="userName">Felhasználónév</label>
+          <input type="text" class="form-control" id="userName"
+                required
+                [(ngModel)]="user.userName" name="userName"
+                autocomplete="off">
+        </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password"  class="form-control" id="password"
-             required
-            [(ngModel)]="user.password" name="password">
-    </div>
+        <div class="form-group">
+          <label for="password">Jelszó</label>
+          <input type="password"  class="form-control" id="password"
+                required
+                [(ngModel)]="user.password" name="password"
+                autocomplete="off">
+        </div>
 
-    <div class="form-group">
-      <label for="repassword">Re-enter password</label>
-      <input type="password"  class="form-control" id="repassword"
-             required
-            [(ngModel)]="rePassword" name="repassword">
-    </div>
+        <div class="form-group">
+          <label for="repassword">Jelszó ismét</label>
+          <input type="password"  class="form-control" id="repassword"
+                required
+                [(ngModel)]="rePassword" name="repassword"
+                autocomplete="off">
+        </div>
 
-    <div class="form-group">
-      <label for="roleSelect">User role:</label>
-      <select class="custom-select form-control" [(ngModel)]="user.role" id="roleSelect" name="roleSelect" required>
-        <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
-      </select>
-    </div>
+        <div class="form-group">
+          <label for="roleSelect">Szerepkör</label>
+          <select class="custom-select form-control" [(ngModel)]="user.role" id="roleSelect" name="roleSelect" required>
+            <option *ngFor="let role of roles" value="{{role}}">{{role}}</option>
+          </select>
+        </div>
 
-    <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!registerFrom.form.valid">Add</button>
-  </form>
+        <button type="submit" class="float-right btn btn-primary btn-lg" [disabled]="!registerFrom.form.valid">Hozzáadás</button>
+      </form>
+    </div>
+    <div class="col-lg-3 col-sm-12"></div>
+  </div>
 </div>

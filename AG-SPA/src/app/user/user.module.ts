@@ -11,7 +11,6 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     FormsModule,
     RouterModule,
-
   ],
   declarations: [UserAddComponent, UserEditComponent, UserListComponent]
 })
