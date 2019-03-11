@@ -81,10 +81,10 @@ namespace Ag.BusinessLogic.Services
 
             foreach (var incomeChunkDto in incomeEntryDto.IncomeChunks)
             {
-                if (incomeChunkDto.Income > 0)
-                {
+                //if (incomeChunkDto.Income > 0)
+                //{
                     incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, operatorPercent, performerPercent));
-                }
+                //}
             }
 
             var incomeEntry = new IncomeEntry()

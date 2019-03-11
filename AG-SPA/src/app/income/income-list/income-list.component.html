@@ -16,13 +16,13 @@
       </thead>
       <tbody>
         <tr *ngFor="let entry of incomeList.incomeEntries">
-          <td scope="row">{{entry.date | date:'yyyy-MM-dd'}}</td>
+          <td scope="row" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.date | date:'yyyy.MM.dd'}}</td>
           <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.operatorName}}</td>
           <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.performerName}}</td>
-          <td class="text-right" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum || 0 | currency}}</td>
-          <td class="text-right" *ngIf="!isCurrentUser('Performer')">{{entry.totalIncomeForOperator | currency}}</td>
-          <td class="text-right">{{entry.totalIncomeForPerformer | currency}}</td>
-          <td class="text-right" *ngIf="isCurrentUser('Admin')">{{entry.totalIncomeForStudio | currency}}</td>
+          <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum | currency}}</td>
+          <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}" *ngIf="!isCurrentUser('Performer')">{{entry.totalIncomeForOperator | currency}}</td>
+          <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.totalIncomeForPerformer | currency}}</td>
+          <td class="text-right income-studio" *ngIf="isCurrentUser('Admin')">{{entry.totalIncomeForStudio | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>
           <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="!isCurrentUser('Performer')">
               <button class="btn btn-primary btn-lg mt-2 pt-0 mb-0 pb-0" routerLink="/incomes/{{entry.id}}" [disabled]="isCurrentUser('Operator') && entry.locked" title="{{(isCurrentUser('Operator') && entry.locked) ? 'Bevétel lezárva, nem szerkeszthető' : ''}}">Szerkeszt</button>

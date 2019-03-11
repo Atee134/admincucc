@@ -1,0 +1,9 @@
+.income-studio {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid white;
+}
+
+table, th, td {
+    border: 2px solid black;
+}
