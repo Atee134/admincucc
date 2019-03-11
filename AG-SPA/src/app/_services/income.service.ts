@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Site, IncomeEntryForReturnDto, IncomeEntryAddDto, IncomeListDataReturnDto, IncomeEntryUpdateDto, IncomeListFilterParams, Role } from '../_models/generatedDtos';
+import { Site,
+  IncomeEntryForReturnDto,
+  IncomeEntryAddDto,
+  IncomeListDataReturnDto,
+  IncomeEntryUpdateDto,
+  IncomeListFilterParams,
+  Role } from '../_models/generatedDtos';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';

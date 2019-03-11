@@ -369,7 +369,7 @@ namespace Ag.BusinessLogic.Services
                 {
                     incomeEntryEntities = incomeEntryEntities.Where(i => i.Operator.Id == filterParams.UserId || i.Performer.Id == filterParams.UserId);
                 }
-                else if (!String.IsNullOrEmpty(filterParams.UserName))
+                if (!String.IsNullOrEmpty(filterParams.UserName))
                 {
                     string userNameParamLc = filterParams.UserName.ToLower();
                     incomeEntryEntities = incomeEntryEntities.Where(i => i.Operator.UserName.Contains(userNameParamLc) || i.Performer.UserName.ToLower().Contains(userNameParamLc));

@@ -1,7 +1,7 @@
 <div class="container">
   <form (ngSubmit)="onGetIncomes()" #incomeEditForm="ngForm">
     <div class="row mt-2">
-      <div class="col-lg-3 col-sm-4 form-group" *ngIf="isCurrentUser('Admin')">
+      <div class="col-lg-3 col-sm-4 form-group" *ngIf="isCurrentUser('Admin') || isCurrentUser('Operator')">
         <label for="userName">Modell:</label>
         <input type="text" class="form-control" id="userName"
                name="userName" [(ngModel)]="incomeFilters.userName">
