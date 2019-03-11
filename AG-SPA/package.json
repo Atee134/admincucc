@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod --output-path ./../AG.API/Ag.Web/wwwroot --base-href ./index.html",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

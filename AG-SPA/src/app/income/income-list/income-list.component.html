@@ -6,8 +6,9 @@
           <th class="text-center" scope="col">Operátor</th>
           <th class="text-center" scope="col">Modell</th>
           <th class="text-center" *ngFor="let site of uniqueSites" scope="col">{{site}}</th>
-          <th class="text-center" scope="col" *ngIf="!isCurrentUser('Performer')">Operátor</th>
-          <th class="text-center" scope="col">Modell</th>
+          <th class="text-center" scope="col" *ngIf="isCurrentUser('Admin')">Operátor</th>
+          <th class="text-center" scope="col" *ngIf="isCurrentUser('Admin')">Modell</th>
+          <th class="text-center" scope="col" *ngIf="isCurrentUser('Operator') || isCurrentUser('Performer')">Bevétel</th>
           <th class="text-center" scope="col" *ngIf="isCurrentUser('Admin')">Studio</th>
           <th class="text-center" scope="col">Összesen</th>
           <th *ngIf="isCurrentUser('Operator') || isCurrentUser('Admin')"></th>
@@ -21,7 +22,7 @@
           <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.performerName}}</td>
           <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}" *ngFor="let site of uniqueSites">{{getIncomeChunk(entry, site)?.sum | currency}}</td>
           <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}" *ngIf="!isCurrentUser('Performer')">{{entry.totalIncomeForOperator | currency}}</td>
-          <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}">{{entry.totalIncomeForPerformer | currency}}</td>
+          <td class="text-right" [ngStyle]="{'background-color': isCurrentUser('Admin') ? entry.color : ''}" *ngIf="!isCurrentUser('Operator')">{{entry.totalIncomeForPerformer | currency}}</td>
           <td class="text-right income-studio" *ngIf="isCurrentUser('Admin')">{{entry.totalIncomeForStudio | currency}}</td>
           <td class="text-right table-info">{{entry.totalSum | currency}}</td>
           <td class="text-right mt-0 pt-0 mb-0 pb-0" *ngIf="!isCurrentUser('Performer')">

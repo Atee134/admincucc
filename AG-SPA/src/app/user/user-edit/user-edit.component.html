@@ -13,13 +13,13 @@
         <div class="form-group">
           <label for="password">Jelszó</label>
           <input type="password"  class="form-control" id="password"
-                [(ngModel)]="userForEdit.password" name="password">
+                [(ngModel)]="userForEdit.password" name="password" autocomplete="off">
         </div>
     
         <div class="form-group">
           <label for="repassword">Jelszó ismét</label>
           <input type="password"  class="form-control" id="repassword"
-                [(ngModel)]="rePassword" name="repassword">
+                [(ngModel)]="rePassword" name="repassword" autocomplete="off">
         </div>
 
         <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">

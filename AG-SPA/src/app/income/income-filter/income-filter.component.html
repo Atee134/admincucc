@@ -6,7 +6,7 @@
         <input type="text" class="form-control" id="userName"
                name="userName" [(ngModel)]="incomeFilters.userName">
      </div>
-     <div class="col-lg-3 col-sm-4" *ngIf="!isCurrentUser('Admin')"></div>
+     <div class="col-lg-3 col-sm-4" *ngIf="isCurrentUser('Performer')"></div>
      <div class="col-lg-3 col-sm-4 form-group">
         <label for="date">Hónap:</label>
         <input type="text"

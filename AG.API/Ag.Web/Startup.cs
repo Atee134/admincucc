@@ -95,6 +95,8 @@ namespace Ag.Web
             }
             //   app.UseHttpsRedirection();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.ConfigureExceptionHandler(logger);
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
