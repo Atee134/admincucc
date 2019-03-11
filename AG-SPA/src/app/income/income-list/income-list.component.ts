@@ -61,7 +61,6 @@ export class IncomeListComponent implements OnInit {
   public onLock(userId: number, incomeId: number): void {
     this.incomeService.lockIncomeEntry(userId, incomeId).subscribe(resp => {
       if (resp) {
-        this.alertify.success('Bevétel lezárva');
         const incomeEntry = this.incomeList.incomeEntries.find(i => i.id === incomeId);
         incomeEntry.locked = true;
       } else {
@@ -75,7 +74,6 @@ export class IncomeListComponent implements OnInit {
   public onUnlock(userId: number, incomeId: number): void {
     this.incomeService.unlockIncomeEntry(userId, incomeId).subscribe(resp => {
       if (resp) {
-        this.alertify.success('Bevétel feloldva');
         const incomeEntry = this.incomeList.incomeEntries.find(i => i.id === incomeId);
         incomeEntry.locked = false;
       } else {
