@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UserForListDto } from 'src/app/_models/generatedDtos';
+import { UserForListDto, Role } from 'src/app/_models/generatedDtos';
 import { UserService } from 'src/app/_services/user.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-user-list',
@@ -11,7 +12,7 @@ import { AlertifyService } from 'src/app/_services/alertify.service';
 export class UserListComponent implements OnInit {
   public users: UserForListDto[];
 
-  constructor(private userService: UserService, private alertify: AlertifyService) {
+  constructor(private userService: UserService, private alertify: AlertifyService, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -20,5 +21,17 @@ export class UserListComponent implements OnInit {
     }, error => {
       this.alertify.error(error);
     });
+  }
+
+  public isUserEditable(user: UserForListDto) {
+    if (user.role === Role.Admin && user.id !== this.authService.currentUser.id) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public isCurrentUser(user: UserForListDto) {
+    return user.id === this.authService.currentUser.id;
   }
 }

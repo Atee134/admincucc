@@ -52,6 +52,8 @@ namespace Ag.Web.Controllers
         [Authorize("Admin")]
         public IActionResult UpdateUser(UserForEditDto userDto)
         {
+            // TODO validate if the userDto role is admin, only the logged in user id == userdto.id can edit that
+
             _userService.UpdateUser(userDto);
 
             return NoContent();

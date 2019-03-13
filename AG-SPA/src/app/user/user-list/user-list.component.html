@@ -12,12 +12,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users">
+          <tr *ngFor="let user of users" [ngClass]="{'table-info': isCurrentUser(user)}">
             <td scope="row">{{user.userName}}</td>
             <td class="text-right">{{user.role}}</td>
             <td class="text-right">{{user.lastPercent | percent}}</td>
             <td class="text-right">
-              <a routerLink="/users/{{user.id}}" class="btn btn-primary btn-sm text-center">Szerkesztés</a>
+              <button routerLink="/users/{{user.id}}" class="btn btn-primary btn-sm text-center" [disabled]="!isUserEditable(user)">Szerkesztés</button>
             </td>
           </tr>
         </tbody>
