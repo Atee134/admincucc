@@ -4,13 +4,6 @@
     <div class="col-lg-4 col-sm-12">
       <form (ngSubmit)="onSubmit()" #editForm="ngForm">
         <div class="form-group">
-          <label for="userName">Felhasználónév</label>
-          <input type="text" class="form-control" id="userName"
-                required
-                [(ngModel)]="userForEdit.userName" name="userName">
-        </div>
-    
-        <div class="form-group">
           <label for="password">Jelszó</label>
           <input type="password"  class="form-control" id="password"
                 [(ngModel)]="userForEdit.password" name="password" autocomplete="off">

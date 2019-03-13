@@ -59,7 +59,6 @@ namespace Ag.BusinessLogic.Services
 
             if (user == null) throw new AgUnfulfillableActionException($"User with ID: {userDto.Id} does not exist.");
 
-            user.UserName = userDto.UserName;
             user.Color = userDto.Color;
             user.Sites = String.Join(';', userDto.Sites);
             user.MinPercent = userDto.MinPercent.Value;

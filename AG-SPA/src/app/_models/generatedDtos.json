@@ -167,7 +167,6 @@
       "additionalProperties": false,
       "required": [
         "Id",
-        "UserName",
         "Color",
         "Sites",
         "MinPercent",
@@ -177,10 +176,6 @@
         "Id": {
           "type": "integer",
           "format": "int32"
-        },
-        "UserName": {
-          "type": "string",
-          "minLength": 1
         },
         "Password": {
           "type": "string",

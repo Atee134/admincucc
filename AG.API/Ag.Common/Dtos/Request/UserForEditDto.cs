@@ -9,9 +9,6 @@ namespace Ag.Common.Dtos.Request
         [Required]
         public int? Id { get; set; }
 
-        [Required]
-        public string UserName { get; set; }
-
         [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
         public string Password { get; set; }
 

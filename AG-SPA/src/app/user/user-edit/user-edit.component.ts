@@ -51,7 +51,6 @@ export class UserEditComponent implements OnInit {
   private initUserForEditDto(userDetail: UserDetailDto): void {
     this.userForEdit = new UserForEditDto({
       id: userDetail.id,
-      userName: userDetail.userName,
       password: undefined,
       color: userDetail.color,
       sites: userDetail.sites,
@@ -83,9 +82,6 @@ export class UserEditComponent implements OnInit {
 
       if (this.userForEdit.password) {
         changedProperties += ('</br>- Jelszó');
-      }
-      if (this.userForEdit.userName !== this.user.userName) {
-        changedProperties += ('</br>- Felhasználónév');
       }
       if (this.userForEdit.color !== this.user.color) {
         changedProperties += ('</br>- Szín');

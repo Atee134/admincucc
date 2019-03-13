@@ -318,7 +318,6 @@ export interface IIncomeEntryUpdateDto {
 
 export class UserForEditDto implements IUserForEditDto {
     id!: number;
-    userName!: string;
     password?: string | null;
     color!: string;
     sites!: Site[];
@@ -340,7 +339,6 @@ export class UserForEditDto implements IUserForEditDto {
     init(data?: any) {
         if (data) {
             this.id = data["Id"] !== undefined ? data["Id"] : <any>null;
-            this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
             this.password = data["Password"] !== undefined ? data["Password"] : <any>null;
             this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
             if (data["Sites"] && data["Sites"].constructor === Array) {
@@ -363,7 +361,6 @@ export class UserForEditDto implements IUserForEditDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["Id"] = this.id !== undefined ? this.id : <any>null;
-        data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
         data["Password"] = this.password !== undefined ? this.password : <any>null;
         data["Color"] = this.color !== undefined ? this.color : <any>null;
         if (this.sites && this.sites.constructor === Array) {
@@ -386,7 +383,6 @@ export class UserForEditDto implements IUserForEditDto {
 
 export interface IUserForEditDto {
     id: number;
-    userName: string;
     password?: string | null;
     color: string;
     sites: Site[];
