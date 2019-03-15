@@ -35,14 +35,14 @@ export function tokenGetter() {
       IncomeModule,
       UserModule,
       ButtonsModule.forRoot(),
-      AppRoutingModule,
       JwtModule.forRoot({
          config: {
             tokenGetter: tokenGetter,
             whitelistedDomains: [environment.domainUrl],
             blacklistedRoutes: [environment.domainUrl + 'api/auth/login']
          }
-      })
+      }),
+      AppRoutingModule
    ],
    providers: [
       WorkdayResolver,
