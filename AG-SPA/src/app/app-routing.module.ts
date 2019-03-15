@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
-import { IncomeAddComponent } from './income/income-add/income-add.component';
 import { UserAddComponent } from './user/user-add/user-add.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
@@ -11,6 +10,7 @@ import { IncomeFilterComponent } from './income/income-filter/income-filter.comp
 import { AuthGuardService } from './_guards/auth-guard.service';
 import { Role } from './_models/generatedDtos';
 import { RoleGuardService } from './_guards/role-guard.service';
+import { IncomeAddUserselectorComponent } from './income/income-add-userselector/income-add-userselector.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,7 +20,7 @@ const routes: Routes = [
     path: 'incomes/add',
     canActivate: [AuthGuardService, RoleGuardService],
     data: { allowedRoles: [Role.Admin, Role.Operator]},
-    component: IncomeAddComponent
+    component: IncomeAddUserselectorComponent
   },
   {
     path: 'incomes/:id',

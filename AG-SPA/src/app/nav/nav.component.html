@@ -20,7 +20,7 @@
       </li>
     </ul> -->
 
-    <ul class="navbar-nav" *ngIf="isCurrentUser('Operator')">
+    <ul class="navbar-nav" *ngIf="isCurrentUser('Operator') || isCurrentUser('Admin')">
         <li class="nav-item" routerLinkActive="active">
           <button class="nav-item btn btn-primary btn-sm mr-3" [routerLink]="['/incomes/add']">Bevétel hozzáadása</button>
         </li>
