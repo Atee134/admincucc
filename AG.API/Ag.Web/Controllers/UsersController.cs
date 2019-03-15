@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
 using Ag.BusinessLogic.Interfaces;
 using Ag.BusinessLogic.Interfaces.Converters;
 using Ag.Common.Dtos.Request;
 using Ag.Common.Enums;
 using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ag.Web.Controllers
@@ -52,7 +49,10 @@ namespace Ag.Web.Controllers
         [Authorize("Admin")]
         public IActionResult UpdateUser(UserForEditDto userDto)
         {
-            // TODO validate if the userDto role is admin, only the logged in user id == userdto.id can edit that
+            if (_userService.GetUser(userDto.Id.Value).Role == Role.Admin && userDto.Id.Value != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
 
             _userService.UpdateUser(userDto);
 
@@ -63,6 +63,11 @@ namespace Ag.Web.Controllers
         [HttpGet("{userId}/colleagues")]
         public IActionResult GetColleagues(int userId)
         {
+            if (!User.IsInRole("Admin") && userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+            {
+                return Unauthorized();
+            }
+
             var colleagues = _joinTableHelperService.GetColleagues(userId).Select(c => _userConverter.ConvertToUserToListDto(c)).ToList();
 
             return Ok(colleagues);
@@ -73,7 +78,6 @@ namespace Ag.Web.Controllers
         public IActionResult AddPerformer(int operatorId, int performerId)
         {
             _userService.AddPerformer(operatorId, performerId);
-            //TODO handle exception? or let the middleware handle it and return the relevant info
 
             return NoContent();
         }
@@ -83,7 +87,6 @@ namespace Ag.Web.Controllers
         public IActionResult RemovePerformer(int operatorId, int performerId)
         {
             _userService.RemovePerformer(operatorId, performerId);
-            //TODO handle exception? or let the middleware handle it and return the relevant info
 
             return NoContent();
         }
