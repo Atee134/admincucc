@@ -3,9 +3,6 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
-import { WorkdayComponent } from './workday/workday.component';
-import { WorkdayResolver } from './_resolvers/workday.resolver';
-import { AvailableDatesResolver } from './_resolvers/availabledates.resolver';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -25,7 +22,6 @@ export function tokenGetter() {
    declarations: [
       AppComponent,
       NavComponent,
-      WorkdayComponent,
       LoginComponent
    ],
    imports: [
@@ -45,8 +41,6 @@ export function tokenGetter() {
       AppRoutingModule
    ],
    providers: [
-      WorkdayResolver,
-      AvailableDatesResolver,
       ErrorInterceptorProvider
    ],
    bootstrap: [
