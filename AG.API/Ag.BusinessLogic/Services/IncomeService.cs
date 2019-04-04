@@ -164,7 +164,7 @@ namespace Ag.BusinessLogic.Services
             {
                 isIncomeEntryAboveAverageThreshold = false;
                 operatorPercent = incomeEntryEntity.Operator.MinPercent;
-                performerPercent = incomeEntryEntity.Performer.MaxPercent;
+                performerPercent = incomeEntryEntity.Performer.MinPercent;
 
                 if (incomeEntries.Any(i => i.AboveAverageThreshold))
                 {
@@ -179,7 +179,7 @@ namespace Ag.BusinessLogic.Services
                 UpdateIncomeChunksOfIncomeEntry(incomeEntryEntity, incomeChunksToUpdate);
             }
 
-            var newlyAddedIncomeChunks = incomeEntryDto.IncomeChunks.Where(i => !i.Id.HasValue && i.Income > 0).ToList();
+            var newlyAddedIncomeChunks = incomeEntryDto.IncomeChunks.Where(i => !i.Id.HasValue).ToList();
 
             if (newlyAddedIncomeChunks.Count > 0)
             {

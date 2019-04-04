@@ -2,11 +2,14 @@
 using Ag.Common.Dtos.Request;
 using Ag.Common.Enums;
 using Ag.Domain;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ag.BusinessLogic.Services
 {
@@ -18,24 +21,60 @@ namespace Ag.BusinessLogic.Services
         private readonly IAuthService _authService;
         private readonly IIncomeService _incomeService;
         private readonly IUserService _userService;
+        private readonly IHostingEnvironment environment;
+        private readonly ILogger<DatabaseSeeder> logger;
 
-        public DatabaseSeeder(AgDbContext context, IAuthService authService, IIncomeService incomeService, IUserService userService)
+        public DatabaseSeeder(AgDbContext context, IAuthService authService, IIncomeService incomeService, IUserService userService, IHostingEnvironment environment, ILogger<DatabaseSeeder> logger)
         {
             _context = context;
             _authService = authService;
             _incomeService = incomeService;
             _userService = userService;
+            this.environment = environment;
+            this.logger = logger;
         }
 
         public void Start()
         {
             bool dbExists = (_context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator).Exists();
 
+            logger.LogInformation("Migrating database...");
             _context.Database.Migrate();
 
-            if (!dbExists) // TODO add check whether we're in dev or prod
+            if (!dbExists && environment.IsDevelopment())
             {
                 SeedTestData();
+            }
+
+            InsertInitialAdmin();
+        }
+
+        private void InsertInitialAdmin()
+        {
+            logger.LogInformation("Checking for initial admin add..");
+            if (_context.Users.Count() == 0)
+            {
+                logger.LogInformation("No users in the database, adding a default admin...");
+
+                _authService.Register(new UserForRegisterDto()
+                {
+                    UserName = "dontusethisadmin",
+                    Password = "qay789edc123",
+                    Role = Role.Admin
+                });
+
+                _authService.Register(new UserForRegisterDto()
+                {
+                    UserName = "Solo",
+                    Password = "qay789edc123",
+                    Role = Role.Performer
+                });
+
+                _context.SaveChanges();
+            }
+            else
+            {
+                logger.LogInformation("There is already user in the database, no action taken.");
             }
         }
 
