@@ -27,7 +27,6 @@ namespace Ag.BusinessLogic.Converters
                 LastPercent = user.LastPercent,
                 Role = user.Role,
                 Shift = user.Shift,
-                Color = user.Color
             };
         }
 
@@ -42,7 +41,6 @@ namespace Ag.BusinessLogic.Converters
                 UserName = user.UserName,
                 Shift = user.Shift,
                 Role = user.Role,
-                Color = user.Color,
                 Sites = sites,
                 Colleagues = colleagues,
                 MinPercent = user.MinPercent,

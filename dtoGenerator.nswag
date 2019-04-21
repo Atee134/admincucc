@@ -24,7 +24,9 @@
         "Ag.Common.Enums.Role",
         "Ag.Common.Enums.Shift",
         "Ag.Common.Enums.Site",
-        "Ag.Web.Models.ErrorDetails"
+        "Ag.Web.Models.ErrorDetails",
+        "Ag.Common.Dtos.Request.ColorChangeDto",
+        "Ag.Common.Dtos.Response.ColorDto"
       ],
       "defaultPropertyNameHandling": "Default",
       "defaultReferenceTypeNullHandling": "Null",

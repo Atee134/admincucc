@@ -534,7 +534,6 @@ namespace Ag.BusinessLogic.Services
                 Id = incomeEntry.Id,
                 Date = incomeEntry.Date,
                 Locked = incomeEntry.Locked,
-                Color = incomeEntry.Performer?.Color ?? incomeEntry.Operator.Color,
                 OperatorId = incomeEntry.Operator.Id,
                 OperatorName = incomeEntry.Operator.UserName,
                 CurrentOperatorPercent = incomeEntry.CurrentOperatorPercent,

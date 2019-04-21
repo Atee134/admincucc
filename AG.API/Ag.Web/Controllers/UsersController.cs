@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Ag.BusinessLogic.Interfaces;
 using Ag.BusinessLogic.Interfaces.Converters;
 using Ag.Common.Dtos.Request;
+using Ag.Common.Dtos.Response;
 using Ag.Common.Enums;
 using Ag.Web.Filters;
 using Microsoft.AspNetCore.Authorization;
@@ -89,6 +90,24 @@ namespace Ag.Web.Controllers
             _userService.RemovePerformer(operatorId, performerId);
 
             return NoContent();
+        }
+
+        [Authorize("Admin")]
+        [HttpPost("color")]
+        public IActionResult UpdateColor(ColorChangeDto colorChangeDto)
+        {
+            _userService.ChangeColor(colorChangeDto.OperatorId, colorChangeDto.PerformerId, colorChangeDto.Color);
+
+            return NoContent();
+        }
+
+        [Authorize("Admin")]
+        [HttpGet("{operatorId}/performer/{performerId}/color")]
+        public IActionResult Getcolor(int operatorId, int performerId)
+        {
+            var color = _userService.GetColor(operatorId, performerId);
+
+            return Ok(new ColorDto { Color = color });
         }
     }
 }

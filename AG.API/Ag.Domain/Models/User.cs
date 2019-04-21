@@ -34,9 +34,6 @@ namespace Ag.Domain.Models
         [Required]
         public Shift Shift { get; set; }
 
-        [Required]
-        public string Color { get; set; }
-
         /// <summary>
         /// DEPRECATED
         /// </summary>

@@ -17,6 +17,7 @@ export class UserEditComponent implements OnInit {
   public rePassword: string;
   public users: UserForListDto[];
   public colors: string[];
+  public userColors: string[];
   public sites: Site[];
 
   constructor(
@@ -54,7 +55,6 @@ export class UserEditComponent implements OnInit {
     this.userForEdit = new UserForEditDto({
       id: userDetail.id,
       password: undefined,
-      color: userDetail.color,
       sites: userDetail.sites,
       minPercent: userDetail.minPercent,
       maxPercent: userDetail.maxPercent
@@ -96,9 +96,6 @@ export class UserEditComponent implements OnInit {
       if (this.userForEdit.password) {
         changedProperties += ('</br>- Jelszó');
       }
-      if (this.userForEdit.color !== this.user.color) {
-        changedProperties += ('</br>- Szín');
-      }
       if (this.userForEdit.sites !== this.user.sites) {
         changedProperties += ('</br>- Honlapok');
       }
@@ -136,6 +133,7 @@ export class UserEditComponent implements OnInit {
     this.userService.getUsers(role)
     .subscribe(users => {
       this.users = users;
+      this.initUserColors(users);
     }, error => {
       this.alertify.error(error);
     });
@@ -147,6 +145,34 @@ export class UserEditComponent implements OnInit {
     }
 
     return false;
+  }
+
+  public initUserColors(users: UserForListDto[]) {
+    this.userColors = [];
+
+    for (const user of users) {
+      if (this.isUserColleague(user)) {
+        this.userService.getColor(this.user.id, user.id).subscribe(color => {
+          this.userColors[user.id] = color.color;
+        });
+      }
+    }
+  }
+
+  public isCurrentColor(user: UserForListDto, color: string) {
+    return this.userColors[user.id] === color;
+  }
+
+  public onUserColorChanged(event: any, user: UserForListDto) {
+    const newColor = event.currentTarget.value;
+
+    this.userColors[user.id] = newColor;
+
+    this.userService.changeColor(this.user.id, user.id, newColor).subscribe(resp => {
+      this.alertify.success('colorchanged');
+    }, error => {
+      this.alertify.error(error);
+    });
   }
 
   // TODO after refactor this shit can be cleaned, as IDs will be interchangeable

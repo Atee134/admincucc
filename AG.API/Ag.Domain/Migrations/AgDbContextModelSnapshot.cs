@@ -86,9 +86,6 @@ namespace Ag.Domain.Migrations
 
                     b.Property<int?>("ColleagueId");
 
-                    b.Property<string>("Color")
-                        .IsRequired();
-
                     b.Property<double>("LastPercent");
 
                     b.Property<double>("MaxPercent");
@@ -123,6 +120,9 @@ namespace Ag.Domain.Migrations
                     b.Property<int>("FromId");
 
                     b.Property<int>("ToId");
+
+                    b.Property<string>("Color")
+                        .IsRequired();
 
                     b.HasKey("FromId", "ToId");
 

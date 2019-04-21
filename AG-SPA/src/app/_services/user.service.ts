@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { UserForListDto, UserDetailDto, Role, UserForEditDto } from '../_models/generatedDtos';
+import { UserForListDto, UserDetailDto, Role, UserForEditDto, ColorDto, ColorChangeDto } from '../_models/generatedDtos';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 
@@ -41,5 +41,13 @@ export class UserService {
 
   removePerformer(operatorId: number, performerId: number) {
     return this.http.delete(`${this.baseUrl}users/${operatorId}/performer/${performerId}`, {});
+  }
+
+  getColor(operatorId: number, performerId: number): Observable<ColorDto> {
+    return this.http.get<ColorDto>(`${this.baseUrl}users/${operatorId}/performer/${performerId}/color`);
+  }
+
+  changeColor(operatorId: number, performerId: number, color: string) {
+    return this.http.post(`${this.baseUrl}users/color`, new ColorChangeDto({operatorId, performerId, color}));
   }
 }

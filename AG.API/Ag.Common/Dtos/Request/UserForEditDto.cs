@@ -13,9 +13,6 @@ namespace Ag.Common.Dtos.Request
         public string Password { get; set; }
 
         [Required]
-        public string Color { get; set; }
-
-        [Required]
         public List<Site> Sites { get; set; }
 
         [Required]

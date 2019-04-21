@@ -92,8 +92,6 @@ namespace Ag.BusinessLogic.Services
 
         private User CreateUserFromDto(UserForRegisterDto userDto)
         {
-            var defaultColor = _configuration.GetSection("UserColors:0").Value;
-
             return new User
             {
                 UserName = userDto.UserName,
@@ -102,7 +100,6 @@ namespace Ag.BusinessLogic.Services
                 MaxPercent = 0.3,
                 Shift = Common.Enums.Shift.Morning,
                 Sites = String.Empty,
-                Color = defaultColor
             };
         }
 

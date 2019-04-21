@@ -6,6 +6,7 @@ using Ag.Common.Dtos.Response;
 using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,15 @@ namespace Ag.BusinessLogic.Services
         private readonly ILogger<UserService> _logger;
         private readonly IUserConverter _userConverter;
         private readonly IAuthService _authService;
+        private readonly IConfiguration _configuration;
 
-        public UserService(AgDbContext context, ILogger<UserService> logger, IUserConverter userConverter, IAuthService authService)
+        public UserService(AgDbContext context, ILogger<UserService> logger, IUserConverter userConverter, IAuthService authService, IConfiguration configuration)
         {
             _context = context;
             _logger = logger;
             _userConverter = userConverter;
             _authService = authService;
+            _configuration = configuration;
         }
 
         public UserDetailDto GetUser(int userId)
@@ -59,7 +62,6 @@ namespace Ag.BusinessLogic.Services
 
             if (user == null) throw new AgUnfulfillableActionException($"User with ID: {userDto.Id} does not exist.");
 
-            user.Color = userDto.Color;
             user.Sites = String.Join(';', userDto.Sites);
             user.MinPercent = userDto.MinPercent.Value;
             user.MaxPercent = userDto.MaxPercent.Value;
@@ -90,12 +92,15 @@ namespace Ag.BusinessLogic.Services
 
             if (performer == null) throw new AgUnfulfillableActionException($"Model with ID: {performerId} does not exist.");
 
+            var defaultColor = _configuration.GetSection("UserColors:0").Value;
+
             UserRelation relation = new UserRelation
             {
                 FromId = operatorId,
                 ToId = performerId,
                 UserFrom = op,
-                UserTo = performer
+                UserTo = performer,
+                Color = defaultColor
             };
 
             _context.UserRelations.Add(relation);
@@ -124,6 +129,32 @@ namespace Ag.BusinessLogic.Services
             _context.SaveChanges();
 
             _logger.LogInformation($"Successfully removed relation between users, Operator ID: {operatorId}, Model ID: {performerId}");
+        }
+
+        public void ChangeColor(int operatorId, int performerId, string color)
+        {
+            if (operatorId == performerId) throw new AgUnfulfillableActionException("Can not change color. Both ID's are the same.");
+
+            var userRelation = _context.UserRelations.SingleOrDefault(r => (r.FromId == operatorId && r.ToId == performerId) || (r.FromId == performerId && r.ToId == operatorId));
+
+            if (userRelation == null) throw new AgUnfulfillableActionException("Performer is not assigned to Operator");
+
+            _logger.LogInformation($"Changing color of connection between operator ID: {operatorId}, performer ID: {performerId}, old color: {userRelation.Color}, new color: {color}");
+
+            userRelation.Color = color;
+
+            _context.SaveChanges();
+        }
+
+        public string GetColor(int operatorId, int performerId)
+        {
+            if (operatorId == performerId) throw new AgUnfulfillableActionException("Can not get color. Both ID's are the same.");
+
+            var userRelation = _context.UserRelations.SingleOrDefault(r => (r.FromId == operatorId && r.ToId == performerId) || (r.FromId == performerId && r.ToId == operatorId));
+
+            if (userRelation == null) throw new AgUnfulfillableActionException("Performer is not assigned to Operator");
+
+            return userRelation.Color;
         }
     }
 }

@@ -15,5 +15,8 @@ namespace Ag.Domain.Models
 
         [Required]
         public virtual User UserTo { get; set; }
+
+        [Required]
+        public string Color { get; set; }
     }
 }

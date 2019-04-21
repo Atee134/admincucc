@@ -167,7 +167,6 @@
       "additionalProperties": false,
       "required": [
         "Id",
-        "Color",
         "Sites",
         "MinPercent",
         "MaxPercent"
@@ -180,10 +179,6 @@
         "Password": {
           "type": "string",
           "minLength": 6
-        },
-        "Color": {
-          "type": "string",
-          "minLength": 1
         },
         "Sites": {
           "type": "array",
@@ -472,9 +467,6 @@
         "Role": {
           "$ref": "#/definitions/Role"
         },
-        "Color": {
-          "type": "string"
-        },
         "Sites": {
           "type": "array",
           "items": {
@@ -571,6 +563,38 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "ColorChangeDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "OperatorId",
+        "PerformerId",
+        "Color"
+      ],
+      "properties": {
+        "OperatorId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "PerformerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Color": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "ColorDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Color": {
+          "type": "string"
         }
       }
     }

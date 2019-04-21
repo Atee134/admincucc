@@ -2,7 +2,7 @@
   <h2 class="text-center">{{user.userName}} profilja</h2>
   <hr>
   <div class="row">
-    <div class="col-lg-2 col-sm-12"></div>
+    <div class="col-lg-1 col-sm-12"></div>
     <div class="col-lg-4 col-sm-12">
       
       <form (ngSubmit)="onSubmit()" #editForm="ngForm">
@@ -32,12 +32,7 @@
                   [(ngModel)]="userForEdit.maxPercent" name="maxPercent">
         </div>
 
-        <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
-          <label for="color">Szín</label>
-          <select class="custom-select form-control" name="color" id="color" [(ngModel)]="userForEdit.color" required [ngStyle]="{'background-color': userForEdit.color}">
-            <option *ngFor="let color of colors" value="{{color}}" [ngStyle]="{'background-color': color}"></option>
-          </select>
-        </div>
+   
         
         <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
           <label for="siteSelect">Honlapok</label>
@@ -47,10 +42,6 @@
               {{site}}
             </li>
           </ul>
-         
-          <!-- <select multiple class="custom-select form-control" [(ngModel)]="userForEdit.sites" id="siteSelect" name="siteSelect" required>
-            <option *ngFor="let site of sites" value="{{site}}">{{site}}</option>
-          </select> -->
         </div>
       
         <button type="submit" class="float-right btn btn-primary btn-lg mb-3" [disabled]="!editForm.form.valid">Mentés</button>
@@ -58,7 +49,7 @@
       <button class="float-right btn btn-info btn-lg mr-3 mb-3" (click)="onCancel()">Módosítások elvetése</button>
     </div>
 
-  <div class="col-lg-4 col-sm-12" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
+  <div class="col-lg-7 col-sm-12" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
     <label for="siteSelect">Felhasználók egymáshoz rendelése</label>
     <table class="table table-bordered">
         <thead>
@@ -66,6 +57,7 @@
             <th scope="col">Felhasználónév</th>
             <th class="text-center" scope="col">Szerepkör</th>
             <th scope="col"></th>
+            <th scope="col">Szín</th>
           </tr>
         </thead>
         <tbody>
@@ -76,9 +68,15 @@
                 <button *ngIf="isUserColleague(user)" (click)="removeLink(user.id)" class="btn btn-danger btn-sm text-center">Összerendelés törlése</button>
                 <button *ngIf="!isUserColleague(user)" (click)="addLink(user.id)" class="btn btn-success btn-sm text-center">Összerendelés</button>
             </td>
+            <td>
+              <div class="form-group" *ngIf="isUserColleague(user)">
+                <select class="custom-select form-control" name="color" id="color" required (change)="onUserColorChanged($event, user)" [ngStyle]="{'background-color': userColors[user.id]}">
+                  <option *ngFor="let color of colors" value="{{color}}" selected="isCurrentColor(user, color)" [ngStyle]="{'background-color': color}"></option>
+                </select>
+              </div>
+            </td>
           </tr>
         </tbody>
     </table>
   </div>
-  <div class="col-lg-2 col-sm-12"></div>
 </div>
