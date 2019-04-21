@@ -1,7 +1,10 @@
 <div class="container mt-3" *ngIf="users">
+  <h2 class="text-center">{{user.userName}} profilja</h2>
+  <hr>
   <div class="row">
     <div class="col-lg-2 col-sm-12"></div>
     <div class="col-lg-4 col-sm-12">
+      
       <form (ngSubmit)="onSubmit()" #editForm="ngForm">
         <div class="form-group">
           <label for="password">Jelszó</label>
@@ -38,9 +41,16 @@
         
         <div class="form-group" *ngIf="hasRole(user, 'Operator') || hasRole(user, 'Performer')">
           <label for="siteSelect">Honlapok</label>
-          <select multiple class="custom-select form-control" [(ngModel)]="userForEdit.sites" id="siteSelect" name="siteSelect" required>
+          <ul>
+            <li *ngFor="let site of sites; let i = index;">
+              <input name="siteSelect" type="checkbox" value="{{site}}" [checked]="isSiteChecked(site)" (change)="onSiteListChanged($event)">
+              {{site}}
+            </li>
+          </ul>
+         
+          <!-- <select multiple class="custom-select form-control" [(ngModel)]="userForEdit.sites" id="siteSelect" name="siteSelect" required>
             <option *ngFor="let site of sites" value="{{site}}">{{site}}</option>
-          </select>
+          </select> -->
         </div>
       
         <button type="submit" class="float-right btn btn-primary btn-lg mb-3" [disabled]="!editForm.form.valid">Mentés</button>

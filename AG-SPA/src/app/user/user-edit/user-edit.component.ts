@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
 import { UserDetailDto, Role, UserForListDto, Shift, UserForEditDto, Site } from 'src/app/_models/generatedDtos';
@@ -17,6 +17,7 @@ export class UserEditComponent implements OnInit {
   public rePassword: string;
   public users: UserForListDto[];
   public colors: string[];
+  public sites: Site[];
 
   constructor(
     private route: ActivatedRoute,
@@ -26,6 +27,7 @@ export class UserEditComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.sites = Object.keys(Site).map(k => Site[k]);
     this.initUser();
     this.getColors();
   }
@@ -59,12 +61,23 @@ export class UserEditComponent implements OnInit {
     });
   }
 
-  get sites(): Site[] {
-    return Object.keys(Site).map(k => Site[k]);
-  }
-
   public onCancel() {
     this.initUser();
+  }
+
+  public onSiteListChanged(event: any) {
+    this.userForEdit.sites = this.userForEdit.sites.filter(s => s !== event.currentTarget.value);
+
+    if (event.currentTarget.checked) {
+      this.userForEdit.sites.push(event.currentTarget.value);
+    }
+  }
+
+  public isSiteChecked(site: Site): boolean {
+    if (this.userForEdit.sites.includes(site)) {
+      return true;
+    }
+    return false;
   }
 
   public onSubmit() {
