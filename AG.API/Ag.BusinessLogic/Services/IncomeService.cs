@@ -7,6 +7,7 @@ using Ag.Common.Enums;
 using Ag.Domain;
 using Ag.Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -19,12 +20,14 @@ namespace Ag.BusinessLogic.Services
         private readonly AgDbContext _context;
         private readonly ILogger<IncomeService> _logger;
         private readonly IJoinTableHelperService _joinTableHelperService;
+        private readonly IConfiguration _configuration;
 
-        public IncomeService(AgDbContext context, ILogger<IncomeService> logger, IJoinTableHelperService joinTableHelperService)
+        public IncomeService(AgDbContext context, ILogger<IncomeService> logger, IJoinTableHelperService joinTableHelperService, IConfiguration configuration)
         {
             _context = context;
             _logger = logger;
             _joinTableHelperService = joinTableHelperService;
+            _configuration = configuration;
         }
 
         public IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto)
@@ -529,11 +532,16 @@ namespace Ag.BusinessLogic.Services
 
         private IncomeEntryForReturnDto ConvertIncomeEntryForReturnDto(IncomeEntry incomeEntry)
         {
+            var userRelation = _context.UserRelations.FirstOrDefault(r => (r.FromId == incomeEntry.Operator.Id && r.ToId == incomeEntry.Performer.Id) || (r.FromId == incomeEntry.Performer.Id && r.ToId == incomeEntry.Operator.Id));
+
+            string color = userRelation == null ? _configuration.GetSection("UserColors:0").Value : userRelation.Color;
+
             return new IncomeEntryForReturnDto()
             {
                 Id = incomeEntry.Id,
                 Date = incomeEntry.Date,
                 Locked = incomeEntry.Locked,
+                Color = color,
                 OperatorId = incomeEntry.Operator.Id,
                 OperatorName = incomeEntry.Operator.UserName,
                 CurrentOperatorPercent = incomeEntry.CurrentOperatorPercent,
