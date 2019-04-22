@@ -20,6 +20,8 @@ namespace Ag.BusinessLogic.Converters
 
         public UserForListDto ConvertToUserToListDto(User user)
         {
+            var sites = user.Sites.Length == 0 ? new List<Site>() : user.Sites.Split(';').Select(s => Enum.Parse<Site>(s)).ToList();
+
             return new UserForListDto
             {
                 Id = user.Id,
@@ -27,6 +29,7 @@ namespace Ag.BusinessLogic.Converters
                 LastPercent = user.LastPercent,
                 Role = user.Role,
                 Shift = user.Shift,
+                Sites = sites
             };
         }
 

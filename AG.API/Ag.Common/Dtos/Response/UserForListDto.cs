@@ -1,4 +1,5 @@
 ﻿using Ag.Common.Enums;
+using System.Collections.Generic;
 
 namespace Ag.Common.Dtos.Response
 {
@@ -15,5 +16,7 @@ namespace Ag.Common.Dtos.Response
         public Role Role { get; set; }
 
         public string Color { get; set; }
+
+        public List<Site> Sites { get; set; }
     }
 }

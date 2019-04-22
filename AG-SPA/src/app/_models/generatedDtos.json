@@ -55,6 +55,29 @@
         }
       }
     },
+    "ColorChangeDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "OperatorId",
+        "PerformerId",
+        "Color"
+      ],
+      "properties": {
+        "OperatorId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "PerformerId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Color": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
     "IncomeChunkAddDto": {
       "type": "object",
       "additionalProperties": false,
@@ -253,6 +276,15 @@
         "Performer",
         "Admin"
       ]
+    },
+    "ColorDto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Color": {
+          "type": "string"
+        }
+      }
     },
     "IncomeChunkForReturnDto": {
       "type": "object",
@@ -532,6 +564,12 @@
         },
         "Color": {
           "type": "string"
+        },
+        "Sites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Site"
+          }
         }
       }
     },
@@ -563,38 +601,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "ColorChangeDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "OperatorId",
-        "PerformerId",
-        "Color"
-      ],
-      "properties": {
-        "OperatorId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "PerformerId": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "Color": {
-          "type": "string",
-          "minLength": 1
-        }
-      }
-    },
-    "ColorDto": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Color": {
-          "type": "string"
         }
       }
     }

@@ -91,6 +91,57 @@ export interface IIncomeListFilterParams {
     orderDescending: boolean;
 }
 
+export class ColorChangeDto implements IColorChangeDto {
+    operatorId!: number;
+    performerId!: number;
+    color!: string;
+
+    constructor(data?: IColorChangeDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.operatorId = data["OperatorId"] !== undefined ? data["OperatorId"] : <any>null;
+            this.performerId = data["PerformerId"] !== undefined ? data["PerformerId"] : <any>null;
+            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ColorChangeDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColorChangeDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["OperatorId"] = this.operatorId !== undefined ? this.operatorId : <any>null;
+        data["PerformerId"] = this.performerId !== undefined ? this.performerId : <any>null;
+        data["Color"] = this.color !== undefined ? this.color : <any>null;
+        return data; 
+    }
+
+    clone(): ColorChangeDto {
+        const json = this.toJSON();
+        let result = new ColorChangeDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColorChangeDto {
+    operatorId: number;
+    performerId: number;
+    color: string;
+}
+
 export class IncomeChunkAddDto implements IIncomeChunkAddDto {
     site!: Site;
     income!: number;
@@ -488,6 +539,49 @@ export enum Role {
     Operator = "Operator", 
     Performer = "Performer", 
     Admin = "Admin", 
+}
+
+export class ColorDto implements IColorDto {
+    color?: string | null;
+
+    constructor(data?: IColorDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
+        }
+    }
+
+    static fromJS(data: any): ColorDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ColorDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["Color"] = this.color !== undefined ? this.color : <any>null;
+        return data; 
+    }
+
+    clone(): ColorDto {
+        const json = this.toJSON();
+        let result = new ColorDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IColorDto {
+    color?: string | null;
 }
 
 export class IncomeChunkForReturnDto implements IIncomeChunkForReturnDto {
@@ -980,6 +1074,7 @@ export class UserForListDto implements IUserForListDto {
     shift!: Shift;
     role!: Role;
     color?: string | null;
+    sites?: Site[] | null;
 
     constructor(data?: IUserForListDto) {
         if (data) {
@@ -998,6 +1093,11 @@ export class UserForListDto implements IUserForListDto {
             this.shift = data["Shift"] !== undefined ? data["Shift"] : <any>null;
             this.role = data["Role"] !== undefined ? data["Role"] : <any>null;
             this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
+            if (data["Sites"] && data["Sites"].constructor === Array) {
+                this.sites = [] as any;
+                for (let item of data["Sites"])
+                    this.sites!.push(item);
+            }
         }
     }
 
@@ -1016,6 +1116,11 @@ export class UserForListDto implements IUserForListDto {
         data["Shift"] = this.shift !== undefined ? this.shift : <any>null;
         data["Role"] = this.role !== undefined ? this.role : <any>null;
         data["Color"] = this.color !== undefined ? this.color : <any>null;
+        if (this.sites && this.sites.constructor === Array) {
+            data["Sites"] = [];
+            for (let item of this.sites)
+                data["Sites"].push(item);
+        }
         return data; 
     }
 
@@ -1034,6 +1139,7 @@ export interface IUserForListDto {
     shift: Shift;
     role: Role;
     color?: string | null;
+    sites?: Site[] | null;
 }
 
 export class WorkDayForListDto implements IWorkDayForListDto {
@@ -1140,98 +1246,4 @@ export class ErrorDetails implements IErrorDetails {
 
 export interface IErrorDetails {
     messages?: string[] | null;
-}
-
-export class ColorChangeDto implements IColorChangeDto {
-    operatorId!: number;
-    performerId!: number;
-    color!: string;
-
-    constructor(data?: IColorChangeDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.operatorId = data["OperatorId"] !== undefined ? data["OperatorId"] : <any>null;
-            this.performerId = data["PerformerId"] !== undefined ? data["PerformerId"] : <any>null;
-            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): ColorChangeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ColorChangeDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["OperatorId"] = this.operatorId !== undefined ? this.operatorId : <any>null;
-        data["PerformerId"] = this.performerId !== undefined ? this.performerId : <any>null;
-        data["Color"] = this.color !== undefined ? this.color : <any>null;
-        return data; 
-    }
-
-    clone(): ColorChangeDto {
-        const json = this.toJSON();
-        let result = new ColorChangeDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IColorChangeDto {
-    operatorId: number;
-    performerId: number;
-    color: string;
-}
-
-export class ColorDto implements IColorDto {
-    color?: string | null;
-
-    constructor(data?: IColorDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.color = data["Color"] !== undefined ? data["Color"] : <any>null;
-        }
-    }
-
-    static fromJS(data: any): ColorDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ColorDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["Color"] = this.color !== undefined ? this.color : <any>null;
-        return data; 
-    }
-
-    clone(): ColorDto {
-        const json = this.toJSON();
-        let result = new ColorDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IColorDto {
-    color?: string | null;
 }

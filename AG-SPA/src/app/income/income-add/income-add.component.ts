@@ -2,7 +2,6 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/cor
 import { IncomeEntryAddDto,
   Site,
   IncomeChunkAddDto,
-  IncomeEntryForReturnDto,
   UserForListDto,
   Shift,
   Role
@@ -11,6 +10,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 import { IncomeService } from 'src/app/_services/income.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-income-add',
@@ -21,14 +21,17 @@ export class IncomeAddComponent implements OnInit, OnChanges {
   @Input() userId: number;
 
   public incomeEntry: IncomeEntryAddDto;
-  public responseEntry: IncomeEntryForReturnDto;
   public colleagues: UserForListDto[];
+  private operatorSites: Site[];
+  private performerSites: Site[];
+  public availableSites: Site[];
 
   constructor(
     private authService: AuthService,
     private incomeService: IncomeService,
     private userService: UserService,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private router: Router
     ) { }
 
   ngOnInit() {
@@ -60,20 +63,37 @@ export class IncomeAddComponent implements OnInit, OnChanges {
 
     if (this.authService.currentUser.role === Role.Admin) {
       this.userService.getUser(userId).subscribe(user => {
-        for (const site of user.sites) {
-          entry.incomeChunks.push(this.createIncomeChunk(site));
-        }
+        this.operatorSites = user.sites;
 
         this.incomeEntry = entry;
       }, error => {
         this.alertify.error(error);
       });
     } else {
-      for (const site of this.authService.currentUser.sites) {
-        entry.incomeChunks.push(this.createIncomeChunk(site));
-      }
-
+      this.operatorSites = this.authService.currentUser.sites;
       this.incomeEntry = entry;
+    }
+  }
+
+  public getPerformerSites() {
+    // tslint:disable-next-line:triple-equals for some reason the HTML select component sets string to incomeEntry.performerId
+    const performer = this.colleagues.find(c => c.id == this.incomeEntry.performerId);
+
+    this.performerSites = performer.sites;
+
+    this.calculateAvailableSites();
+  }
+
+  private calculateAvailableSites() {
+    this.availableSites = this.operatorSites.filter(x => this.performerSites.includes(x));
+    this.recreateIncomeChunks();
+  }
+
+  private recreateIncomeChunks() {
+    this.incomeEntry.incomeChunks = [];
+
+    for (const site of this.availableSites) {
+      this.incomeEntry.incomeChunks.push(this.createIncomeChunk(site));
     }
   }
 
@@ -81,16 +101,6 @@ export class IncomeAddComponent implements OnInit, OnChanges {
     const chunk = new IncomeChunkAddDto();
     chunk.site = site;
     return chunk;
-  }
-
-  get sites(): Site[] {
-    const sites: Site[] = [];
-
-    for (const chunk of this.incomeEntry.incomeChunks) {
-      sites.push(chunk.site);
-    }
-
-    return sites;
   }
 
   private getInitialDate(): Date {
@@ -107,8 +117,8 @@ export class IncomeAddComponent implements OnInit, OnChanges {
 
   public onSubmit(): void {
     this.incomeService.addIncomeEntry(this.userId, this.incomeEntry).subscribe(resp => {
-      this.responseEntry = resp;
       this.alertify.success('Bevétel hozzáadva.');
+      this.router.navigate(['/incomes']);
     }, error => {
       this.alertify.error(error);
     });
