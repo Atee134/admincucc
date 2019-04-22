@@ -141,7 +141,7 @@ namespace Ag.BusinessLogic.Services
 
             DateTime? oldDate = null;
 
-            if (incomeEntryDto.Date != null && incomeEntryEntity.Date != incomeEntryDto.Date.Value) // TODO add block to prevent cross period income updates
+            if (incomeEntryDto.Date != null && incomeEntryEntity.Date != incomeEntryDto.Date.Value)
             {
                 _logger.LogInformation($"Date changed of income entry with ID: {incomeEntryEntity.Id}. Old date: {incomeEntryEntity.Date.ToString()}, new date: {incomeEntryDto.Date.ToString()}");
 
@@ -184,6 +184,28 @@ namespace Ag.BusinessLogic.Services
             RecalculateIncomePercentsOfPeriod(incomeEntryDto.Date.Value, incomeEntryEntity.Operator.Id, incomeEntryEntity.Performer.Id);
 
             return GetIncomeEntry(incomeEntryEntity.Id);
+        }
+
+        public void DeleteIncomeEntry(long incomeId)
+        {
+            _logger.LogInformation($"Deleting income with ID: {incomeId}");
+
+            var incomeEntry = _context.IncomeEntries.Include(i => i.Operator).Include(i => i.Performer).FirstOrDefault(i => i.Id == incomeId);
+
+            if (incomeEntry == null) throw new AgUnfulfillableActionException($"Income with ID: {incomeId} does not exist.");
+
+            //foreach (var incomeChunk in incomeEntry.IncomeChunks)
+            //{
+            //    _context.IncomeChunks.Remove(incomeChunk);
+            //}
+
+            _context.IncomeEntries.Remove(incomeEntry);
+
+            _context.SaveChanges();
+
+            _logger.LogInformation($"Income with ID: {incomeId} successfully deleted.");
+
+            RecalculateIncomePercentsOfPeriod(incomeEntry.Date, incomeEntry.Operator.Id, incomeEntry.Performer.Id);
         }
 
         private void UpdatePerformerOfIncomeEntry(IncomeEntry incomeEntry, int newPerformerId)

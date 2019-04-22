@@ -89,6 +89,15 @@ namespace Ag.Web.Controllers
             return Ok(incomeEntry);
         }
 
+        [HttpDelete("~/api/incomes/{incomeId}")]
+        [Authorize("Admin")]
+        public IActionResult DeleteIncome(long incomeId)
+        {
+            _incomeService.DeleteIncomeEntry(incomeId);
+
+            return NoContent();
+        }
+
         [HttpPut("{incomeId}/lock")]
         [Authorize("Admin")]
         public IActionResult LockIncome(int userId, long incomeId)
