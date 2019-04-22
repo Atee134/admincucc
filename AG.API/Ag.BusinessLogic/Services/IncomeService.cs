@@ -30,6 +30,47 @@ namespace Ag.BusinessLogic.Services
             _configuration = configuration;
         }
 
+        public void RecalculateIncomePercentsOfPeriod(DateTime date, int operatorId, int performerId)
+        {
+            _logger.LogInformation($"Recalculating period percents. Date: {date.ToString()}, Operator ID: {operatorId}, Model ID: {performerId}");
+
+            var op = _context.Users.FirstOrDefault(u => u.Id == operatorId && u.Role == Role.Operator);
+            if (op == null) throw new AgUnfulfillableActionException($"Operator with ID: {operatorId} does not exist.");
+
+            var performer = _joinTableHelperService.GetColleagues(operatorId).SingleOrDefault(c => c.Id == performerId);
+            if (performer == null) throw new AgUnfulfillableActionException($"Model with ID:{performerId} is not assigned to Operator with ID:{operatorId}");
+
+            double operatorPercent;
+            double performerPercent;
+
+            var incomeEntries = GetIncomeEntriesOfPeriod(date, operatorId, performerId);
+            if (IsAverageAboveThreshold(incomeEntries))
+            {
+                operatorPercent = op.MaxPercent;
+                performerPercent = performer.MaxPercent;
+
+                if (incomeEntries.Any(i => !i.AboveAverageThreshold))
+                {
+                    UpdateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, aboveAverageThreshold: true);
+                }
+            }
+            else
+            {
+                operatorPercent = op.MinPercent;
+                performerPercent = performer.MinPercent;
+
+                if (incomeEntries.Any(i => i.AboveAverageThreshold))
+                {
+                    UpdateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, aboveAverageThreshold: false);
+                }
+            }
+
+            UpdateUserLastPercent(op, operatorPercent);
+            UpdateUserLastPercent(performer, performerPercent);
+
+            _context.SaveChanges();
+        }
+
         public IncomeEntryForReturnDto AddIncomEntry(int userId, IncomeEntryAddDto incomeEntryDto)
         {
             _logger.LogInformation($"Adding income for user with ID: {userId}");
@@ -38,56 +79,15 @@ namespace Ag.BusinessLogic.Services
 
             if (op == null) throw new AgUnfulfillableActionException($"Operator with ID: {userId} does not exist.");
 
-            if (incomeEntryDto.PerformerId == null)
-            {
-                throw new NotImplementedException("Solo operators are not supported yet!");
-            }
-
             var performer = _joinTableHelperService.GetColleagues(userId).SingleOrDefault(c => c.Id == incomeEntryDto.PerformerId);
 
             if (performer == null) throw new AgUnfulfillableActionException($"Model with ID:{incomeEntryDto.PerformerId} is not assigned to Operator with ID:{userId}");
-
-            // above, they were above all along, no modification, income add as above
-            // above, they were below before, recalculation needed, income add as above
-            // below, they were below all along, no modification, income add as below
-            // below, they were above before, recalculation needed, income add as below
-
-            bool isIncomeEntryAboveAverageThreshold;
-            double operatorPercent;
-            double performerPercent;
-
-            var incomeEntries = GetIncomeEntriesOfPeriod(incomeEntryDto.Date, op.Id, performer.Id);
-            if (IsAverageAboveThreshold(incomeEntries, incomeEntryDto.IncomeChunks.Sum(i => i.Income)))
-            {
-                isIncomeEntryAboveAverageThreshold = true;
-                operatorPercent = op.MaxPercent;
-                performerPercent = performer.MaxPercent;
-
-                if (incomeEntries.Any(i => !i.AboveAverageThreshold))
-                {
-                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
-                }
-            }
-            else
-            {
-                isIncomeEntryAboveAverageThreshold = false;
-                operatorPercent = op.MinPercent;
-                performerPercent = performer.MinPercent;
-
-                if (incomeEntries.Any(i => i.AboveAverageThreshold))
-                {
-                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
-                }
-            }
 
             List<IncomeChunk> incomeChunks = new List<IncomeChunk>();
 
             foreach (var incomeChunkDto in incomeEntryDto.IncomeChunks)
             {
-                //if (incomeChunkDto.Income > 0)
-                //{
-                    incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, operatorPercent, performerPercent));
-                //}
+                incomeChunks.Add(CreateIncomeChunkFromDto(incomeChunkDto, op.MinPercent, performer.MinPercent));
             }
 
             var incomeEntry = new IncomeEntry()
@@ -96,23 +96,22 @@ namespace Ag.BusinessLogic.Services
                 Operator = op,
                 Performer = performer,
                 IncomeChunks = incomeChunks,
-                CurrentOperatorPercent = operatorPercent,
-                CurrentPerformerPercent = performerPercent,
-                AboveAverageThreshold = isIncomeEntryAboveAverageThreshold
+                CurrentOperatorPercent = op.MinPercent,
+                CurrentPerformerPercent = performer.MinPercent,
+                AboveAverageThreshold = false
             };
 
             CalculateIncomeEntryTotals(incomeEntry, incomeChunks);
 
             _context.IncomeEntries.Add(incomeEntry);
 
-            UpdateUserLastPercent(op, operatorPercent);
-            UpdateUserLastPercent(performer, performerPercent);
-
             _context.SaveChanges();
 
             _logger.LogInformation($"Income successfully added to operator with ID: {userId}, model ID: {performer.Id}, income ID: {incomeEntry.Id}, income chunk IDs: {String.Join(", ",incomeEntry.IncomeChunks.Select(i => i.Id))}");
 
-            return ConvertIncomeEntryForReturnDto(incomeEntry);
+            RecalculateIncomePercentsOfPeriod(incomeEntryDto.Date, op.Id, performer.Id);
+
+            return GetIncomeEntry(incomeEntry.Id);
         }
 
         public void ValidateAuthorityToUpdateIncome(int userId, long incomeId)
@@ -140,39 +139,14 @@ namespace Ag.BusinessLogic.Services
                 UpdatePerformerOfIncomeEntry(incomeEntryEntity, incomeEntryDto.PerformerId.Value);
             }
 
+            DateTime? oldDate = null;
+
             if (incomeEntryDto.Date != null && incomeEntryEntity.Date != incomeEntryDto.Date.Value) // TODO add block to prevent cross period income updates
             {
                 _logger.LogInformation($"Date changed of income entry with ID: {incomeEntryEntity.Id}. Old date: {incomeEntryEntity.Date.ToString()}, new date: {incomeEntryDto.Date.ToString()}");
 
+                oldDate = incomeEntryEntity.Date;
                 incomeEntryEntity.Date = incomeEntryDto.Date.Value;
-            }
-
-            bool isIncomeEntryAboveAverageThreshold;
-            double operatorPercent;
-            double performerPercent;
-
-            var incomeEntries = GetIncomeEntriesOfPeriod(incomeEntryDto.Date.Value, incomeEntryEntity.Operator.Id, incomeEntryEntity.Performer.Id, incomeId);
-            if (IsAverageAboveThreshold(incomeEntries, incomeEntryDto.IncomeChunks.Sum(i => i.Income.Value)))
-            {
-                isIncomeEntryAboveAverageThreshold = true;
-                operatorPercent = incomeEntryEntity.Operator.MaxPercent;
-                performerPercent = incomeEntryEntity.Performer.MaxPercent;
-
-                if (incomeEntries.Any(i => !i.AboveAverageThreshold))
-                {
-                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
-                }
-            }
-            else
-            {
-                isIncomeEntryAboveAverageThreshold = false;
-                operatorPercent = incomeEntryEntity.Operator.MinPercent;
-                performerPercent = incomeEntryEntity.Performer.MinPercent;
-
-                if (incomeEntries.Any(i => i.AboveAverageThreshold))
-                {
-                    RecalculateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, isIncomeEntryAboveAverageThreshold);
-                }
             }
 
             var incomeChunksToUpdate = incomeEntryDto.IncomeChunks.Where(i => i.Id.HasValue).ToList();
@@ -189,26 +163,27 @@ namespace Ag.BusinessLogic.Services
                 AddIncomeChunksToIncomeEntry(incomeEntryEntity, newlyAddedIncomeChunks);
             }
 
-            incomeEntryEntity.CurrentOperatorPercent = operatorPercent;
-            incomeEntryEntity.CurrentPerformerPercent = performerPercent;
-            incomeEntryEntity.AboveAverageThreshold = isIncomeEntryAboveAverageThreshold;
-
             CalculateIncomeEntryTotals(incomeEntryEntity, incomeEntryEntity.IncomeChunks.ToList());
-
-            UpdateUserLastPercent(incomeEntryEntity.Operator, operatorPercent);
-            UpdateUserLastPercent(incomeEntryEntity.Performer, performerPercent);
 
             _context.SaveChanges();
 
             if (newlyAddedIncomeChunks.Count > 0)
             {
-                 var newlyAddedIds = incomeEntryEntity.IncomeChunks.Where(i => newlyAddedIncomeChunks.Select(ic => ic.Site).Contains(i.Site)).Select(i => i.Id).ToList();
+                var newlyAddedIds = incomeEntryEntity.IncomeChunks.Where(i => newlyAddedIncomeChunks.Select(ic => ic.Site).Contains(i.Site)).Select(i => i.Id).ToList();
                 _logger.LogInformation($"New income chunks added during updating of income with ID:{incomeId}, income chunk IDs: {String.Join(", ", newlyAddedIds)}");
             }
 
             _logger.LogInformation($"Updating income entry with ID: {incomeEntryEntity.Id} was successful.");
 
-            return ConvertIncomeEntryForReturnDto(incomeEntryEntity);
+            // Period percents recalculation, if the income is moved accross 2 periods, both of them should be updated
+            if (oldDate.HasValue && GetBoundsOfPeriod(oldDate.Value) != GetBoundsOfPeriod(incomeEntryDto.Date.Value))
+            {
+                RecalculateIncomePercentsOfPeriod(oldDate.Value, incomeEntryEntity.Operator.Id, incomeEntryEntity.Performer.Id);
+            }
+
+            RecalculateIncomePercentsOfPeriod(incomeEntryDto.Date.Value, incomeEntryEntity.Operator.Id, incomeEntryEntity.Performer.Id);
+
+            return GetIncomeEntry(incomeEntryEntity.Id);
         }
 
         private void UpdatePerformerOfIncomeEntry(IncomeEntry incomeEntry, int newPerformerId)
@@ -276,17 +251,14 @@ namespace Ag.BusinessLogic.Services
             return true;
         }
 
-        private bool IsAverageAboveThreshold(List<IncomeEntry> incomeEntries, double incomeToBeAdded)
+        private bool IsAverageAboveThreshold(List<IncomeEntry> incomeEntries)
         {
-            var oldEntries = incomeEntries.Select(i => i.TotalSum).ToList();
-            oldEntries.Add(incomeToBeAdded);
-
-            var average = oldEntries.Average();
+            var average = incomeEntries.Select(i => i.TotalSum).Average();
 
             return average >= 250; // TODO TODO TODO this shit should be in a config
         }
 
-        private List<IncomeEntry> GetIncomeEntriesOfPeriod(DateTime date, int operatorId, int performerId, long? updatedIncomeId = null)
+        private List<IncomeEntry> GetIncomeEntriesOfPeriod(DateTime date, int operatorId, int performerId)
         {
             var bounds = GetBoundsOfPeriod(date);
 
@@ -299,11 +271,6 @@ namespace Ag.BusinessLogic.Services
                     i.Performer.Id == performerId &&
                     i.Date.Date >= bounds.Start.Date &&
                     i.Date.Date <= bounds.End.Date).ToList();
-
-            if (updatedIncomeId != null)
-            {
-                incomeEntries = incomeEntries.Where(i => i.Id != updatedIncomeId).ToList();
-            }
 
             return incomeEntries;
         }
@@ -327,7 +294,7 @@ namespace Ag.BusinessLogic.Services
             return dateRange;
         }
 
-        private void RecalculateIncomePercentsOfPeriod(List<IncomeEntry> incomeEntries, double newOperatorPercent, double newPerformerPercent, bool aboveAverageThreshold)
+        private void UpdateIncomePercentsOfPeriod(List<IncomeEntry> incomeEntries, double newOperatorPercent, double newPerformerPercent, bool aboveAverageThreshold)
         {
             foreach (IncomeEntry incomeEntry in incomeEntries)
             {
