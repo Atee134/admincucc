@@ -52,18 +52,24 @@ export class IncomeEditComponent implements OnInit {
 
     this.userService.getColleagues(userId).subscribe(resp => {
       this.colleagues = resp;
-      if (this.authService.currentUser.role === Role.Admin) {
-        this.userService.getUser(userId).subscribe(user => {
-          const sites = user.sites.filter(s => !this.incomeEntry.incomeChunks.map(i => i.site).includes(s));
-          this.createIncomeEntryUpdateDto(sites);
-        });
-      } else {
-        const sites = this.authService.currentUser.sites.filter(s => !this.incomeEntry.incomeChunks.map(i => i.site).includes(s));
-        this.createIncomeEntryUpdateDto(sites);
-      }
+      this.initIncomeEntryUpdateDto();
     }, error => {
       this.alertify.error(error);
     });
+  }
+
+  private initIncomeEntryUpdateDto() {
+    const userId = this.authService.currentUser.role === Role.Admin ? this.incomeEntry.operatorId : this.authService.currentUser.id;
+
+    if (this.authService.currentUser.role === Role.Admin) {
+      this.userService.getUser(userId).subscribe(user => {
+        const sites = user.sites.filter(s => !this.incomeEntry.incomeChunks.map(i => i.site).includes(s));
+        this.createIncomeEntryUpdateDto(sites);
+      });
+    } else {
+      const sites = this.authService.currentUser.sites.filter(s => !this.incomeEntry.incomeChunks.map(i => i.site).includes(s));
+      this.createIncomeEntryUpdateDto(sites);
+    }
   }
 
   private createIncomeEntryUpdateDto(operatorSites: Site[]) {
@@ -132,7 +138,7 @@ export class IncomeEditComponent implements OnInit {
         resp => {
            this.incomeEntry = resp;
            this.alertify.success('Változtatások mentve.');
-           this.incomeEntryUpdateDto = this.createIncomeEntryUpdateDto();
+           this.initIncomeEntryUpdateDto();
         }, error => {
            this.alertify.error(error);
         });

@@ -12,8 +12,6 @@ export class IncomeFilterComponent implements OnInit {
   @ViewChild(IncomeListComponent) incomeList: IncomeListComponent;
   public incomeListReady = false;
 
-  public anyad: boolean;
-
   public incomeFilters: IncomeListFilterParams = new IncomeListFilterParams({
     hideLocked: false,
     orderDescending: true,

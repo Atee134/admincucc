@@ -96,7 +96,7 @@ namespace Ag.BusinessLogic.Services
             {
                 UserName = userDto.UserName,
                 Role = userDto.Role,
-                MinPercent = 0.25, // TODO add proper init values from somewhere
+                MinPercent = 0.25,
                 MaxPercent = 0.3,
                 Shift = Common.Enums.Shift.Morning,
                 Sites = String.Empty,
