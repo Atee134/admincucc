@@ -10,7 +10,7 @@ import {
 } from 'src/app/_models/generatedDtos';
 import { AuthService } from 'src/app/_services/auth.service';
 import { IncomeService } from 'src/app/_services/income.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';
 
@@ -27,6 +27,7 @@ export class IncomeEditComponent implements OnInit {
   constructor(private incomeService: IncomeService,
     private authService: AuthService,
     private route: ActivatedRoute,
+    private router: Router,
     private alertify: AlertifyService,
     private userService: UserService
     ) { }
@@ -119,6 +120,17 @@ export class IncomeEditComponent implements OnInit {
 
   public isCurrentUser(role: string): boolean {
     return this.authService.currentUser.role.toLowerCase() === role.toLowerCase();
+  }
+
+  public onDelete(): void {
+    this.alertify.confirm('Biztos, hogy véglegesen törlöd a bevételt?', () => {
+      this.incomeService.deleteIncomeEntry(this.incomeEntry.id).subscribe(resp => {
+        this.alertify.success('Bevétel törölve');
+        this.router.navigate(['/incomes']);
+      }, error => {
+        this.alertify.error(error);
+      });
+    });
   }
 
   public onSubmit(): void {

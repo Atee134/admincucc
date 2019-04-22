@@ -92,6 +92,10 @@ export class IncomeService {
     return this.http.post<IncomeEntryForReturnDto>(this.baseUrl + 'users/' + userId + '/incomes', incomeEntry);
   }
 
+  deleteIncomeEntry(incomeId: number) {
+    return this.http.delete(this.baseUrl + 'incomes/' + incomeId);
+  }
+
   lockIncomeEntry(userId: number, incomeId: number): Observable<boolean> {
     return this.http.put<boolean>(this.baseUrl + 'users/' + userId + '/incomes/' + incomeId + '/lock', {});
   }

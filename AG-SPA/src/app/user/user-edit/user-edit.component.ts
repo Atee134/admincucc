@@ -169,7 +169,6 @@ export class UserEditComponent implements OnInit {
     this.userColors[user.id] = newColor;
 
     this.userService.changeColor(this.user.id, user.id, newColor).subscribe(resp => {
-      this.alertify.success('colorchanged');
     }, error => {
       this.alertify.error(error);
     });

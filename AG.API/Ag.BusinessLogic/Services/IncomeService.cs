@@ -194,11 +194,6 @@ namespace Ag.BusinessLogic.Services
 
             if (incomeEntry == null) throw new AgUnfulfillableActionException($"Income with ID: {incomeId} does not exist.");
 
-            //foreach (var incomeChunk in incomeEntry.IncomeChunks)
-            //{
-            //    _context.IncomeChunks.Remove(incomeChunk);
-            //}
-
             _context.IncomeEntries.Remove(incomeEntry);
 
             _context.SaveChanges();
