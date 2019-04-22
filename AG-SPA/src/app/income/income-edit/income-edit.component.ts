@@ -41,7 +41,6 @@ export class IncomeEditComponent implements OnInit {
 
     this.incomeService.getIncomeEntry(this.authService.currentUser.id, id).subscribe(resp => {
       this.incomeEntry = resp;
-      this.incomeEntryUpdateDto = this.createIncomeEntryUpdateDto();
       this.getColleagues(this.incomeEntry);
     }, error => {
       this.alertify.error(error);
@@ -53,28 +52,42 @@ export class IncomeEditComponent implements OnInit {
 
     this.userService.getColleagues(userId).subscribe(resp => {
       this.colleagues = resp;
+      if (this.authService.currentUser.role === Role.Admin) {
+        this.userService.getUser(userId).subscribe(user => {
+          const sites = user.sites.filter(s => !this.incomeEntry.incomeChunks.map(i => i.site).includes(s));
+          this.createIncomeEntryUpdateDto(sites);
+        });
+      } else {
+        const sites = this.authService.currentUser.sites.filter(s => !this.incomeEntry.incomeChunks.map(i => i.site).includes(s));
+        this.createIncomeEntryUpdateDto(sites);
+      }
     }, error => {
       this.alertify.error(error);
     });
   }
 
-  private createIncomeEntryUpdateDto(): IncomeEntryUpdateDto {
+  private createIncomeEntryUpdateDto(operatorSites: Site[]) {
     const incomeEntryUpdateDto = new IncomeEntryUpdateDto();
     incomeEntryUpdateDto.date = new Date(this.incomeEntry.date);
     incomeEntryUpdateDto.performerId = this.incomeEntry.performerId;
     incomeEntryUpdateDto.incomeChunks = [];
 
+    // site list consists of the already existing sites (sites of incomeChunks)
+    // and the intersection of the operator and performer current sites.
     for (const incomeChunk of this.incomeEntry.incomeChunks) {
       incomeEntryUpdateDto.incomeChunks.push(this.createIncomeChunkUpdateDto(incomeChunk));
     }
 
-    const newSites = this.authService.currentUser.sites.filter(s => !incomeEntryUpdateDto.incomeChunks.map(i => i.site).includes(s));
+    const performer = this.colleagues.find(c => c.id === this.incomeEntry.performerId);
+    const performerSites = performer.sites;
 
-    for (const site of newSites) {
+    const availableSites = operatorSites.filter(x => performerSites.includes(x));
+
+    for (const site of availableSites) {
       incomeEntryUpdateDto.incomeChunks.push(this.createNewIncomeChunkUpdateDto(site));
     }
 
-    return incomeEntryUpdateDto;
+    this.incomeEntryUpdateDto = incomeEntryUpdateDto;
   }
 
   private createIncomeChunkUpdateDto(incomeChunk: IncomeChunkForReturnDto): IncomeChunkUpdateDto {
@@ -94,28 +107,6 @@ export class IncomeEditComponent implements OnInit {
     incomeChunkDto.site = site;
 
     return incomeChunkDto;
-  }
-
-   /**
-   * gets the union of the dto's current sites, and the user's assigned sites.
-   * In case of editing an income which has not yet had the newly assigned site,
-   * or editing an old income, which still as a site, but it's not assigned to the user anymore.
-   */
-  get uniqueSites(): Site[] {
-    const uniqueSites: Site[] = [];
-    for (const incomeChunk of this.incomeEntry.incomeChunks) {
-      if (!uniqueSites.includes(incomeChunk.site)) {
-        uniqueSites.push(incomeChunk.site);
-      }
-    }
-
-    for (const site of this.authService.currentUser.sites) {
-      if (!uniqueSites.includes(site)) {
-        uniqueSites.push(site);
-      }
-    }
-
-    return uniqueSites;
   }
 
   public isCurrentUser(role: string): boolean {
