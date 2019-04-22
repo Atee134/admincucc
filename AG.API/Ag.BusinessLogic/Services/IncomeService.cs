@@ -362,7 +362,7 @@ namespace Ag.BusinessLogic.Services
                     incomeEntryEntities = incomeEntryEntities.Where(i => i.Operator.UserName.Contains(userNameParamLc) || i.Performer.UserName.ToLower().Contains(userNameParamLc));
                 }
 
-                if (filterParams.Month.HasValue && filterParams.Period.HasValue)
+                if (!filterParams.FromToFilter && filterParams.Month.HasValue && filterParams.Period.HasValue)
                 {
                     bool firstPeriod = filterParams.Period.Value == 1;
                     DateTime date = filterParams.Month.Value;

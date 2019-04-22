@@ -29,6 +29,11 @@ export class IncomeService {
       if (incomeFilters.userName) {
         params = params.append('userName', incomeFilters.userName);
       }
+      if (incomeFilters.fromToFilter) {
+        params = params.append('fromToFilter', 'true');
+      } else {
+        params = params.append('fromToFilter', 'false');
+      }
       if (incomeFilters.month) {
         params = params.append('month', incomeFilters.month.toISOString());
       }

@@ -1,13 +1,26 @@
 <div class="container">
   <form (ngSubmit)="onGetIncomes()" #incomeEditForm="ngForm">
     <div class="row mt-2">
-      <div class="col-lg-3 col-sm-4 form-group" *ngIf="isCurrentUser('Admin') || isCurrentUser('Operator')">
+      <div class="col-lg-2 col-sm-4 form-group" *ngIf="isCurrentUser('Admin') || isCurrentUser('Operator')">
         <label for="userName">Modell:</label>
         <input type="text" class="form-control" id="userName"
                name="userName" [(ngModel)]="incomeFilters.userName">
      </div>
-     <div class="col-lg-3 col-sm-4" *ngIf="isCurrentUser('Performer')"></div>
-     <div class="col-lg-3 col-sm-4 form-group">
+     <div class="col-lg-2 col-sm-4" *ngIf="isCurrentUser('Performer')"></div>
+     <div class="col-lg-2 col-sm-4">
+      <div class="form-group">
+          <label for="datetype">Listázás módja:</label>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="datetype1" name="datetype" class="custom-control-input" checked [value]="false" [(ngModel)]="incomeFilters.fromToFilter">
+            <label class="custom-control-label" for="datetype1">Periódus</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="datetype2" name="datetype" class="custom-control-input" [value]="true" [(ngModel)]="incomeFilters.fromToFilter">
+            <label class="custom-control-label" for="datetype2">Idő intervallum</label>
+          </div>
+    </div>
+     </div>
+     <div class="col-lg-2 col-sm-4 form-group" *ngIf="!incomeFilters.fromToFilter">
         <label for="date">Hónap:</label>
         <input type="text"
                class="form-control"
@@ -21,7 +34,7 @@
                autocomplete="off"
                >
       </div>
-      <div class="col-lg-2 col-sm-4 form-group">
+      <div class="col-lg-2 col-sm-4 form-group" *ngIf="!incomeFilters.fromToFilter">
         <label for="period">Periódus:</label>
           <div class="custom-control custom-radio">
             <input type="radio" id="period1" name="period" class="custom-control-input" checked [value]="1" [(ngModel)]="incomeFilters.period">
@@ -32,6 +45,37 @@
             <label class="custom-control-label" for="period2">2</label>
           </div>
       </div>
+
+      <div class="col-lg-2 col-sm-4 form-group" *ngIf="incomeFilters.fromToFilter">
+          <label for="dateFrom">Mettől:</label>
+          <input type="text"
+                 class="form-control"
+                 name="dateFrom"
+                 id="dateFrom"
+                 [bsConfig]="{ dateInputFormat: 'YYYY.MM.DD'}"
+                 #dp="bsDatepicker"
+                 bsDatepicker
+                 [(ngModel)]="incomeFilters.from"
+                 required
+                 autocomplete="off"
+                 >
+        </div>
+
+        <div class="col-lg-2 col-sm-4 form-group" *ngIf="incomeFilters.fromToFilter">
+            <label for="dateTo">Meddig:</label>
+            <input type="text"
+                   class="form-control"
+                   name="dateTo"
+                   id="dateTo"
+                   [bsConfig]="{ dateInputFormat: 'YYYY.MM.DD'}"
+                   #dp="bsDatepicker"
+                   bsDatepicker
+                   [(ngModel)]="incomeFilters.to"
+                   required
+                   autocomplete="off"
+                   >
+          </div>
+
       <div class="col-lg-2 col-sm-4 form-group" *ngIf="isCurrentUser('Admin')">
         <div class="mt-4 custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" id="hideLocked" name="hideLocked" [(ngModel)]="incomeFilters.hideLocked">

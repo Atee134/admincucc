@@ -15,9 +15,8 @@ export class IncomeFilterComponent implements OnInit {
   public incomeFilters: IncomeListFilterParams = new IncomeListFilterParams({
     hideLocked: false,
     orderDescending: true,
+    fromToFilter: false,
   });
-
-  public datePickerCollapsed = true;
 
   constructor(private authService: AuthService) { }
 

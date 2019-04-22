@@ -9,6 +9,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "FromToFilter",
         "HideLocked",
         "OrderDescending"
       ],
@@ -19,6 +20,9 @@
         },
         "UserName": {
           "type": "string"
+        },
+        "FromToFilter": {
+          "type": "boolean"
         },
         "From": {
           "type": "string",

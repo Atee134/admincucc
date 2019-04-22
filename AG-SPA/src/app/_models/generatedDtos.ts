@@ -11,6 +11,7 @@
 export class IncomeListFilterParams implements IIncomeListFilterParams {
     userId?: number | null;
     userName?: string | null;
+    fromToFilter!: boolean;
     from?: Date | null;
     to?: Date | null;
     month?: Date | null;
@@ -34,6 +35,7 @@ export class IncomeListFilterParams implements IIncomeListFilterParams {
         if (data) {
             this.userId = data["UserId"] !== undefined ? data["UserId"] : <any>null;
             this.userName = data["UserName"] !== undefined ? data["UserName"] : <any>null;
+            this.fromToFilter = data["FromToFilter"] !== undefined ? data["FromToFilter"] : <any>null;
             this.from = data["From"] ? new Date(data["From"].toString()) : <any>null;
             this.to = data["To"] ? new Date(data["To"].toString()) : <any>null;
             this.month = data["Month"] ? new Date(data["Month"].toString()) : <any>null;
@@ -57,6 +59,7 @@ export class IncomeListFilterParams implements IIncomeListFilterParams {
         data = typeof data === 'object' ? data : {};
         data["UserId"] = this.userId !== undefined ? this.userId : <any>null;
         data["UserName"] = this.userName !== undefined ? this.userName : <any>null;
+        data["FromToFilter"] = this.fromToFilter !== undefined ? this.fromToFilter : <any>null;
         data["From"] = this.from ? this.from.toISOString() : <any>null;
         data["To"] = this.to ? this.to.toISOString() : <any>null;
         data["Month"] = this.month ? this.month.toISOString() : <any>null;
@@ -80,6 +83,7 @@ export class IncomeListFilterParams implements IIncomeListFilterParams {
 export interface IIncomeListFilterParams {
     userId?: number | null;
     userName?: string | null;
+    fromToFilter: boolean;
     from?: Date | null;
     to?: Date | null;
     month?: Date | null;

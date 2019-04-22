@@ -8,6 +8,8 @@ namespace Ag.BusinessLogic.Models
 
         public string UserName { get; set; }
 
+        public bool FromToFilter { get; set; }
+
         public DateTime? From { get; set; }
 
         public DateTime? To { get; set; }
