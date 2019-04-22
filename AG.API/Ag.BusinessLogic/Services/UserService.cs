@@ -21,14 +21,18 @@ namespace Ag.BusinessLogic.Services
         private readonly IUserConverter _userConverter;
         private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
+        private readonly IIncomeService _incomeService;
+        private readonly IJoinTableHelperService _joinTableHelperService;
 
-        public UserService(AgDbContext context, ILogger<UserService> logger, IUserConverter userConverter, IAuthService authService, IConfiguration configuration)
+        public UserService(AgDbContext context, ILogger<UserService> logger, IUserConverter userConverter, IAuthService authService, IConfiguration configuration, IIncomeService incomeService, IJoinTableHelperService joinTableHelperService)
         {
             _context = context;
             _logger = logger;
             _userConverter = userConverter;
             _authService = authService;
             _configuration = configuration;
+            _incomeService = incomeService;
+            _joinTableHelperService = joinTableHelperService;
         }
 
         public UserDetailDto GetUser(int userId)
@@ -63,6 +67,14 @@ namespace Ag.BusinessLogic.Services
             if (user == null) throw new AgUnfulfillableActionException($"User with ID: {userDto.Id} does not exist.");
 
             user.Sites = String.Join(';', userDto.Sites);
+
+            bool percentRecalculationNeeded = false;
+
+            if (user.MinPercent != userDto.MinPercent.Value || user.MaxPercent != userDto.MaxPercent.Value)
+            {
+                percentRecalculationNeeded = true;
+            }
+
             user.MinPercent = userDto.MinPercent.Value;
             user.MaxPercent = userDto.MaxPercent.Value;
 
@@ -73,6 +85,23 @@ namespace Ag.BusinessLogic.Services
             if (!String.IsNullOrEmpty(userDto.Password))
             {
                 _authService.ChangeUserPassword(user, userDto.Password);
+            }
+
+            if (percentRecalculationNeeded)
+            {
+                var colleagues = _joinTableHelperService.GetColleagues(user.Id);
+
+                foreach (var colleague in colleagues)
+                {
+                    if (user.Role == Role.Operator)
+                    {
+                        _incomeService.RecalculateIncomePercentsOfPeriod(DateTime.Now, user.Id, colleague.Id, forcefully: true);
+                    }
+                    else if (user.Role == Role.Performer)
+                    {
+                        _incomeService.RecalculateIncomePercentsOfPeriod(DateTime.Now, colleague.Id, user.Id, forcefully: true);
+                    }
+                }
             }
         }
 

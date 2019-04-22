@@ -30,7 +30,7 @@ namespace Ag.BusinessLogic.Services
             _configuration = configuration;
         }
 
-        public void RecalculateIncomePercentsOfPeriod(DateTime date, int operatorId, int performerId)
+        public void RecalculateIncomePercentsOfPeriod(DateTime date, int operatorId, int performerId, bool forcefully = false)
         {
             _logger.LogInformation($"Recalculating period percents. Date: {date.ToString()}, Operator ID: {operatorId}, Model ID: {performerId}");
 
@@ -49,7 +49,7 @@ namespace Ag.BusinessLogic.Services
                 operatorPercent = op.MaxPercent;
                 performerPercent = performer.MaxPercent;
 
-                if (incomeEntries.Any(i => !i.AboveAverageThreshold))
+                if (incomeEntries.Any(i => !i.AboveAverageThreshold) || forcefully)
                 {
                     UpdateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, aboveAverageThreshold: true);
                 }
@@ -59,7 +59,7 @@ namespace Ag.BusinessLogic.Services
                 operatorPercent = op.MinPercent;
                 performerPercent = performer.MinPercent;
 
-                if (incomeEntries.Any(i => i.AboveAverageThreshold))
+                if (incomeEntries.Any(i => i.AboveAverageThreshold) || forcefully)
                 {
                     UpdateIncomePercentsOfPeriod(incomeEntries, operatorPercent, performerPercent, aboveAverageThreshold: false);
                 }
