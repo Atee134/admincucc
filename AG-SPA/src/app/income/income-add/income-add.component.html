@@ -27,6 +27,7 @@
 
         <div *ngFor="let site of availableSites" class="form-group">
           <label [for]="site">{{site}}</label>
+          <div *ngIf="isSiteEur(site)">(EUR-ban megadott összeg leadás után automatikusan át lesz váltva USD-re)</div>
           <input type="number" placeholder="0.00" step=".1"
                 class="form-control" [id]="site"
                 [(ngModel)]="getIncomeChunk(site).income" [name]="site"

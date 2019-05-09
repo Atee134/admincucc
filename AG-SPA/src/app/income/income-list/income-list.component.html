@@ -45,7 +45,7 @@
             <td colspan="3" class="text-right">Összesen</td>
             <td class="text-right" *ngFor="let site of uniqueSites">{{getSiteStatistics(site)?.statistics.total || 0 | currency}}</td>
             <td class="text-right" *ngIf="!isCurrentUser('Performer')">{{incomeList.operatorStatistics.total | currency}}</td>
-            <td class="text-right">{{incomeList.performerStatistics.total | currency}}</td>
+            <td class="text-right" *ngIf="!isCurrentUser('Operator')">{{incomeList.performerStatistics.total | currency}}</td>
             <td class="text-right" *ngIf="isCurrentUser('Admin')">{{incomeList.studioStatistics.total | currency}}</td>
             <td class="text-right table-info">{{incomeList.totalStatistics.total | currency}}</td>
         </tr>

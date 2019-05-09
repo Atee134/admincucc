@@ -11,6 +11,7 @@ import { IncomeService } from 'src/app/_services/income.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { UserService } from 'src/app/_services/user.service';
 import { Router } from '@angular/router';
+import { ExchangeRateService } from 'src/app/_services/exchange-rate.service';
 
 @Component({
   selector: 'app-income-add',
@@ -31,7 +32,8 @@ export class IncomeAddComponent implements OnInit, OnChanges {
     private incomeService: IncomeService,
     private userService: UserService,
     private alertify: AlertifyService,
-    private router: Router
+    private router: Router,
+    private exchangeRateService: ExchangeRateService
     ) { }
 
   ngOnInit() {
@@ -115,12 +117,42 @@ export class IncomeAddComponent implements OnInit, OnChanges {
     return this.incomeEntry.incomeChunks.find(i => i.site === site);
   }
 
+  public isSiteEur(site: string) {
+    if (site.toLowerCase().includes('eur')) {
+      return true;
+    }
+
+    return false;
+  }
+
   public onSubmit(): void {
+    if (this.incomeEntry.incomeChunks.find(i => i.site.toLowerCase().includes('eur'))) {
+      this.convertEurSitesToUsd();
+    } else {
+      this.addIncome();
+    }
+  }
+
+  private addIncome() {
     this.incomeService.addIncomeEntry(this.userId, this.incomeEntry).subscribe(resp => {
       this.alertify.success('Bevétel hozzáadva.');
       this.router.navigate(['/incomes']);
     }, error => {
       this.alertify.error(error);
+    });
+  }
+
+  private convertEurSitesToUsd() {
+    this.exchangeRateService.getEurToUsdExchangeRate().subscribe(rate => {
+      for (const chunk of this.incomeEntry.incomeChunks) {
+        if (chunk.site.toLowerCase().includes('eur')) {
+          chunk.income *= rate;
+        }
+      }
+
+      this.addIncome();
+    }, error => {
+      this.alertify.error('Nem sikerült átváltani az EUR-t USD-re. Bevétel leadása sikertelen. Kérlek értesítsd a rendszergazdát.');
     });
   }
 }

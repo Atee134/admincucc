@@ -105,7 +105,7 @@ namespace Ag.BusinessLogic.Services
 
             var opi = _context.Users.Find(1);
 
-            opi.Sites = String.Join(';', new List<string> { Site.CB.ToString(), Site.LJ.ToString(), Site.MFC.ToString() });
+            opi.Sites = String.Join(';', new List<string> { Site.Cam4.ToString(), Site.Chaturbate.ToString(), Site.LiveJasmin.ToString() });
 
             _userService.AddPerformer(1, 2);
 
@@ -128,9 +128,9 @@ namespace Ag.BusinessLogic.Services
                 PerformerId = 2,
                 IncomeChunks = new List<IncomeChunkAddDto>()
             {
-                new IncomeChunkAddDto { Site = Site.CB, Income = 1},
-                new IncomeChunkAddDto { Site = Site.LJ, Income = 2},
-                new IncomeChunkAddDto { Site = Site.MFC, Income = 3},
+                new IncomeChunkAddDto { Site = Site.Cam4, Income = 1},
+                new IncomeChunkAddDto { Site = Site.Chaturbate, Income = 2},
+                new IncomeChunkAddDto { Site = Site.LiveJasmin, Income = 3},
             }
             };
         }
@@ -147,9 +147,9 @@ namespace Ag.BusinessLogic.Services
                     PerformerId = 2,
                     IncomeChunks = new List<IncomeChunkAddDto>()
                 {
-                    new IncomeChunkAddDto { Site = Site.CB, Income = _random.NextDouble() * 100},
-                    new IncomeChunkAddDto { Site = Site.LJ, Income = _random.NextDouble() * 100},
-                    new IncomeChunkAddDto { Site = Site.MFC, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.Cam4, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.Chaturbate, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.LiveJasmin, Income = _random.NextDouble() * 100},
                 }
                 };
             }
@@ -161,8 +161,8 @@ namespace Ag.BusinessLogic.Services
                     PerformerId = 2,
                     IncomeChunks = new List<IncomeChunkAddDto>()
                 {
-                    new IncomeChunkAddDto { Site = Site.CB, Income = _random.NextDouble() * 100},
-                    new IncomeChunkAddDto { Site = Site.MFC, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.Cam4, Income = _random.NextDouble() * 100},
+                    new IncomeChunkAddDto { Site = Site.LiveJasmin, Income = _random.NextDouble() * 100},
                 }
                 };
             }

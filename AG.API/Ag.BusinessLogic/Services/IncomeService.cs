@@ -272,7 +272,7 @@ namespace Ag.BusinessLogic.Services
         {
             var average = incomeEntries.Select(i => i.TotalSum).Average();
 
-            return average >= 250; // TODO TODO TODO this shit should be in a config
+            return average >= int.Parse(_configuration.GetSection("PercentSwitchAverageBoundary").Value);
         }
 
         private List<IncomeEntry> GetIncomeEntriesOfPeriod(DateTime date, int operatorId, int performerId)

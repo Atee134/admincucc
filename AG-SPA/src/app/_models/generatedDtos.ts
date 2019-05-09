@@ -194,9 +194,20 @@ export interface IIncomeChunkAddDto {
 }
 
 export enum Site {
-    LJ = "LJ", 
-    CB = "CB", 
-    MFC = "MFC", 
+    MyFreeCams = "MyFreeCams", 
+    Chaturbate = "Chaturbate", 
+    LiveJasmin = "LiveJasmin", 
+    CamSoda = "CamSoda", 
+    Cam4 = "Cam4", 
+    Cams = "Cams", 
+    Flirt4Free = "Flirt4Free", 
+    StripChat = "StripChat", 
+    Streamate = "Streamate", 
+    BongaCams = "BongaCams", 
+    MyDirtyHobby = "MyDirtyHobby", 
+    Camversity = "Camversity", 
+    Skype = "Skype", 
+    SkypeEUR = "SkypeEUR", 
 }
 
 export class IncomeChunkUpdateDto implements IIncomeChunkUpdateDto {

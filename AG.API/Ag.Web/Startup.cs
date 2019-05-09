@@ -49,8 +49,8 @@ namespace Ag.Web
                     options.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
                 });
             // TODO remove dbcontext dependency, and reference to domain from here somehow (make dependency modules that add their own dependencies to DI)
-            //services.AddDbContext<AgDbContext>(options => options.UseMySql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
-            services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
+            services.AddDbContext<AgDbContext>(options => options.UseMySql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
+            //services.AddDbContext<AgDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Ag"), o => o.MigrationsAssembly("Ag.Domain")), ServiceLifetime.Scoped);
             services.AddScoped<ActionLogFilterAttribute>();
 
             // Adding converters

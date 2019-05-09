@@ -6,8 +6,19 @@ namespace Ag.Common.Enums
 {
     public enum Site
     {
-        LJ,
-        CB,
-        MFC
+        MyFreeCams,
+        Chaturbate,
+        LiveJasmin,
+        CamSoda,
+        Cam4,
+        Cams,
+        Flirt4Free,
+        StripChat,
+        Streamate,
+        BongaCams,
+        MyDirtyHobby,
+        Camversity,
+        Skype,
+        SkypeEUR
     }
 }

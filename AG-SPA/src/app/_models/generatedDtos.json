@@ -108,14 +108,36 @@
       "type": "string",
       "description": "",
       "x-enumNames": [
-        "LJ",
-        "CB",
-        "MFC"
+        "MyFreeCams",
+        "Chaturbate",
+        "LiveJasmin",
+        "CamSoda",
+        "Cam4",
+        "Cams",
+        "Flirt4Free",
+        "StripChat",
+        "Streamate",
+        "BongaCams",
+        "MyDirtyHobby",
+        "Camversity",
+        "Skype",
+        "SkypeEUR"
       ],
       "enum": [
-        "LJ",
-        "CB",
-        "MFC"
+        "MyFreeCams",
+        "Chaturbate",
+        "LiveJasmin",
+        "CamSoda",
+        "Cam4",
+        "Cams",
+        "Flirt4Free",
+        "StripChat",
+        "Streamate",
+        "BongaCams",
+        "MyDirtyHobby",
+        "Camversity",
+        "Skype",
+        "SkypeEUR"
       ]
     },
     "IncomeChunkUpdateDto": {

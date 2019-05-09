@@ -1,9 +1,8 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/_services/user.service';
 import { UserDetailDto, Role, UserForListDto, Shift, UserForEditDto, Site } from 'src/app/_models/generatedDtos';
 import { AlertifyService } from 'src/app/_services/alertify.service';
-import { AuthService } from 'src/app/_services/auth.service';
 import { StaticdataService } from 'src/app/_services/staticdata.service';
 
 @Component({
@@ -28,7 +27,7 @@ export class UserEditComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.sites = Object.keys(Site).map(k => Site[k]);
+    this.sites = Object.keys(Site).map(k => Site[k]).sort();
     this.initUser();
     this.getColors();
   }

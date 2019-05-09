@@ -135,8 +135,8 @@ namespace Ag.BusinessLogic.Services
             _context.UserRelations.Add(relation);
 
             // HUGE TODO HERE, consider what the hell will happen with these? performers shouldnt even be assigned sites, they are fine on their own, but shift... op must have more shifts, each assigned to a performer, so the relation should contain shift?!
-            performer.Shift = op.Shift; //placeholders for now
-            performer.Sites = op.Sites; //placeholders for now
+            //performer.Shift = op.Shift; //placeholders for now
+            //performer.Sites = op.Sites; //placeholders for now
 
             _context.SaveChanges();
 

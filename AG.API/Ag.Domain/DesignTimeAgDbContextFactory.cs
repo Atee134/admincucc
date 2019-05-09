@@ -16,8 +16,8 @@ namespace Ag.Domain
 
             var optionsBuilder = new DbContextOptionsBuilder<AgDbContext>();
             var connectionString = configuration.GetConnectionString("Ag");
-            //optionsBuilder.UseMySql(connectionString);
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseMySql(connectionString);
+            //optionsBuilder.UseNpgsql(connectionString);
 
             return new AgDbContext(optionsBuilder.Options);
         }
