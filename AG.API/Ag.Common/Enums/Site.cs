@@ -19,6 +19,7 @@ namespace Ag.Common.Enums
         MyDirtyHobby,
         Camversity,
         Skype,
-        SkypeEUR
+        SkypeEUR,
+        HerBicepsCam
     }
 }

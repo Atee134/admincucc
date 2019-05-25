@@ -121,7 +121,8 @@
         "MyDirtyHobby",
         "Camversity",
         "Skype",
-        "SkypeEUR"
+        "SkypeEUR",
+        "HerBicepsCam"
       ],
       "enum": [
         "MyFreeCams",
@@ -137,7 +138,8 @@
         "MyDirtyHobby",
         "Camversity",
         "Skype",
-        "SkypeEUR"
+        "SkypeEUR",
+        "HerBicepsCam"
       ]
     },
     "IncomeChunkUpdateDto": {

@@ -208,6 +208,7 @@ export enum Site {
     Camversity = "Camversity", 
     Skype = "Skype", 
     SkypeEUR = "SkypeEUR", 
+    HerBicepsCam = "HerBicepsCam", 
 }
 
 export class IncomeChunkUpdateDto implements IIncomeChunkUpdateDto {
