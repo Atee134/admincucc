@@ -44,6 +44,9 @@ namespace Ag.BusinessLogic.Services
             double performerPercent;
 
             var incomeEntries = GetIncomeEntriesOfPeriod(date, operatorId, performerId);
+
+            if (incomeEntries == null || incomeEntries.Count == 0) return;
+
             if (IsAverageAboveThreshold(incomeEntries))
             {
                 operatorPercent = op.MaxPercent;
